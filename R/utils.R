@@ -52,6 +52,16 @@ sparql_query <- function(params, ...){
   return(httr::content(result, as = "parsed", type = "application/json"))
 }
 
+# Simple tests of strings for whether they adhere to common wikidata formats 
+is.qid  <- function(x){grepl("^[Qq][0-9]+$",x)}
+is.pid  <- function(x){grepl("^[Pp][0-9]+$",x)}
+is.date <- function(x){grepl("[0-9]{1,4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",x)}
+is.quot <- function(x){grepl("^\".+\"$",x)}
+
+# Simple functions to convert plain text descriptions into their most likely QID/PIDs
+as_qid <- function(x){if(!all(is.qid(x))){WikidataR::find_item(x)[[1]]$id}else{x}}
+as_pid <- function(x){if(!all(is.pid(x))){WikidataR::find_property(x)[[1]]$id}else{x}}
+
 #'@title Extract Claims from Returned Item Data
 #'@description extract claim information from data returned using
 #'\code{\link{get_item}}.
