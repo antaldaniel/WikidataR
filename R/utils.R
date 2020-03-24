@@ -75,16 +75,17 @@ sparql_query <- function(params, ...){
 #'claims <- extract_claims(adams_data, "P31")
 #'
 #'@export
-extract_claims <- function(items, claims){
-  output <- lapply(items, function(x, claims){
-    return(lapply(claims, function(claim, obj){
+extract_claims <- function(items,claims){
+  claims <- sapply(claims,as_pid)
+  output <- lapply(items, function(x, claims) {
+    return(lapply(claims, function(claim, obj) {
       which_match <- which(names(obj$claims) == claim)
-      if(!length(which_match)){
+      if (!length(which_match)) {
         return(NA)
       }
       return(obj$claims[[which_match[1]]])
     }, obj = x))
   }, claims = claims)
-  
+
   return(output)
 }
