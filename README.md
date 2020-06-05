@@ -1,9 +1,9 @@
 WikidataR
 =========
 
-An R API wrapper for the Wikidata store of semantic data.
+An R package for reading, writing and handling Wikidata semantic data (via APIs).
 
-__Author:__ Oliver Keyes, Serena Signorelli & Christian Graul<br/> 
+__Author:__ Oliver Keyes, Serena Signorelli & Christian Graul, Thomas Shafee<br/> 
 __License:__ [MIT](http://opensource.org/licenses/MIT)<br/>
 __Status:__ Stable
 
