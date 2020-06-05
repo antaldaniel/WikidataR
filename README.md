@@ -24,19 +24,19 @@ vignette](https://CRAN.R-project.org/package=WikidataR/vignettes/Introduction.ht
 Installation
 ======
 
-For the most 2017 CRAN version:
+For the 2017 CRAN versions:
 
-    install.packages("WikidataR")
+    install.packages("WikidataR","WikidataQueryServiceR")
     
 For this development version:
 
     library(devtools)
     devtools::install_github("TS404/WikidataR")
 
+Examples
+======
 
-
-
-### Wikidata Query Example: fetching genres of a particular movie
+### Wikidata Query: fetching genres of a particular movie
 You submit SPARQL queries using the `query_wikidata()` function.
 
 In this example, we find an "instance of" ([P31](https://www.wikidata.org/wiki/Property:P31)) "film" ([Q11424](https://www.wikidata.org/wiki/Q11424)) that has the label "The Cabin in the Woods" ([Q45394](https://www.wikidata.org/wiki/Q45394)), get its genres ([P136](https://www.wikidata.org/wiki/Property:P136)), and then use [WDQS label service](https://www.mediawiki.org/wiki/Wikidata_query_service/User_Manual#Label_service) to return the genre labels.
