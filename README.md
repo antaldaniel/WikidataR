@@ -16,6 +16,7 @@ WikidataR includes functions to:
 - query wikidata (retreiving all items that match a set of criterial via [Wikidata SPARQL query service](https://query.wikidata.org))
 - write to Wikidata (adding new items or statements via [QuickStatements](https://tools.wmflabs.org/quickstatements)) 
 - Handle and manipulate Wikidata objects as lists and tibbles
+
 It combines and builds on the untilities of Christian Graul's
 [rwikidata](https://github.com/chgrl/rwikidata), Oliver Keyes' [WikidataR](https://github.com/Ironholds/WikidataR) and Mikhail Popov's [WikidataQueryServiceR](https://github.com/bearloga/WikidataQueryServiceR). For details on how to best use it, see the [explanatory
 vignette](https://CRAN.R-project.org/package=WikidataR/vignettes/Introduction.html).
