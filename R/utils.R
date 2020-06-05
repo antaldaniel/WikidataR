@@ -123,38 +123,6 @@ list_properties <- function (item,
   return(properties.p)
 }
 
-# Some simple is, as, and conversion functions
-is.qid  <- function(x){grepl("^[Qq][0-9]+$",x)}
-is.pid  <- function(x){grepl("^[Pp][0-9]+$",x)}
-is.date <- function(x){grepl("[0-9]{1,4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",x)}
-is.quot <- function(x){grepl("^\".+\"$",x)}
-as_qid <- function(x){if(!all(is.qid(x))){WikidataR::find_item(x)[[1]]$id}else{x}}
-as_pid <- function(x){if(!all(is.pid(x))){WikidataR::find_property(x)[[1]]$id}else{x}}
-
-
-qid_from_DOI <- function(DOI = '10.15347/WJM/2019.001'){
-  qid_from_DOI_nest1 <- function(x){paste('SELECT ?DOI WHERE {?DOI wdt:P356 "',
-                                          x,
-                                          '"}',
-                                          sep='')}
-  qid_from_DOI_nest2 <- function(x){tail(stringr::str_split(x,pattern = "/")[[1]],n=1)}
-  sparql_query <- lapply(DOI,qid_from_DOI_nest1)
-  article.qr   <- lapply(query_wikidata(sparql_query),as_tibble)
-  names(article.qr)<-DOI
-  article.qid  <- unlist(lapply(article.qr,qid_from_DOI_nest2))
-  return(article.qid)
-}
-
-qid_from_name <- function(name  = 'Thomas Shafee',
-                          limit = 100){
-  qid_from_name_nest1 <- function(x){lapply(x,"[[","id")}
-  item.qs  <- lapply(name,find_item, limit=limit)
-  item.qid <- lapply(item.qs,qid_from_name_nest1)
-  names(item.qid) <- name
-  item.qid <- unlist(item.qid)
-  return(item.qid)
-}
-
 list_properties <- function (item,
                              names=FALSE){
   properties.p <- lapply(lapply(item,"[[","claims"),names)
@@ -215,6 +183,14 @@ unspecial <- function(x){
   }
   return(as_tibble(out))
 }
+
+# Somesimple is, as, and conversion functions
+is.qid  <- function(x){grepl("^[Qq][0-9]+$",x)}
+is.pid  <- function(x){grepl("^[Pp][0-9]+$",x)}
+is.date <- function(x){grepl("[0-9]{1,4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",x)}
+is.quot <- function(x){grepl("^\".+\"$",x)}
+as_qid <- function(x){if(!all(is.qid(x))){WikidataR::find_item(x)[[1]]$id}else{x}}
+as_pid <- function(x){if(!all(is.pid(x))){WikidataR::find_property(x)[[1]]$id}else{x}}
 
 #' @title Get an example SPARQL query from Wikidata
 #' @description Gets the specified example(s) from
