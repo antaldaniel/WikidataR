@@ -86,6 +86,7 @@ as_pid <- function(x){if(!all(is.pid(x))){WikidataR::find_property(x)[[1]]$id}el
 #'
 #'@export
 extract_claims <- function (items, claims){
+
   claims <- sapply(claims,as_pid)
   output <- lapply(items, function(x, claims) {
     return(lapply(claims, function(claim, obj) {
