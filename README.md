@@ -35,14 +35,14 @@ For this development version:
 
 Examples
 ======
-### Get Wikidata QIDs and full items example: journal articles
+### Get Wikidata QIDs and full items (example: journal articles)
     article.qid      <- qid_from_DOI(c('10.15347/WJM/2017.007','10.15347/WJM/2019.001','10.15347/WJM/2019.003','10.15347/WJM/2019.007'))
     article.q        <- get_item(article.qid)
     article.topics.p <- extract_claims(article.q, "main topic")
     get_names_from_properties(article.topics.p)
 
 
-### Wikidata Query example: movie genres
+### Query Wikidata (example: movie genres)
 Search Wikidata using SPARQL queries.
 
 In this example, we find an "instance of" ([P31](https://www.wikidata.org/wiki/Property:P31)) "film" ([Q11424](https://www.wikidata.org/wiki/Q11424)) that has the label "The Cabin in the Woods" ([Q45394](https://www.wikidata.org/wiki/Q45394)), get its genres ([P136](https://www.wikidata.org/wiki/Property:P136)), and then use [WDQS label service](https://www.mediawiki.org/wiki/Wikidata_query_service/User_Manual#Label_service) to return the genre labels.
@@ -84,6 +84,8 @@ For more example SPARQL queries, see [this page](https://www.wikidata.org/wiki/W
 -   *[Learning SPARQL](http://www.learningsparql.com/)* by Bob DuCharme
 -   [WDQS User Manual](https://www.mediawiki.org/wiki/Wikidata_query_service/User_Manual)
 
+### Write to Wikidata (example: )
+Write to Wikidata using the Quickstatements format.
 
 Dependencies
 ======
