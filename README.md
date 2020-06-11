@@ -46,7 +46,7 @@ Examples
 
 ### Query Wikidata (example: movie genres)
 
-In this example, we search Wikidata for "instances of" ([P31](https://www.wikidata.org/wiki/Property:P31)) "film" ([Q11424](https://www.wikidata.org/wiki/Q11424)) that has the label "The Cabin in the Woods" ([Q45394](https://www.wikidata.org/wiki/Q45394)), get its genres ([P136](https://www.wikidata.org/wiki/Property:P136)), and then use [WDQS label service](https://www.mediawiki.org/wiki/Wikidata_query_service/User_Manual#Label_service) to return the genre labels.
+In this example, we search Wikidata for any items that are an "instance of" ([P31](https://www.wikidata.org/wiki/Property:P31)) "film" ([Q11424](https://www.wikidata.org/wiki/Q11424)) that has the label "The Cabin in the Woods" ([Q45394](https://www.wikidata.org/wiki/Q45394)), and ask for the item's genres ([P136](https://www.wikidata.org/wiki/Property:P136)).
 
 ``` r
 query_wikidata('SELECT DISTINCT
