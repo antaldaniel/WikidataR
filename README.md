@@ -36,6 +36,7 @@ For this development version:
 Examples
 ======
 ### Get Wikidata QIDs and full items (example: journal articles)
+
 ``` r
     article.qid      <- qid_from_DOI(c('10.15347/WJM/2017.007','10.15347/WJM/2019.001','10.15347/WJM/2019.003','10.15347/WJM/2019.007'))
     article.q        <- get_item(article.qid)
@@ -44,9 +45,8 @@ Examples
 ```
 
 ### Query Wikidata (example: movie genres)
-Search Wikidata using SPARQL queries.
 
-In this example, we find an "instance of" ([P31](https://www.wikidata.org/wiki/Property:P31)) "film" ([Q11424](https://www.wikidata.org/wiki/Q11424)) that has the label "The Cabin in the Woods" ([Q45394](https://www.wikidata.org/wiki/Q45394)), get its genres ([P136](https://www.wikidata.org/wiki/Property:P136)), and then use [WDQS label service](https://www.mediawiki.org/wiki/Wikidata_query_service/User_Manual#Label_service) to return the genre labels.
+In this example, we search Wikidata for "instances of" ([P31](https://www.wikidata.org/wiki/Property:P31)) "film" ([Q11424](https://www.wikidata.org/wiki/Q11424)) that has the label "The Cabin in the Woods" ([Q45394](https://www.wikidata.org/wiki/Q45394)), get its genres ([P136](https://www.wikidata.org/wiki/Property:P136)), and then use [WDQS label service](https://www.mediawiki.org/wiki/Wikidata_query_service/User_Manual#Label_service) to return the genre labels.
 
 ``` r
 query_wikidata('SELECT DISTINCT
@@ -58,7 +58,7 @@ WHERE {
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 }')
 ```
-Which returns 5 rows:
+Which reurns 5 rows:
 
 | genre                                     | genreLabel           |
 |:------------------------------------------|:---------------------|
@@ -70,7 +70,7 @@ Which returns 5 rows:
 
 For more example SPARQL queries, see [this page](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples) on [Wikidata](https://www.wikidata.org/wiki/Wikidata:Main_Page).
 
-`query_wikidata()` can accept multiple queries, returning a (potentially named) list of tibbles. If the vector of SPARQL queries is named, the results will inherit those names.
+`query_wikidata()` can accept multiple queries, returning a (potentially named) list of data frames. If the vector of SPARQL queries is named, the results will inherit those names.
 
 ####Links for learning SPARQL
 
@@ -84,31 +84,11 @@ For more example SPARQL queries, see [this page](https://www.wikidata.org/wiki/W
 -   *[Learning SPARQL](http://www.learningsparql.com/)* by Bob DuCharme
 -   [WDQS User Manual](https://www.mediawiki.org/wiki/Wikidata_query_service/User_Manual)
 
-### Write to Wikidata (example: journal articles)
+### Write to Wikidata (example: )
 
-In this example, we find an "instance of" ([P31](https://www.wikidata.org/wiki/Property:P31)) "film" ([Q11424](https://www.wikidata.org/wiki/Q11424)) that has the label "The Cabin in the Woods" ([Q45394](https://www.wikidata.org/wiki/Q45394)), get its genres ([P136](https://www.wikidata.org/wiki/Property:P136)), and then use [WDQS label service](https://www.mediawiki.org/wiki/Wikidata_query_service/User_Manual#Label_service) to return the genre labels.
 
 ``` r
-sparql_query <- 'SELECT ?Article ?ArticleLabel ?JLabel ?TLabel ?peer_review_URL WHERE {
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-  ?Article wdt:P1433 wd:Q24657325.
-  OPTIONAL { ?Article wdt:P1433 ?J. }
-  OPTIONAL { ?Article wdt:P1476 ?T. }
-  OPTIONAL { ?Article wdt:P7347 ?peer_review_URL. }}
-LIMIT 10000'
-articles.qr <- as_tibble(query_wikidata(sparql_query))
-articles.qr <- articles.qr[articles.qr$peer_review_URL=="",] #omit those with review URLs listed
-review.URLs <- paste0('https://en.wikiversity.org/wiki/Talk:',
-                      articles.qr$JLabel,
-                      "/",
-                      articles.qr$T
-                     )
-review.URLs <- gsub(" ","_",review.URLs)
 
-as_quickstatement(items=sapply(sapply(articles.qr$Article,pattern = "/",stringr::str_split),tail,1),
-                  properties="Peer review URL",
-                  token=, #REDACTED# Find your token at https://tools.wmflabs.org/quickstatements/#/user
-                  values=review.URLs)
 ```
 
 Dependencies
