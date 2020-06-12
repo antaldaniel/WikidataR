@@ -84,11 +84,38 @@ For more example SPARQL queries, see [this page](https://www.wikidata.org/wiki/W
 -   *[Learning SPARQL](http://www.learningsparql.com/)* by Bob DuCharme
 -   [WDQS User Manual](https://www.mediawiki.org/wiki/Wikidata_query_service/User_Manual)
 
-### Write to Wikidata (example: )
+### Write to Wikidata (example: journal articles)
 
 
 ``` r
+sparql_query <- 'SELECT ?Article ?ArticleLabel ?JLabel ?T ?peer_review_URL WHERE {
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+  ?Article wdt:P1433 wd:Q24657325.
+  OPTIONAL { ?Article wdt:P1433 ?J. }
+  OPTIONAL { ?Article wdt:P1476 ?T. }
+  OPTIONAL { ?Article wdt:P7347 ?peer_review_URL. }}
+LIMIT 10000'
+articles.qr <- as_tibble(query_wikidata(sparql_query))
+articles.qr <- articles.qr[articles.qr$peer_review_URL=="",] #omit those with review URLs listed
+review.URLs <- paste0('https://en.wikiversity.org/wiki/Talk:',
+                      articles.qr$JLabel,
+                      "/",
+                      articles.qr$T
+                     )
+review.URLs <- gsub(" ","_",review.URLs)
 
+as_quickstatement(items      = sapply(sapply(articles.qr$Article,pattern = "/",stringr::str_split),tail,1),
+                  properties = "Peer review URL",
+                  values     = review.URLs,
+                  format     = "tibble",
+                  )
+                  
+as_quickstatement(items      = sapply(sapply(articles.qr$Article,pattern = "/",stringr::str_split),tail,1),
+                  properties = "Peer review URL",
+                  values     = review.URLs,
+                  format     = "api",
+                  token=,#REDCATED# Find from from https://tools.wmflabs.org/quickstatements/#/user
+                  )
 ```
 
 Dependencies
