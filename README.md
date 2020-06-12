@@ -36,9 +36,10 @@ For this development version:
 Examples
 ======
 ### Get Wikidata QIDs and full items (example: journal articles)
+In this example, we search for three articles using their DOIs ([P356](https://www.wikidata.org/wiki/Property:P356)), find their QIDs,  download their full wikidata entries, and then extract the "main topics" (note PID didn't have to be used).
 
 ``` r
-    article.qid      <- qid_from_DOI(c('10.15347/WJM/2017.007','10.15347/WJM/2019.001','10.15347/WJM/2019.003','10.15347/WJM/2019.007'))
+    article.qid      <- qid_from_DOI(c('10.15347/WJM/2017.007','10.15347/WJM/2019.001','10.15347/WJM/2019.007'))
     article.q        <- get_item(article.qid)
     article.topics.p <- extract_claims(article.q, "main topic")
     get_names_from_properties(article.topics.p)
