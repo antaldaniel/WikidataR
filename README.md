@@ -44,6 +44,7 @@ In this example, we search for three articles using their DOIs ([P356](https://w
     article.topics.p <- extract_claims(article.q, "main topic")
     get_names_from_properties(article.topics.p)
 ```
+Which returns a tibble for each of the journal articles, listing the main topics of each and their QIDs.
 
 ### Query Wikidata (example: movie genres)
 
