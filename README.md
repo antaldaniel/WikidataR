@@ -13,12 +13,12 @@ Description
 ======
 WikidataR includes functions to:
 - read from wikidata (single items, properties, or properties)
-- query wikidata (retreiving all items that match a set of criterial via [Wikidata SPARQL query service](https://query.wikidata.org))
+- query wikidata (retrieving all items that match a set of criterial via [Wikidata SPARQL query service](https://query.wikidata.org))
 - write to Wikidata (adding new items or statements via [QuickStatements](https://tools.wmflabs.org/quickstatements)) 
 - Handle and manipulate Wikidata objects (as lists and tibbles)
 
-It combines and builds on the utilities of Christian Graul's
-[rwikidata](https://github.com/chgrl/rwikidata), Oliver Keyes' [WikidataR](https://github.com/Ironholds/WikidataR), Mikhail Popov's [WikidataQueryServiceR](https://github.com/bearloga/WikidataQueryServiceR), and Serena Signorelli's [QueryWikidataR](https://github.com/serenasignorelli/QueryWikidataR) packages. For details on how to best use it, see the [explanatory
+It combines and builds on the utilities of Oliver Keyes' [WikidataR](https://github.com/Ironholds/WikidataR), Christian Graul's
+[rwikidata](https://github.com/chgrl/rwikidata), Mikhail Popov's [WikidataQueryServiceR](https://github.com/bearloga/WikidataQueryServiceR), and Serena Signorelli's [QueryWikidataR](https://github.com/serenasignorelli/QueryWikidataR) packages. For details on how to best use it, see the [explanatory
 vignette](https://CRAN.R-project.org/package=WikidataR/vignettes/Introduction.html).
 
 Installation
@@ -116,7 +116,7 @@ as_quickstatement(items      = sapply(sapply(articles.qr$Article,pattern = "/",s
                   properties = "Peer review URL",
                   values     = review.URLs,
                   format     = "api",
-                  token=,#REDCATED# Find from from https://tools.wmflabs.org/quickstatements/#/user
+                  token=,#REDACTED# Find from from https://tools.wmflabs.org/quickstatements/#/user
                   )
 ```
 
