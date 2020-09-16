@@ -16,8 +16,7 @@ WikidataR includes functions to:
 - Handle and manipulate Wikidata objects (as lists and tibbles)
 
 It combines and builds on the utilities of Os Keyes' [WikidataR](https://github.com/Ironholds/WikidataR), Christian Graul's
-[rwikidata](https://github.com/chgrl/rwikidata), Mikhail Popov's [WikidataQueryServiceR](https://github.com/bearloga/WikidataQueryServiceR), and Serena Signorelli's [QueryWikidataR](https://github.com/serenasignorelli/QueryWikidataR) packages. For details on how to best use it, see the [explanatory
-vignette](https://CRAN.R-project.org/package=WikidataR/vignettes/Introduction.html).
+[rwikidata](https://github.com/chgrl/rwikidata), Mikhail Popov's [WikidataQueryServiceR](https://github.com/bearloga/WikidataQueryServiceR), and Serena Signorelli's [QueryWikidataR](https://github.com/serenasignorelli/QueryWikidataR) packages. For details on how to best use it, see the examples below.
 
 Installation
 ======
@@ -33,8 +32,28 @@ For this development version:
 
 Examples
 ======
-### Get Wikidata QIDs and full items (example: journal articles)
-In this example, we search for three articles using their DOIs ([P356](https://www.wikidata.org/wiki/Property:P356)), find their QIDs,  download their full wikidata entries, and then extract the "main topics" (note PID didn't have to be used).
+### Search Wikidata to see if an item exists (example: pharmaceutical)
+For cases where you don't already know the QID of an item or the PID of a property, you can search wikidata by name. Note that some search terms will return multiple possible items. You can also specify a language (defaults to Engligh).
+
+``` r
+find_item("Paracetamol")
+find_property("medical condition treated")
+```
+Which returns the lists: 
+
+>  acetaminophen (Q57055) - common drug for pain and fever  
+>  Paracetamol (Q36716177) - scientific article published on July 1980  
+>  Paracetamol (Q54982056) - musical group  
+>  ...
+
+and
+
+> medical condition treated (P2175) - disease that this pharmaceutical drug, procedure, or therapy is used to treat 
+
+Elements within those lists include basic information from wikidata (ID, description, labels). The QID or PID can then be used to get the full data for the item (see below).
+
+### Get full items from Wikidata (example: journal articles)
+In this example, we search for three articles using their DOIs ([P356](https://www.wikidata.org/wiki/Property:P356)), find their QIDs, download their full wikidata entries, and then extract the "main topics" (note PID didn't have to be used).
 
 ``` r
     article.qid      <- qid_from_DOI(c('10.15347/WJM/2017.007','10.15347/WJM/2019.001','10.15347/WJM/2019.007'))
@@ -44,7 +63,7 @@ In this example, we search for three articles using their DOIs ([P356](https://w
 ```
 Which returns a tibble for each of the journal articles, listing the main topics of each and their QIDs.
 
-### Query Wikidata (example: movie genres)
+### Query Wikidata with complex searches (example: movie genres)
 
 In this example, we search Wikidata for any items that are an "instance of" ([P31](https://www.wikidata.org/wiki/Property:P31)) "film" ([Q11424](https://www.wikidata.org/wiki/Q11424)) that has the label "The Cabin in the Woods" ([Q45394](https://www.wikidata.org/wiki/Q45394)), and ask for the item's genres ([P136](https://www.wikidata.org/wiki/Property:P136)).
 
@@ -60,13 +79,13 @@ WHERE {
 ```
 Which reurns 5 rows:
 
-| genre                                     | genreLabel           |
-|:------------------------------------------|:---------------------|
-| <http://www.wikidata.org/entity/Q471839>  | science fiction film |
-| <http://www.wikidata.org/entity/Q1342372> | monster film         |
-| <http://www.wikidata.org/entity/Q224700>  | comedy horror        |
-| <http://www.wikidata.org/entity/Q200092>  | horror film          |
-| <http://www.wikidata.org/entity/Q859369>  | comedy-drama         |
+>| genre                                     | genreLabel           |
+>|:------------------------------------------|:---------------------|
+>| <http://www.wikidata.org/entity/Q471839>  | science fiction film |
+>| <http://www.wikidata.org/entity/Q1342372> | monster film         |
+>| <http://www.wikidata.org/entity/Q224700>  | comedy horror        |
+>| <http://www.wikidata.org/entity/Q200092>  | horror film          |
+>| <http://www.wikidata.org/entity/Q859369>  | comedy-drama         |
 
 For more example SPARQL queries, see [this page](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples) on [Wikidata](https://www.wikidata.org/wiki/Wikidata:Main_Page).
 
@@ -117,9 +136,3 @@ as_quickstatement(items      = sapply(sapply(articles.qr$Article,pattern = "/",s
                   token=,#REDACTED# Find from from https://tools.wmflabs.org/quickstatements/#/user
                   )
 ```
-
-Dependencies
-======
-* R. Doy.
-* [httr](https://cran.r-project.org/package=httr) and its dependencies.
-* [WikipediR](https://cran.r-project.org/package=WikipediR)
