@@ -58,6 +58,7 @@ is.pid  <- function(x){grepl("^[Pp][0-9]+$",x)}
 is.sid  <- function(x){grepl("^[Ss][0-9]+$",x)}
 is.date <- function(x){grepl("[0-9]{1,4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",x)}
 is.quot <- function(x){grepl("^\".+\"$",x)}
+is.empty<- function(x){x==""}
 
 # Simple functions to convert plain text descriptions into their most likely QID/PIDs
 as_qid <- function(x){if(all(is.qid(x))){x}else{WikidataR::find_item(x)[[1]]$id}}
