@@ -45,12 +45,12 @@ Which returns the lists:
     acetaminophen (Q57055) - common drug for pain and fever  
     Paracetamol (Q36716177) - scientific article published on July 1980  
     Paracetamol (Q54982056) - musical group  
-...
+    ...
 ```
 
 and
 ```
-    > medical condition treated (P2175) - disease that this pharmaceutical drug, procedure, or therapy is used to treat 
+    medical condition treated (P2175) - disease that this pharmaceutical drug, procedure, or therapy is used to treat 
 ```
 Elements within those lists include basic information from wikidata (ID, description, labels). The QID or PID can then be used to get the full data for the item (see below).
 
