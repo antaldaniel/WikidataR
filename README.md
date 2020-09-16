@@ -21,11 +21,11 @@ It combines and builds on the utilities of Os Keyes' [WikidataR](https://github.
 Installation
 ======
 
-For the 2017 CRAN versions:
+For the 2017 read-only CRAN versions:
 
     install.packages("WikidataR","WikidataQueryServiceR")
     
-For this development version:
+For this read-write development version:
 
     library(devtools)
     devtools::install_github("TS404/WikidataR")
