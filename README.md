@@ -7,8 +7,6 @@ __Authors:__ [Os Keyes](https://github.com/Ironholds), [Serena Signorelli](https
 __License:__ [MIT](http://opensource.org/licenses/MIT)<br/>
 __Status:__ Stable
 
-[![Travis-CI Build Status](https://travis-ci.org/Ironholds/WikidataR.svg?branch=master)](https://travis-ci.org/Ironholds/WikidataR)![downloads](http://cranlogs.r-pkg.org/badges/grand-total/WikidataR)
-
 Description
 ======
 WikidataR includes functions to:
