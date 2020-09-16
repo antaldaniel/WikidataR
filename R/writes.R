@@ -1,18 +1,20 @@
-# Write a Quickstatements table (and optionally submit via API)
+
 as_quickstatement <- function(items,
-                              properties,
-                              values,
+                              properties      = NULL,
+                              values          = NULL,
                               qual.properties = NULL,
                               qual.values     = NULL,
-                              format          = "api", # api, tibble or print
-                              api.username    = "",
-                              api.token       = "", # from https://tools.wmflabs.org/quickstatements/#/user
+                              remove          = FALSE,
+                              format          = "api",
+                              api.username    = "Evolution_and_evolvability",
+                              api.token       = "%242y%2410%24VdlzfpUNVSRVbz7.d2HrXO3n7VdhBI9BWhthNGDAXfHj3Aa6kD3mq",
                               api.format      = "v1",
                               api.batchname   = "ts_API_test2",
                               api.submit      = TRUE
                               ){
   
   items           <- sapply(items,function(x){if(x!="LAST"){as_qid(x)}else{x}})
+  items[remove]   <- paste0("-",items[remove])
   properties      <- sapply(properties,as_pid)
   
   if (format=="api"){
