@@ -132,9 +132,9 @@ For more example SPARQL queries, see [this page](https://www.wikidata.org/wiki/W
 ### Write to Wikidata (example: paintings)  
 In this example we'll write directly to wikidata via the [QuickStatements](https://tools.wmflabs.org/quickstatements) format.
 ``` r
-as_quickstatement(items      = c(Q12418,Q471379),
+as_quickstatement(items      = c("Q12418","Q471379"),
                   properties = "Creator",
-                  values     = c(Q762,Q41406),
+                  values     = c("Q762","Q41406"),
                   format     = "api",
                   token=,#REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
                   )
