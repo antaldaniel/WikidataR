@@ -4,6 +4,8 @@ as_quickstatement <- function(items,
                               values          = NULL,
                               qual.properties = NULL,
                               qual.values     = NULL,
+                              src.properties  = NULL,
+                              src.values      = NULL,
                               remove          = FALSE,
                               format          = "api",
                               api.username    = "Evolution_and_evolvability",
@@ -24,6 +26,7 @@ as_quickstatement <- function(items,
   values          <- sapply(values,function(x){if(!(is.qid(x)|is.date(x)|is.quot(x))){paste0('"',x,'"')}else{x}})
   }
   
+  # basic statement properties and values
   QS <- list(items,
              properties,
              values)
@@ -35,7 +38,7 @@ as_quickstatement <- function(items,
                    Prop =  QS[[2]],
                    Value = QS[[3]])
   
-  # qualifiers properties and statements
+  # qualifiers properties and values
   if(!is.null(qual.properties)|!is.null(qual.values)){
     qual.properties <- sapply(qual.properties,function(x){if(!is.null(x)){as_pid(x)}else{x}})
     qual.values     <- sapply(qual.values,function(x){if(!(is.qid(x)|is.date(x)|is.quot(x))){paste0('"',x,'"')}else{x}})
@@ -48,11 +51,29 @@ as_quickstatement <- function(items,
     if(!all(QSq.check)){stop("incorrect number of qualifiers provided")}
     
     QS.tib <- add_column(QS.tib,
-                         qual.Prop  = QSq[[1]],
-                         qual.Value = QSq[[2]])
+                         Qual.Prop  = QSq[[1]],
+                         Qual.Value = QSq[[2]])
   }
-  if (format=="print"){
-    write.table(QS.tib,quote = FALSE,row.names = FALSE,sep = "|")
+  # source properties and values
+  if(!is.null(src.properties)|!is.null(src.values)){
+    src.properties <- sapply(src.properties,function(x){if(!is.null(x)){as_sid(x)}else{x}})
+    src.values     <- sapply(src.values,function(x){if(!(is.qid(x)|is.date(x)|is.quot(x))){paste0('"',x,'"')}else{x}})
+    
+    QSs <- list(src.properties,
+                src.values)
+    QSs.rowmax <- max(sapply(c(QS,QSs),length))
+    QSs.check  <- sapply(c(QS,QSs),length)==1|
+      sapply(c(QS,QSs),length)==QSs.rowmax
+    if(!all(QSs.check)){stop("incorrect number of qualifiers provided")}
+    
+    QS.tib <- add_column(QS.tib,
+                         Src.Prop  = QSs[[1]],
+                         Src.Value = QSs[[2]])
+  }
+  
+  # output
+  if (format=="csv"){
+    write.table(QS.tib,quote = FALSE,row.names = FALSE,sep = ",")
   }
   if (format=="tibble"){
     return(QS.tib)
