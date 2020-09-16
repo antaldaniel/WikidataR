@@ -139,7 +139,7 @@ as_quickstatement(items      = c(Q12418,Q471379),
                   token=,#REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
                   )
 ```
-Results in the statement being directly deposited into wikidata under your username via the API.  
+Results in the statements being directly added to wikidata under your username via the API.  
 > The Mona Lisa (Q12418) has the Creator (P170) of Leonardo da Vinci (Q762)  
 > The Scream (Q471379) has the Creator (P170) of Edvard Munch (Q41406)  
 
