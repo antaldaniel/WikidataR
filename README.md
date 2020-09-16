@@ -100,7 +100,7 @@ WHERE {
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 }')
 ```
-Which returns a tibble 5 rows:
+Which returns a tibble:
 ```
     # A tibble: 6 x 2
       genre                                   genreLabel          
