@@ -1,5 +1,8 @@
 #' @title API client library for Wikidata
-#' @description This package serves as an API client for \href{Wikidata}{https://www.wikidata.org}.
+#' @description This package serves as an API client for reading and writing
+#' to and from \href{Wikidata}{https://www.wikidata.org}, (including 
+#' via the \href{QuickStatements}{https://quickstatements.toolforge.org/} format),
+#' as well as for reading from \href{Wikipedia}{https://www.wikipedia.org}
 #' See the accompanying vignette for more details.
 #' 
 #' @name WikidataR
@@ -8,6 +11,7 @@
 #'\code{\link{get_item}} for a /specific/ item or property, or \code{\link{find_item}}
 #'for using search functionality to pull out item or property IDs where the descriptions
 #'or aliases match a particular search term.
+#' @import WikidataQueryServiceR
 #' @importFrom WikipediR page_content random_page query
 #' @importFrom httr user_agent
 #' @importFrom jsonlite fromJSON
