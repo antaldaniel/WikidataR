@@ -41,7 +41,7 @@ as_quickstatement <- function(items,
   # qualifiers properties and values
   if(!is.null(qual.properties)|!is.null(qual.values)){
     qual.properties <- sapply(qual.properties,function(x){if(!is.null(x)){as_pid(x)}else{x}})
-    qual.values     <- sapply(qual.values,function(x){if(!(is.qid(x)|is.date(x)|is.quot(x))){paste0('"',x,'"')}else{x}})
+    qual.values     <- sapply(qual.values,function(x){if(!(is.qid(x)|is.date(x)|is.quot(x)|is.na(x))){paste0('"',x,'"')}else{x}})
     
     QSq <- list(qual.properties,
                 qual.values)
@@ -57,14 +57,14 @@ as_quickstatement <- function(items,
   # source properties and values
   if(!is.null(src.properties)|!is.null(src.values)){
     src.properties <- sapply(src.properties,function(x){if(!is.null(x)){as_sid(x)}else{x}})
-    src.values     <- sapply(src.values,function(x){if(!(is.qid(x)|is.date(x)|is.quot(x))){paste0('"',x,'"')}else{x}})
+    src.values     <- sapply(src.values,function(x){if(!(is.qid(x)|is.date(x)|is.quot(x)|is.na(x))){paste0('"',x,'"')}else{x}})
     
     QSs <- list(src.properties,
                 src.values)
     QSs.rowmax <- max(sapply(c(QS,QSs),length))
     QSs.check  <- sapply(c(QS,QSs),length)==1|
       sapply(c(QS,QSs),length)==QSs.rowmax
-    if(!all(QSs.check)){stop("incorrect number of qualifiers provided")}
+    if(!all(QSs.check)){stop("incorrect number of sources provided")}
     
     QS.tib <- add_column(QS.tib,
                          Src.Prop  = QSs[[1]],
