@@ -32,7 +32,7 @@ For this development version:
 
 Examples
 ======
-### Search Wikidata to see if an item exists (example: pharmaceutical)
+### Search Wikidata to see if an item exists (example: pharmaceuticals)
 For cases where you don't already know the QID of an item or the PID of a property, you can search wikidata by name. Note that some search terms will return multiple possible items. You can also specify a language (defaults to Engligh).
 
 ``` r
@@ -129,9 +129,23 @@ For more example SPARQL queries, see [this page](https://www.wikidata.org/wiki/W
 -   *[Learning SPARQL](http://www.learningsparql.com/)* by Bob DuCharme
 -   [WDQS User Manual](https://www.mediawiki.org/wiki/Wikidata_query_service/User_Manual)
 
-### Write to Wikidata (example: journal articles)
+### Write to Wikidata (example: )
+In this example we'll write directly to wikidata via the [QuickStatements](https://tools.wmflabs.org/quickstatements) format.
+``` r
+as_quickstatement(items      = c(Q12418,Q471379),
+                  properties = "Creator",
+                  values     = c(Q762,Q41406),
+                  format     = "api",
+                  token=,#REDACTED# Find from from https://tools.wmflabs.org/quickstatements/#/user
+                  )
+```
+Results in the statement being directly deposited into wikidata under your username via the API.
+>The Mona Lisa (Q12418) has the Creator (P170) of Leonardo da Vinci (Q762)
+>The Scream (Q471379) has the Creator (P170) of Edvard Munch (Q41406)
+Alternatively, you can print via <code>format=tibble</code> and paste into the [QuickStatements](https://tools.wmflabs.org/quickstatements) website.
 
-
+###Combining all of the above (example: journal articles)
+The example below finds all articles in a journal, works out the URL for their peer reviews, and writes those URLs into those articles' wikidata items.
 ``` r
 sparql_query <- 'SELECT ?Article ?ArticleLabel ?JLabel ?T ?peer_review_URL WHERE {
   SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
