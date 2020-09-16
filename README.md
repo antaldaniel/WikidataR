@@ -117,7 +117,7 @@ For more example SPARQL queries, see [this page](https://www.wikidata.org/wiki/W
 
 `query_wikidata()` can accept multiple queries, returning a (potentially named) list of data frames. If the vector of SPARQL queries is named, the results will inherit those names.
 
-####Links for learning SPARQL
+#### Links for learning SPARQL  
 
 -   [A beginner-friendly course for SPARQL](https://www.wikidata.org/wiki/Wikidata:A_beginner-friendly_course_for_SPARQL)
 -   Building a SPARQL query: [Museums on Instagram](https://www.wikidata.org/wiki/Help:SPARQL/Building_a_query/Museums_on_Instagram)
@@ -129,22 +129,23 @@ For more example SPARQL queries, see [this page](https://www.wikidata.org/wiki/W
 -   *[Learning SPARQL](http://www.learningsparql.com/)* by Bob DuCharme
 -   [WDQS User Manual](https://www.mediawiki.org/wiki/Wikidata_query_service/User_Manual)
 
-### Write to Wikidata (example: )
+### Write to Wikidata (example: paintings)  
 In this example we'll write directly to wikidata via the [QuickStatements](https://tools.wmflabs.org/quickstatements) format.
 ``` r
 as_quickstatement(items      = c(Q12418,Q471379),
                   properties = "Creator",
                   values     = c(Q762,Q41406),
                   format     = "api",
-                  token=,#REDACTED# Find from from https://tools.wmflabs.org/quickstatements/#/user
+                  token=,#REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
                   )
 ```
 Results in the statement being directly deposited into wikidata under your username via the API.  
 > The Mona Lisa (Q12418) has the Creator (P170) of Leonardo da Vinci (Q762)  
 > The Scream (Q471379) has the Creator (P170) of Edvard Munch (Q41406)  
+
 Alternatively, you can print via <code>format=tibble</code> and paste into the [QuickStatements](https://tools.wmflabs.org/quickstatements) website.
 
-###Combining all of the above (example: journal articles)
+### Combining all of the above (example: journal articles)
 The example below finds all articles in a journal, works out the URL for their peer reviews, and writes those URLs into those articles' wikidata items.
 ``` r
 sparql_query <- 'SELECT ?Article ?ArticleLabel ?JLabel ?T ?peer_review_URL WHERE {
@@ -173,6 +174,6 @@ as_quickstatement(items      = sapply(sapply(articles.qr$Article,pattern = "/",s
                   properties = "Peer review URL",
                   values     = review.URLs,
                   format     = "api",
-                  token=,#REDACTED# Find from from https://tools.wmflabs.org/quickstatements/#/user
+                  token=,#REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
                   )
 ```
