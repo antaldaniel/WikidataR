@@ -42,48 +42,48 @@ find_property("medical condition treated")
 Which returns the lists: 
 
 ```
-acetaminophen (Q57055) - common drug for pain and fever  
-Paracetamol (Q36716177) - scientific article published on July 1980  
-Paracetamol (Q54982056) - musical group  
+    acetaminophen (Q57055) - common drug for pain and fever  
+    Paracetamol (Q36716177) - scientific article published on July 1980  
+    Paracetamol (Q54982056) - musical group  
 ...
 ```
 
 and
-
-> medical condition treated (P2175) - disease that this pharmaceutical drug, procedure, or therapy is used to treat 
-
+```
+    > medical condition treated (P2175) - disease that this pharmaceutical drug, procedure, or therapy is used to treat 
+```
 Elements within those lists include basic information from wikidata (ID, description, labels). The QID or PID can then be used to get the full data for the item (see below).
 
 ### Get full items from Wikidata (example: journal articles)
 In this example, we search for three articles using their DOIs ([P356](https://www.wikidata.org/wiki/Property:P356)), find their QIDs, download their full wikidata entries, and then extract the "main topics" (note PID didn't have to be used).
 
 ``` r
-    article.qid      <- qid_from_DOI(c('10.15347/WJM/2017.007','10.15347/WJM/2019.001','10.15347/WJM/2019.007'))
-    article.q        <- get_item(article.qid)
-    article.topics.p <- extract_claims(article.q, "main topic")
-    get_names_from_properties(article.topics.p)
+article.qid      <- qid_from_DOI(c('10.15347/WJM/2017.007','10.15347/WJM/2019.001','10.15347/WJM/2019.007'))
+article.q        <- get_item(article.qid)
+article.topics.p <- extract_claims(article.q, "main topic")
+get_names_from_properties(article.topics.p)
 ```
 Which returns a tibble for each of the journal articles, listing the main topics of each and their QIDs.
 ```
-$`10.15347/WJM/2017.007`
-# A tibble: 1 x 2
-  QID          value    
-  <chr>        <chr>    
-1 P921.Q164778 rotavirus
+    $`10.15347/WJM/2017.007`
+    # A tibble: 1 x 2
+      QID          value    
+      <chr>        <chr>    
+    1 P921.Q164778 rotavirus
 
-$`10.15347/WJM/2019.001`
-# A tibble: 2 x 2
-  QID            value                               
-  <chr>          <chr>                               
-1 P921.Q15989108 Western African Ebola virus epidemic
-2 P921.Q10538943 Ebola virus                         
+    $`10.15347/WJM/2019.001`
+    # A tibble: 2 x 2
+      QID            value                               
+      <chr>          <chr>                               
+    1 P921.Q15989108 Western African Ebola virus epidemic
+    2 P921.Q10538943 Ebola virus                         
 
-$`10.15347/WJM/2019.007`
-# A tibble: 2 x 2
-  QID            value                          
-  <chr>          <chr>                          
-1 P921.Q1820650  readability                    
-2 P921.Q16235120 health information on Wikipedia
+    $`10.15347/WJM/2019.007`
+    # A tibble: 2 x 2
+      QID            value                          
+      <chr>          <chr>                          
+    1 P921.Q1820650  readability                    
+    2 P921.Q16235120 health information on Wikipedia
 ```
 
 ### Query Wikidata with complex searches (example: movie genres)
@@ -102,15 +102,15 @@ WHERE {
 ```
 Which returns a tibble 5 rows:
 ```
-# A tibble: 6 x 2
-  genre                                   genreLabel          
-  <chr>                                   <chr>               
-1 http://www.wikidata.org/entity/Q3072049 zombie film         
-2 http://www.wikidata.org/entity/Q471839  science fiction film
-3 http://www.wikidata.org/entity/Q859369  comedy-drama        
-4 http://www.wikidata.org/entity/Q1342372 monster film        
-5 http://www.wikidata.org/entity/Q853630  slasher film        
-6 http://www.wikidata.org/entity/Q224700  comedy horror    
+    # A tibble: 6 x 2
+      genre                                   genreLabel          
+      <chr>                                   <chr>               
+    1 http://www.wikidata.org/entity/Q3072049 zombie film         
+    2 http://www.wikidata.org/entity/Q471839  science fiction film
+    3 http://www.wikidata.org/entity/Q859369  comedy-drama        
+    4 http://www.wikidata.org/entity/Q1342372 monster film        
+    5 http://www.wikidata.org/entity/Q853630  slasher film        
+    6 http://www.wikidata.org/entity/Q224700  comedy horror    
 ```
 
 For more example SPARQL queries, see [this page](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples) on [Wikidata](https://www.wikidata.org/wiki/Wikidata:Main_Page).
@@ -140,8 +140,8 @@ as_quickstatement(items      = c(Q12418,Q471379),
                   )
 ```
 Results in the statement being directly deposited into wikidata under your username via the API.
->The Mona Lisa (Q12418) has the Creator (P170) of Leonardo da Vinci (Q762)
->The Scream (Q471379) has the Creator (P170) of Edvard Munch (Q41406)
+    > The Mona Lisa (Q12418) has the Creator (P170) of Leonardo da Vinci (Q762)
+    > The Scream (Q471379) has the Creator (P170) of Edvard Munch (Q41406)
 Alternatively, you can print via <code>format=tibble</code> and paste into the [QuickStatements](https://tools.wmflabs.org/quickstatements) website.
 
 ###Combining all of the above (example: journal articles)
