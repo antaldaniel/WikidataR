@@ -47,7 +47,7 @@ as_quickstatement <- function(items,
                 qual.values)
     QSq.rowmax <- max(sapply(c(QS,QSq),length))
     QSq.check  <- sapply(c(QS,QSq),length)==1|
-      sapply(c(QS,QSq),length)==QSq.rowmax
+                  sapply(c(QS,QSq),length)==QSq.rowmax
     if(!all(QSq.check)){stop("incorrect number of qualifiers provided")}
     
     QS.tib <- add_column(QS.tib,
@@ -64,7 +64,7 @@ as_quickstatement <- function(items,
                 src.values)
     QSs.rowmax <- max(sapply(c(QS,QSs),length))
     QSs.check  <- sapply(c(QS,QSs),length)==1|
-      sapply(c(QS,QSs),length)==QSs.rowmax
+                  sapply(c(QS,QSs),length)==QSs.rowmax
     if(!all(QSs.check)){stop("incorrect number of sources provided")}
     
     QS.tib <- add_column(QS.tib,
