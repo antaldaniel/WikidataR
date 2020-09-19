@@ -3,7 +3,7 @@ WikidataR
 
 An combined R package for reading, writing and handling Wikidata semantic data (via APIs).
 
-__Authors:__ [Os Keyes](https://github.com/Ironholds), [Serena Signorelli](https://github.com/serenasignorelli), [Christian Graul](https://github.com/chgrl), [Mikhail Popov](https://github.com/bearloga), [Thomas Shafee](https://github.com/TS404)<br/> 
+__Authors:__  [Thomas Shafee](https://github.com/TS404)
 __License:__ [MIT](http://opensource.org/licenses/MIT)<br/>
 __Status:__ Stable
 
@@ -14,9 +14,7 @@ WikidataR includes functions to:
 - query wikidata (retrieving all items that match a set of criterial via [Wikidata SPARQL query service](https://query.wikidata.org))
 - write to Wikidata (adding new items or statements via [QuickStatements](https://tools.wmflabs.org/quickstatements)) 
 - Handle and manipulate Wikidata objects (as lists and tibbles)
-
-It combines and builds on the utilities of Os Keyes' [WikidataR](https://github.com/Ironholds/WikidataR), Christian Graul's
-[rwikidata](https://github.com/chgrl/rwikidata), Mikhail Popov's [WikidataQueryServiceR](https://github.com/bearloga/WikidataQueryServiceR), and Serena Signorelli's [QueryWikidataR](https://github.com/serenasignorelli/QueryWikidataR) packages. For details on how to best use it, see the examples below.
+For details on how to best use it, see the examples below.
 
 Installation
 ======
@@ -177,3 +175,6 @@ as_quickstatement(items      = sapply(sapply(articles.qr$Article,pattern = "/",s
                   token=,#REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
                   )
 ```
+### Acknowledgements
+This package combines and builds on the utilities of Os Keyes' [WikidataR](https://github.com/Ironholds/WikidataR), Christian Graul's
+[rwikidata](https://github.com/chgrl/rwikidata), Mikhail Popov's [WikidataQueryServiceR](https://github.com/bearloga/WikidataQueryServiceR), and Serena Signorelli's [QueryWikidataR](https://github.com/serenasignorelli/QueryWikidataR) packages. It also uses the Magnus Manske's [QuickStatements](https://github.com/magnusmanske/quickstatements) tool.
