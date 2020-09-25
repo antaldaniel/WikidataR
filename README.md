@@ -3,7 +3,7 @@ WikidataR
 
 An combined R package for reading, writing and handling Wikidata semantic data (via APIs).
 
-__Authors:__  [Thomas Shafee](https://github.com/TS404)  
+__Authors:__ [Thomas Shafee](https://github.com/TS404) (aut., maint.), [Os Keys](https://github.com/Ironholds) (aut., cre.)  
 __License:__ [MIT](http://opensource.org/licenses/MIT)  
 __Status:__ Stable
 
