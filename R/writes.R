@@ -1,4 +1,3 @@
-
 as_quickstatement <- function(items,
                               properties      = NULL,
                               values          = NULL,
@@ -7,26 +6,27 @@ as_quickstatement <- function(items,
                               src.properties  = NULL,
                               src.values      = NULL,
                               remove          = FALSE,
-                              format          = "api",
+                              format          = "tibble",
                               api.username    = "Evolution_and_evolvability",
                               api.token       = NULL,
                               api.format      = "v1",
                               api.batchname   = NULL,
                               api.submit      = TRUE
-                              ){
+){
   
   items           <- sapply(items,function(x){if(x!="LAST"){as_qid(x)}else{x}})
   items[remove]   <- paste0("-",items[remove])
   properties      <- sapply(properties,as_pid)
   
+  #strings need quotation marks, and in APIs those are indicated as $22 
   if (format=="api"){
     values          <- sapply(values,function(x){if(!(is.qid(x)|is.date(x)|is.quot(x))){paste0('$22',x,'$22')}else{x}})
   }
-  if (format=="print"){
-  values          <- sapply(values,function(x){if(!(is.qid(x)|is.date(x)|is.quot(x))){paste0('"',x,'"')}else{x}})
+  if (format=="tibble"|"csv"){
+    values          <- sapply(values,function(x){if(!(is.qid(x)|is.date(x)|is.quot(x))){paste0('"',x,'"')}else{x}})
   }
   
-  # basic statement properties and values
+  # build the basic tibble of the items and what properties and values to add as statements
   QS <- list(items,
              properties,
              values)
@@ -38,7 +38,7 @@ as_quickstatement <- function(items,
                    Prop =  QS[[2]],
                    Value = QS[[3]])
   
-  # qualifiers properties and values
+  # optionally, append columns for qualifier properties and qualifier values for those statements
   if(!is.null(qual.properties)|!is.null(qual.values)){
     qual.properties <- sapply(qual.properties,function(x){if(!is.null(x)){as_pid(x)}else{x}})
     qual.values     <- sapply(qual.values,function(x){if(!(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)|is.empty(x))){paste0('"',x,'"')}else{x}})
@@ -55,7 +55,7 @@ as_quickstatement <- function(items,
                          Qual.Value = QSq[[2]])
   }
   
-  # source properties and values
+  # optionally, append columns for source properties and source values for those statements
   if(!is.null(src.properties)|!is.null(src.values)){
     src.properties <- sapply(src.properties,function(x){if(!is.null(x)){as_sid(x)}else{x}})
     src.values     <- sapply(src.values,function(x){if(!(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)|is.empty(x))){paste0('"',x,'"')}else{x}})
@@ -64,7 +64,7 @@ as_quickstatement <- function(items,
                 src.values)
     QSs.rowmax <- max(sapply(c(QS,QSs),length))
     QSs.check  <- sapply(c(QS,QSs),length)==1|
-                  sapply(c(QS,QSs),length)==QSs.rowmax
+      sapply(c(QS,QSs),length)==QSs.rowmax
     if(!all(QSs.check)){stop("incorrect number of sources provided")}
     
     QS.tib <- add_column(QS.tib,
@@ -76,6 +76,7 @@ as_quickstatement <- function(items,
   if (format=="csv"){
     write.table(QS.tib,quote = FALSE,row.names = FALSE,sep = ",")
   }
+  # format up the output
   if (format=="tibble"){
     return(QS.tib)
   }
