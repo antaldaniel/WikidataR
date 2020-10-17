@@ -80,7 +80,7 @@ as_quickstatement <- function(items,
     return(QS.tib)
   }
   if (format=="api"){
-    if (api.token=NULL){stop("API token needed. Find yours at https://quickstatements.toolforge.org/#/user")}
+    if (is.null(api.token)){stop("API token needed. Find yours at https://quickstatements.toolforge.org/#/user")}
     api.temp1 <- format_tsv(QS.tib)
     api.temp2 <- gsub("\t","%09",api.temp1) # Replace TAB with "%09"
     api.temp3 <- gsub("\n","%0A",api.temp2) # Replace end-of-line with "%0A"
