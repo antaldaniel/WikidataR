@@ -58,7 +58,7 @@ is.pid  <- function(x){grepl("^[Pp][0-9]+$",x)}
 is.sid  <- function(x){grepl("^[Ss][0-9]+$",x)}
 is.date <- function(x){grepl("[0-9]{1,4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",x)}
 is.quot <- function(x){grepl("^\".+\"$",x)}
-is.coord <- function(x){grepl("@-?[1-9]?[0-8](.[0-9]*)?/-?1?[1-7]?[0-9](.[0-9]*)?$",x)}
+is.coord <- function(x){grepl("@-?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?)/-?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$",x)}
 is.empty<- function(x){x==""}
 
 # Simple functions to convert plain text descriptions into their most likely QID/PIDs
