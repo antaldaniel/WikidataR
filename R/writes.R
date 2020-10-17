@@ -47,7 +47,7 @@ as_quickstatement <- function(items,
                 qual.values)
     QSq.rowmax <- max(sapply(c(QS,QSq),length))
     QSq.check  <- sapply(c(QS,QSq),length)==1|
-      sapply(c(QS,QSq),length)==QSq.rowmax
+                  sapply(c(QS,QSq),length)==QSq.rowmax
     if(!all(QSq.check)){stop("incorrect number of qualifiers provided")}
     
     QS.tib <- add_column(QS.tib,
@@ -72,12 +72,13 @@ as_quickstatement <- function(items,
                          Src.Value = QSs[[2]])
   }
   
+  # output
+  if (format=="csv"){
+    write.table(QS.tib,quote = FALSE,row.names = FALSE,sep = ",")
+  }
   # format up the output
   if (format=="tibble"){
     return(QS.tib)
-  }
-  if (format=="csv"){
-    write.table(QS.tib,quote = FALSE,row.names = FALSE,sep = ",")
   }
   if (format=="api"){
     if (is.null(api.token)){stop("API token needed. Find yours at https://quickstatements.toolforge.org/#/user")}

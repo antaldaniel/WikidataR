@@ -55,12 +55,18 @@ sparql_query <- function(params, ...){
 # Simple tests of strings for whether they adhere to common wikidata formats 
 is.qid  <- function(x){grepl("^[Qq][0-9]+$",x)}
 is.pid  <- function(x){grepl("^[Pp][0-9]+$",x)}
+is.sid  <- function(x){grepl("^[Ss][0-9]+$",x)}
 is.date <- function(x){grepl("[0-9]{1,4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",x)}
 is.quot <- function(x){grepl("^\".+\"$",x)}
+is.empty<- function(x){x==""}
 
 # Simple functions to convert plain text descriptions into their most likely QID/PIDs
-as_qid <- function(x){if(!all(is.qid(x))){WikidataR::find_item(x)[[1]]$id}else{x}}
-as_pid <- function(x){if(!all(is.pid(x))){WikidataR::find_property(x)[[1]]$id}else{x}}
+as_qid <- function(x){if(all(is.qid(x))){x}else{WikidataR::find_item(x)[[1]]$id}}
+as_pid <- function(x){if(all(is.pid(x))){x}else{WikidataR::find_property(x)[[1]]$id}}
+as_sid <- function(x){if(all(is.sid(x))){x}
+  else if(all(is.pid(x))){gsub("P","S",x,ignore.case = 1)}
+  else{gsub("P","S",WikidataR::find_property(x)[[1]]$id)}
+  }
 
 #'@title Extract Claims from Returned Item Data
 #'@description extract claim information from data returned using
@@ -85,8 +91,8 @@ as_pid <- function(x){if(!all(is.pid(x))){WikidataR::find_property(x)[[1]]$id}el
 #'claims <- extract_claims(adams_data, "P31")
 #'
 #'@export
-extract_claims <- function (items, claims){
-
+extract_claims <- function (items,
+                            claims){
   claims <- sapply(claims,as_pid)
   output <- lapply(items, function(x, claims) {
     return(lapply(claims, function(claim, obj) {
@@ -121,17 +127,6 @@ qid_from_name <- function(name  = 'Thomas Shafee',
   names(item.qid) <- name
   item.qid <- unlist(item.qid)
   return(item.qid)
-}
-
-list_properties <- function (item,
-                             names=FALSE){
-  properties.p <- lapply(lapply(item,"[[","claims"),names)
-  if(names){
-    if(length(item)==1){
-      names(properties.p) <- unlist(lapply(lapply(lapply(get_property(properties.p),"[[","labels"),"[[","en"),"[[","value"))
-    }
-  }
-  return(properties.p)
 }
 
 list_properties <- function (item,
@@ -195,14 +190,6 @@ unspecial <- function(x){
   return(as_tibble(out))
 }
 
-# Somesimple is, as, and conversion functions
-is.qid  <- function(x){grepl("^[Qq][0-9]+$",x)}
-is.pid  <- function(x){grepl("^[Pp][0-9]+$",x)}
-is.date <- function(x){grepl("[0-9]{1,4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",x)}
-is.quot <- function(x){grepl("^\".+\"$",x)}
-as_qid <- function(x){if(!all(is.qid(x))){WikidataR::find_item(x)[[1]]$id}else{x}}
-as_pid <- function(x){if(!all(is.pid(x))){WikidataR::find_property(x)[[1]]$id}else{x}}
-
 #' @title Get an example SPARQL query from Wikidata
 #' @description Gets the specified example(s) from
 #'   [SPARQL query service examples page](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples)
@@ -240,4 +227,36 @@ get_example <- function(example_name) {
     query <- paste0(wiki[(heading_line + start_line):(heading_line + start_line + end_line - 1)], collapse = "\n")
     return(sub("^\\s*\\{\\{SPARQL2?\\n?\\|query\\=", "", query))
   }, ""))
+}
+
+
+extract_para <- function(text,
+                         para,
+                         templ=NULL){
+  extract_para_nest1 <- function(x,y){
+    out <- lapply(x,gsub,pattern=".*= *| *\\|",replacement="")
+    names(out) <- y
+    return(out)
+  }
+  templ <- gsub(" ","_",templ)
+  tosearch <- gsub("( |\\\\n|\\\\t)+"," ",text)
+  if(!is.null(templ)){
+    templates <- regmatches(tosearch, gregexpr("\\{(?:[^{}]+|(?R))*+\\}",
+                                               tosearch, perl=TRUE, ignore.case=TRUE))[[1]]
+    name_lens <- regexpr(" *\\|| *\\}",templates) - 1 
+    templates <- paste0(gsub(" ","_",substr(templates,1,regexpr(" *\\|| *\\}",templates)-1)),
+                        substr(templates,regexpr("*\\||*\\}",templates),nchar(templates)))
+    
+    tosearch <- unlist(str_extract_all(templates,
+                                       paste0("(?i)\\{\\{ *?",templ,".*?\\}\\}")))
+    names(tosearch) <- paste0(templ,"_",1:length(tosearch))
+  }
+  
+  match_paras <- lapply(tosearch,
+                        str_extract_all,
+                        paste0("\\| *?",para," *?=.*?\\|"))
+  
+  match_exact <- lapply(match_paras,extract_para_nest1,para)
+  
+  return(match_exact)
 }
