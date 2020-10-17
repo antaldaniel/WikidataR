@@ -9,9 +9,9 @@ as_quickstatement <- function(items,
                               remove          = FALSE,
                               format          = "api",
                               api.username    = "Evolution_and_evolvability",
-                              api.token       = "%242y%2410%24VdlzfpUNVSRVbz7.d2HrXO3n7VdhBI9BWhthNGDAXfHj3Aa6kD3mq",
+                              api.token       = NULL,
                               api.format      = "v1",
-                              api.batchname   = "ts_API_test2",
+                              api.batchname   = NULL,
                               api.submit      = TRUE
                               ){
   
@@ -80,6 +80,7 @@ as_quickstatement <- function(items,
     return(QS.tib)
   }
   if (format=="api"){
+    if (api.token=NULL){stop("API token needed. Find yours at https://quickstatements.toolforge.org/#/user")}
     api.temp1 <- format_tsv(QS.tib)
     api.temp2 <- gsub("\t","%09",api.temp1) # Replace TAB with "%09"
     api.temp3 <- gsub("\n","%0A",api.temp2) # Replace end-of-line with "%0A"
