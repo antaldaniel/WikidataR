@@ -1,3 +1,66 @@
+#'@title Write statements to Wikidata
+#'@description Upload data to wikidata, including creating items,
+#'adding statements to existing items (via the quickstatements format and API).
+#'
+#'@param items a vector of strings indicating the items to which to add statements (as QIDs or labels).
+#'Note: if labels are provided, and multiple items match, the first matching item will be used
+#'(see \code{as_qid} function), so use with caution.
+#'
+#'@param properties a vector of strings indicating the properties to add as statements (as PIDs or labels).
+#'Note: if labels are provided, and multiple items match, the first matching item will be used
+#'(see \code{as_pid} function), so use with caution.
+#'
+#'@param values a vector of strings indicating the values to add as statements (as QIDs or strings).
+#'Note: if strings are provided, they will be treated as plain text.
+#'
+#'@param qual.properties a vector of strings indicating the properties to add as qualifiers to statements (as PIDs or labels).
+#'Note: if labels are provided, and multiple items match, the first matching item will be used
+#'(see \code{as_pid} function), so use with caution.
+#'
+#'@param qual.values a vector of strings indicating the values to add as statements (as QIDs or strings).
+#'Note: if strings are provided, they will be treated as plain text.
+#'
+#'@param src.properties a vector of strings indicating the properties to add as reference sources to statements (as SIDs or labels).
+#'Note: if labels are provided, and multiple items match, the first matching item will be used
+#'(see \code{as_sid} function), so use with caution.
+#'
+#'@param src.values a vector of strings indicating the values to add reference sources to statements (as QIDs or strings).
+#'Note: if strings are provided, they will be treated as plain text.
+#'
+#'@param remove a vector of boolians for each statemnt indicating whether it should
+#'be removed from the item rather than added (default = FALSE)
+#'
+#'@param format output format as a string. Options include:
+#' \describe{
+#'   \item{tibble}{easiest format to further manuipulation in R}
+#'   \item{csv}{can be copy-pasted to https://quickstatements.toolforge.org/ (or manipulated in a spreadsheet programs)}
+#'   \item{api}{a url that can be copy-pasted into a web browser, or automatically submitted (see \code{api.submit} parameter)}
+#' }
+#'
+#'@param api.username a string indicating your wikimedia username 
+#'
+#'@param api.token a string indicating your api token (the unique identifier that you can find listed at https://quickstatements.toolforge.org/#/user)
+#'
+#'@param api.format a string indicateing which version of the quickstatement format used to submit the api (default = "v1")
+#'
+#'@param api.batchname a string create a named batch (listed at https://quickstatements.toolforge.org/#/batches) and tag in the edit summaries
+#'
+#'@param api.submit boolian indicating whether to submit instruction directly to wikidata (else returns the URL that can be copy-pasted into a web browser)
+#'
+#'@return data formatted to upload to wikidata (via quickstatemsnts),
+#'optionally also directly uploded to wikidata (see \code{format} parameter. 
+#'
+#'@examples
+#'as_quickstatement(items        = "Wikidata Sandbox",
+#'                  properties   = "instance of",
+#'                  values       = "Q1",
+#'                  format       = "api",
+#'                  api.username = "myusername", 
+#'                  api.token    = , #REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
+#'                  )
+#'
+#'@export
+
 as_quickstatement <- function(items,
                               properties      = NULL,
                               values          = NULL,
