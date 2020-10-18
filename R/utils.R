@@ -127,7 +127,24 @@ is.sid   <- function(x){grepl("^[Ss][0-9]+$",x)}
 is.date  <- function(x){grepl("[0-9]{1,4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",x)}
 is.quot  <- function(x){grepl("^\".+\"$",x)}
 is.coord <- function(x){grepl("@-?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?)/-?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$",x)}
-is.empty <- function(x){x==""}
+is.wdURL <- function(x){grepl("http://www.wikidata.org/entity/[PpQq][0-9]+$",x)}is.empty <- function(x){x==""}
+
+#'@title Extract an identifier from a wikidata URL
+#'@description Convert a URL ending in an identifier (returned by SPARQL queries) to just the plan identifier (QID or PID).
+#'
+#'@param x a strings representing a wikidata URL
+#'
+#'@return if the URL ends in a QID or PID, return that PID or QID, else return the original string
+#'
+#'@examples
+#'url_to_id("http://www.wikidata.org/entity/42")
+#'
+#'@export
+url_to_id <- function (x){
+  if(is.wdURL(x)){x <- sapply(sapply(x,pattern = "/",stringr::str_split),tail,1)}
+  output <- x
+  output
+}
 
 #Generic input checker. Needs additional stuff for property-based querying
 #because namespaces are weird, yo. - Ironholds
@@ -213,6 +230,21 @@ as_sid <- function(x){if(all(is.sid(x))){x}
   else if(all(is.pid(x))){gsub("P","S",x,ignore.case = 1)}
   else{gsub("P","S",WikidataR::find_property(x)[[1]]$id)}
   }
+
+#'@title Extract an identifier from a wikidata URL
+#'@description Convert a URL ending in an identifier (returned by SPARQL queries) to just the plan identifier (QID or PID).
+#'
+#'@param x a vector of strings representing wikidata URLs
+#'
+#'@return QID or PID
+#'
+#'@examples
+#'url_to_id("http://www.wikidata.org/entity/42")
+#'
+#'@export
+url_to_id <- function (x){
+  sapply(sapply(x,pattern = "/",stringr::str_split),tail,1)
+}
 
 # -------- Wikidata object manipulation --------
 #'@title Extract Claims from Returned Item Data

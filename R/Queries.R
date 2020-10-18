@@ -5,7 +5,7 @@
 #'   "smart" fetches JSON-formatted data and returns a data frame with datetime
 #'   columns converted to `POSIXct`
 #' @param ... Additional parameters to supply to [httr::POST]
-#' @return A `data.frame`
+#' @return A `tibble`. Note: QID values will be returned as QIDs, rather than URLs.
 #' @examples
 #' # R's versions and release dates:
 #' sparql_query <- 'SELECT DISTINCT
@@ -26,5 +26,8 @@
 #' @seealso [get_example]
 #' @export
 query_wikidata <- function(...) {
-  as_tibble(WikidataQueryServiceR::query_wikidata(...))
+  output <- WikidataQueryServiceR::query_wikidata(...)
+  output <- mapply(url_to_id,data.frame(articles.qr))
+  output <- tibble(data.frame(output))
+  output
 }
