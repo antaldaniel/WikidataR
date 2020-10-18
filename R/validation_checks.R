@@ -5,4 +5,4 @@ sparql_query <- 'SELECT ?Wikidata_property_to_indicate_a_source ?Wikidata_proper
                     ?Wikidata_property_to_indicate_a_source wdt:P31 wd:Q18608359.
                  }'
 
-SIDs.valid <- query_wikidata(sparql_query)
+SIDs.valid <- query_wikidata(sparql_query)[,1]
