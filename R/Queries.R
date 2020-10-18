@@ -27,7 +27,7 @@
 #' @export
 query_wikidata <- function(...) {
   output <- WikidataQueryServiceR::query_wikidata(...)
-  output <- mapply(url_to_id,data.frame(output))
+  output <- suppressWarnings(mapply(url_to_id,data.frame(output)))
   output <- tibble(data.frame(output))
   output
 }
