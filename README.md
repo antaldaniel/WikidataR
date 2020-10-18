@@ -168,11 +168,12 @@ as_quickstatement(items      = sapply(sapply(articles.qr$Article,pattern = "/",s
                   format     = "tibble",
                   )
                   
-as_quickstatement(items      = sapply(sapply(articles.qr$Article,pattern = "/",stringr::str_split),tail,1),
-                  properties = "Peer review URL",
-                  values     = review.URLs,
-                  format     = "api",
-                  token=,#REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
+as_quickstatement(items        = sapply(sapply(articles.qr$Article,pattern = "/",stringr::str_split),tail,1),
+                  properties   = "Peer review URL",
+                  values       = review.URLs,
+                  format       = "api",
+                  api.username = "myusername", 
+                  api.token    = , #REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
                   )
 ```
 ### Acknowledgements
