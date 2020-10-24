@@ -31,3 +31,19 @@ query_wikidata <- function(...) {
   output <- tibble(data.frame(output))
   output
 }
+
+
+qid_from_property <- function(property = 'DOI',
+                              value    = c('10.15347/WJM/2019.001','10.15347/WJM/2020.002')){
+  
+  property <- as_pid(property)
+  
+  qid_from_property1 <- function(x,y){paste('SELECT ?value WHERE {?value wdt:',y,' "',
+                                            x,
+                                            '"}',
+                                            sep='')}
+  sparql_query <- lapply(value,property,FUN=qid_from_property1)
+  article.qr   <- if(length(value)>1){pbapply::pblapply(sparql_query,FUN=query_wikidata)}else{lapply(sparql_query,FUN=query_wikidata)}
+  article.qid  <- tibble(value,qid=unlist(article.qr))
+  return(article.qid)
+}

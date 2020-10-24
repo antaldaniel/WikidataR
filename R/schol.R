@@ -1,14 +1,16 @@
-
+#' @title QID freom DOI
+#' @description simple converter from DOIs to QIDs (for items in wikidata)
+#' @param DOI digital object identifiers submitted as strings
+#' @return tibble of QIDs corresponding to DOIs submitted
+#' @export
 qid_from_DOI <- function(DOI = '10.15347/WJM/2019.001'){
   qid_from_DOI_nest1 <- function(x){paste('SELECT ?DOI WHERE {?DOI wdt:P356 "',
                                           x,
                                           '"}',
                                           sep='')}
-  qid_from_DOI_nest2 <- function(x){tail(stringr::str_split(x,pattern = "/")[[1]],n=1)}
-  sparql_query <- lapply(DOI,qid_from_DOI_nest1)
-  article.qr   <- lapply(query_wikidata(sparql_query),as_tibble)
-  names(article.qr)<-DOI
-  article.qid  <- unlist(lapply(article.qr,qid_from_DOI_nest2))
+  sparql_query <- lapply(DOI,FUN=qid_from_DOI_nest1)
+  article.qr   <- lapply(sparql_query,FUN=query_wikidata)
+  article.qid   <- tibble(DOI,qid=unlist(article.qr))
   return(article.qid)
 }
 
@@ -27,10 +29,8 @@ qid_from_ORCID <- function(ORCID = '0000-0002-2298-7593'){
                                             x,
                                             '"}',
                                             sep='')}
-  qid_from_ORCID_nest2 <- function(x){tail(stringr::str_split(x,pattern = "/")[[1]],n=1)}
-  sparql_query <- lapply(ORCID,qid_from_ORCID_nest1)
-  author.qr   <- lapply(query_wikidata(sparql_query),as_tibble)
-  names(author.qr)<-ORCID
-  author.qid  <- unlist(lapply(author.qr,qid_from_ORCID_nest2))
+  sparql_query <- lapply(ORCID,FUN=qid_from_ORCID_nest1)
+  article.qr   <- lapply(sparql_query,FUN=query_wikidata)
+  author.qid   <- tibble(ORCID,qid=unlist(article.qr))
   return(author.qid)
 }
