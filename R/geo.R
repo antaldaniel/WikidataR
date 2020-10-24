@@ -183,7 +183,7 @@ get_geo_box <- function(first_city_code, first_corner, second_city_code, second_
 
 # Conversion function to convert dms coordinate string to decimal format for QuickStatements
 dms2num <- function(coord) {
-  getdeg <- regexec("([0-9]{1,2})°", coord)
+  getdeg <- regexec("([0-9]{1,3})°", coord)
   getmin <- regexec("([0-9]{1,2})'", coord)
   getsec <- regexec("([1-9]?[0-9](\\.[0-9]+)?)\"", coord)
   getdir <- regexec("[N|S|E|W]", coord)
