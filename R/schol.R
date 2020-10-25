@@ -1,4 +1,4 @@
-#' @title QID freom DOI
+#' @title QID from DOI
 #' @description simple converter from DOIs to QIDs (for items in wikidata)
 #' @param DOI digital object identifiers submitted as strings
 #' @return tibble of QIDs corresponding to DOIs submitted
@@ -14,16 +14,29 @@ qid_from_DOI <- function(DOI = '10.15347/WJM/2019.001'){
   return(article.qid)
 }
 
+#' @title QID from label name
+#' @description simple converter from label names to QIDs (for items in wikidata).
+#' Essentially a simplification of \code{find_item}
+#' @param DOI digital object identifiers submitted as strings
+#' @return tibble of QIDs corresponding to ORCIDs submitted
+#' @export
 qid_from_name <- function(name  = 'Thomas Shafee',
-                          limit = 100){
+                          limit = 100,
+                          format="vector"){
   qid_from_name_nest1 <- function(x){lapply(x,"[[","id")}
   item.qs  <- lapply(name,find_item, limit=limit)
   item.qid <- lapply(item.qs,qid_from_name_nest1)
   names(item.qid) <- name
-  item.qid <- unlist(item.qid)
+  if(format=="vector"){item.qid <- unlist(item.qid)}
+  if(format=="list")  {item.qid <- item.qid}
   return(item.qid)
 }
 
+#' @title QID from ORCID
+#' @description simple converter from ORCIDs to QIDs (for items in wikidata)
+#' @param DOI digital object identifiers submitted as strings
+#' @return tibble of QIDs corresponding to ORCIDs submitted
+#' @export
 qid_from_ORCID <- function(ORCID = '0000-0002-2298-7593'){
   qid_from_ORCID_nest1 <- function(x){paste('SELECT ?ORCID WHERE {?ORCID wdt:P496 "',
                                             x,
