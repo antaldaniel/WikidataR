@@ -186,7 +186,20 @@ check_input <- function(input, substitution){
 #'as_qid("Douglas Adams and the question of arterial blood pressure in mammals")
 #'
 #'@export
-as_qid <- function(x){if(all(is.qid(x))){x}else{WikidataR::find_item(x)[[1]]$id}}
+as_qid <- function(x){
+  as_qid_nest1 <- function(x){
+    if(is.qid(x)){
+      x
+    }else{
+      temp     <- WikidataR::find_item(x)[[1]]
+      x        <- temp$id
+      names(x) <- temp$label
+      x
+    }
+  }
+  output <- unlist(lapply(x,as_qid_nest1))
+  return(output)
+}
 
 #'@title Convert an input to a property PID
 #'@description Convert an input string to the most likely property PID
@@ -211,7 +224,6 @@ as_pid <- function(x){
     if(is.pid(x)){
       x
     }else{
-      as_pid_nest1 <- function(x){}
       temp     <- WikidataR::find_property(x)[[1]]
       x        <- temp$id
       names(x) <- temp$label
