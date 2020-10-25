@@ -121,13 +121,22 @@ get_example <- function(example_name) {
 
 # -------- Format checkers --------
 # Simple tests of strings for whether they adhere to common wikidata formats
-is.qid   <- function(x){grepl("^[Qq][0-9]+$",x)}
-is.pid   <- function(x){grepl("^[Pp][0-9]+$",x)}
-is.sid   <- function(x){grepl("^[Ss][0-9]+$",x)}
-is.date  <- function(x){grepl("[0-9]{1,4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",x)}
-is.quot  <- function(x){grepl("^\".+\"$",x)}
-is.coord <- function(x){grepl("@-?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?)/-?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$",x)}
-is.wdURL <- function(x){grepl("http://www.wikidata.org/entity/[PpQq][0-9]+$",x)}is.empty <- function(x){x==""}
+is.qid    <- function(x){grepl("^[Qq][0-9]+$",x)}
+is.pid    <- function(x){grepl("^[Pp][0-9]+$",x)}
+is.sid    <- function(x){grepl("^[Ss][0-9]+$",x)}
+is.date   <- function(x){grepl("[0-9]{1,4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",x)}
+is.quot   <- function(x){grepl("^\".+\"$",x)}
+is.coord  <- function(x){grepl("@-?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?)/-?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$",x)}
+is.wdURL  <- function(x){grepl("http://www.wikidata.org/entity/[PpQq][0-9]+$",x)}is.empty <- function(x){x==""}
+is.create <- function(x){grepl("^CREATE",x)}
+is.special<- function(x){if(grepl("^[LAD]",x)){
+                          paste0(substr(x,1,1)) %in% as.matrix(lang.abbrev)
+                        }else if(grepl("^S",x)){
+                          
+                        }else{
+                          FALSE
+                        }}
+
 
 #'@title Extract an identifier from a wikidata URL
 #'@description Convert a URL ending in an identifier (returned by SPARQL queries) to just the plan identifier (QID or PID).

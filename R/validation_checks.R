@@ -26,6 +26,26 @@ sparql_query <- 'SELECT ?property ?propertyLabel ?wbtype WHERE {
 
 PID.datatype <- query_wikidata(sparql_query)
 
+#Language abbreviations
+sparql_query <- 'SELECT ?abbrev WHERE {
+                    ?language wdt:P305 ?abbrev.
+                 }'
+
+lang.abbrev <- query_wikidata(sparql_query)
+
+#Language abbreviations for current wikis
+sparql_query <- 'SELECT ?abbrev WHERE {
+                    ?Wikipedia_language_edition wdt:P31 wd:Q10876391.
+                    ?Wikipedia_language_edition wdt:P424 ?abbrev.
+                 }'
+lang.abbrev.wiki <- query_wikidata(sparql_query)
+
+#Wikimedia abbreviations for current wikis
+sparql_query <- 'SELECT ?abbrev WHERE {
+                    ?Wiki_edition wdt:P1800 ?abbrev.
+                 }'
+abbrev.wiki <- query_wikidata(sparql_query)
+
 #example
 grep(as.matrix(PID.constraint[PID.constraint$Wikidata_property=="P968","fmt"]),
      "mailto:t.shafee@gmail.com",
