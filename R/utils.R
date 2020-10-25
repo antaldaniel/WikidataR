@@ -129,6 +129,7 @@ is.quot   <- function(x){grepl("^\".+\"$",x)}
 is.coord  <- function(x){grepl("@-?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?)/-?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$",x)}
 is.wdURL  <- function(x){grepl("http://www.wikidata.org/entity/[PpQq][0-9]+$",x)}is.empty <- function(x){x==""}
 is.create <- function(x){grepl("^CREATE",x)}
+is.last   <- function(x){grepl("^LAST$",x)}
 is.special<- function(x){if(grepl("^[LAD]",x)){
                           substr(x,2,100) %in% as.matrix(lang.abbrev)
                         }else if(grepl("^S",x)){
