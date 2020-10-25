@@ -130,9 +130,9 @@ is.coord  <- function(x){grepl("@-?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?)/-?(180(\\.0+
 is.wdURL  <- function(x){grepl("http://www.wikidata.org/entity/[PpQq][0-9]+$",x)}is.empty <- function(x){x==""}
 is.create <- function(x){grepl("^CREATE",x)}
 is.special<- function(x){if(grepl("^[LAD]",x)){
-                          paste0(substr(x,1,1)) %in% as.matrix(lang.abbrev)
+                          substr(x,2,100) %in% as.matrix(lang.abbrev)
                         }else if(grepl("^S",x)){
-                          
+                          substr(x,2,100) %in% as.matrix(abbrev.wiki)
                         }else{
                           FALSE
                         }}
