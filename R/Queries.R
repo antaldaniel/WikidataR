@@ -32,9 +32,16 @@ query_wikidata <- function(...) {
   output
 }
 
-
-qid_from_property <- function(property = 'DOI',
-                              value    = c('10.15347/WJM/2019.001','10.15347/WJM/2020.002')){
+#' @title QID from DOI
+#' @description convert unique identifiers to QIDs (for items in wikidata). 
+#' @param property the identifier property to search (for caveats, see \code {as_property})
+#' @param value the identifier value to match
+#' @return tibble of QIDs corresponding to DOIs submitted
+#' @example
+#' qid_from_identifier('ISBN-13','978-4-582-53701-7')
+#' @export
+qid_from_identifier <- function(property = 'DOI',
+                                value    = c('10.15347/WJM/2019.001','10.15347/WJM/2020.002')){
   
   property <- as_pid(property)
   
