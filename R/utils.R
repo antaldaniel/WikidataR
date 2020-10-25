@@ -206,7 +206,22 @@ as_qid <- function(x){if(all(is.qid(x))){x}else{WikidataR::find_item(x)[[1]]$id}
 #'as_pid("Scopus author ID")
 #'
 #'@export
-as_pid <- function(x){if(all(is.pid(x))){x}else{WikidataR::find_property(x)[[1]]$id}}
+as_pid <- function(x){
+  as_pid_nest1 <- function(x){
+    if(is.pid(x)){
+      x
+    }else{
+      as_pid_nest1 <- function(x){}
+      temp     <- WikidataR::find_property(x)[[1]]
+      x        <- temp$id
+      names(x) <- temp$label
+      x
+    }
+  }
+  output <- unlist(lapply(x,as_pid_nest1))
+  return(output)
+}
+
 
 #'@title Convert an input to a source property SID
 #'@description Convert an input string to the most likely source SID (equivalent to PID)
