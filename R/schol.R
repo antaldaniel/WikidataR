@@ -17,8 +17,10 @@ qid_from_DOI <- function(DOI = '10.15347/WJM/2019.001'){
 #' @title QID from label name
 #' @description simple converter from label names to QIDs (for items in wikidata).
 #' Essentially a simplification of \code{find_item}
-#' @param DOI digital object identifiers submitted as strings
-#' @return tibble of QIDs corresponding to ORCIDs submitted
+#' @param name name labels submitted as strings
+#' @param limit if multiple QIDs match each submitted name, how many to return
+#' @param format output format ('vector' to return a simple vector, or 'list' to return a nested list)
+#' @return tibble of QIDs corresponding to names submitted. Note: some names may return multiple QIDs.
 #' @export
 qid_from_name <- function(name  = 'Thomas Shafee',
                           limit = 100,
