@@ -122,8 +122,8 @@ get_example <- function(example_name) {
 # -------- Format checkers --------
 # Simple tests of strings for whether they adhere to common wikidata formats
 is.qid    <- function(x){grepl("^[Qq][0-9]+$",x)}
-is.pid    <- function(x){grepl("^[Pp][0-9]+$",x)}
-is.sid    <- function(x){grepl("^[Ss][0-9]+$",x)}
+is.pid    <- function(x){gsub("S","P",x) %in% as.matrix(.GlobalEnv$WD.globalvar$PID.datatype$property)}
+is.sid    <- function(x){gsub("S","P",x) %in% as.matrix(.GlobalEnv$WD.globalvar$SID.valid$Wikidata_property_to_indicate_a_source)}
 is.date   <- function(x){grepl("[0-9]{1,4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",x)}
 is.quot   <- function(x){grepl("^\".+\"$",x)}
 is.coord  <- function(x){grepl("@-?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?)/-?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$",x)}
@@ -131,9 +131,9 @@ is.wdURL  <- function(x){grepl("http://www.wikidata.org/entity/[PpQq][0-9]+$",x)
 is.create <- function(x){grepl("^CREATE",x)}
 is.last   <- function(x){grepl("^LAST$",x)}
 is.special<- function(x){if(grepl("^[LAD]",x)){
-  substr(x,2,100) %in% as.matrix(lang.abbrev)
+  substr(x,2,100) %in% as.matrix(.GlobalEnv$WD.globalvar$lang.abbrev)
 }else if(grepl("^S",x)){
-  substr(x,2,100) %in% as.matrix(abbrev.wiki)
+  substr(x,2,100) %in% as.matrix(.GlobalEnv$WD.globalvar$abbrev.wiki)
 }else{
   FALSE
 }}
