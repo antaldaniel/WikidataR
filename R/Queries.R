@@ -1,3 +1,4 @@
+#Wrapper around WikidataQueryServiceR::query_wikidata
 #' @title Send one or more SPARQL queries to WDQS
 #' @description Makes a POST request to Wikidata Query Service SPARQL endpoint.
 #' @param sparql_query SPARQL query (can be a vector of queries)
@@ -23,7 +24,6 @@
 #' # "smart" format converts all datetime columns to POSIXct
 #' query_wikidata(sparql_query, format = "smart")
 #' }
-#' @seealso [get_example]
 #' @export
 query_wikidata <- function(...) {
   output <- WikidataQueryServiceR::query_wikidata(...)

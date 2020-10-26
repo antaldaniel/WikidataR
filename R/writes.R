@@ -5,46 +5,36 @@
 #'@param items a vector of strings indicating the items to which to add statements (as QIDs or labels).
 #'Note: if labels are provided, and multiple items match, the first matching item will be used
 #'(see \code{as_qid} function), so use with caution.
-#'
+#'New QIDs can be created by using the "CREATE_xyz", where "_xyz" is any unique string.
+#'Using the same id will add additional statemnts to those new items 
 #'@param properties a vector of strings indicating the properties to add as statements (as PIDs or labels).
 #'Note: if labels are provided, and multiple items match, the first matching item will be used
 #'(see \code{as_pid} function), so use with caution.
-#'
+#'Four special properties can also be used: labels, aliases, descriptions and sitelinks. See [this link](https://www.wikidata.org/wiki/Help:QuickStatements#Adding_labels,_aliases,_descriptions_and_sitelinks) for the syntax.
 #'@param values a vector of strings indicating the values to add as statements (as QIDs or strings).
 #'Note: if strings are provided, they will be treated as plain text.
-#'
 #'@param qual.properties a vector of strings indicating the properties to add as qualifiers to statements (as PIDs or labels).
 #'Note: if labels are provided, and multiple items match, the first matching item will be used
 #'(see \code{as_pid} function), so use with caution.
-#'
 #'@param qual.values a vector of strings indicating the values to add as statements (as QIDs or strings).
 #'Note: if strings are provided, they will be treated as plain text.
-#'
 #'@param src.properties a vector of strings indicating the properties to add as reference sources to statements (as SIDs or labels).
 #'Note: if labels are provided, and multiple items match, the first matching item will be used
 #'(see \code{as_sid} function), so use with caution.
-#'
 #'@param src.values a vector of strings indicating the values to add reference sources to statements (as QIDs or strings).
 #'Note: if strings are provided, they will be treated as plain text.
-#'
 #'@param remove a vector of boolians for each statemnt indicating whether it should
 #'be removed from the item rather than added (default = FALSE)
-#'
 #'@param format output format as a string. Options include:
 #' \describe{
 #'   \item{tibble}{easiest format to further manuipulation in R}
-#'   \item{csv}{can be copy-pasted to https://quickstatements.toolforge.org/ (or manipulated in a spreadsheet programs)}
+#'   \item{csv}{can be copy-pasted to [the QuickStatements website](https://quickstatements.toolforge.org/) (or manipulated in a spreadsheet programs)}
 #'   \item{api}{a url that can be copy-pasted into a web browser, or automatically submitted (see \code{api.submit} parameter)}
 #' }
-#'
 #'@param api.username a string indicating your wikimedia username 
-#'
-#'@param api.token a string indicating your api token (the unique identifier that you can find listed at https://quickstatements.toolforge.org/#/user)
-#'
+#'@param api.token a string indicating your api token (the unique identifier that you can find listed at [your user page](https://quickstatements.toolforge.org/#/user))
 #'@param api.format a string indicateing which version of the quickstatement format used to submit the api (default = "v1")
-#'
-#'@param api.batchname a string create a named batch (listed at https://quickstatements.toolforge.org/#/batches) and tag in the edit summaries
-#'
+#'@param api.batchname a string create a named batch (listed at [your batch history page](https://quickstatements.toolforge.org/#/batches)) and tag in the edit summaries
 #'@param api.submit boolian indicating whether to submit instruction directly to wikidata (else returns the URL that can be copy-pasted into a web browser)
 #'
 #'@return data formatted to upload to wikidata (via quickstatemsnts),
@@ -60,7 +50,7 @@
 #'                  values       = "Q1",
 #'                  format       = "api",
 #'                  api.username = "myusername", 
-#'                  api.token    = , #REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
+#'                  api.token    = , #REDACTED# Find yours from [your user page](https://tools.wmflabs.org/quickstatements/#/user)
 #'                  )
 #'
 #'@export
@@ -81,26 +71,46 @@ as_quickstatement <- function(items,
                               api.submit      = TRUE
 ){
   
-  items           <- sapply(items,function(x){if(x!="LAST"){as_qid(x)}else{x}})
+  items           <- sapply(items,function(x){if(is.create(x)|is.last(x)){x}else{as_qid(x)}})
   items[remove]   <- paste0("-",items[remove])
-  properties      <- sapply(properties,as_pid)
+  properties      <- sapply(properties,function(x){if(is.special(x)){x}else{as_pid(x)}})
   
-  #strings need quotation marks, and in APIs those are indicated as $22 
+  # strings need quotation marks, and in APIs those are indicated as $22 
   if (format=="api"){
-    values          <- sapply(values,function(x){if(!(is.qid(x)|is.date(x)|is.quot(x))){paste0('$22',x,'$22')}else{x}})
+    values <- sapply(values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)){x}else{paste0('$22',x,'$22')}})
+    if(!is.null(qual.values)){qual.values <- sapply(qual.values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)){x}else{paste0('$22',x,'$22')}})}
+    if(!is.null(src.values)) {src.values  <- sapply(src.values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)){x}else{paste0('$22',x,'$22')}})}
   }
-  if (format=="tibble"|"csv"){
-    values          <- sapply(values,function(x){if(!(is.qid(x)|is.date(x)|is.quot(x))){paste0('"',x,'"')}else{x}})
+  
+  if (format=="tibble"|format=="csv"){
+    values <- sapply(values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)){x}else{paste0('"',x,'"')}})
+    if(!is.null(qual.values)){qual.values <- sapply(qual.values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)){x}else{paste0('"',x,'"')}})}
+    if(!is.null(src.values)) {src.values  <- sapply(src.values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)){x}else{paste0('"',x,'"')}})}
   }
+  
+  # if new QIDs are being created via the "CREATE" keyword, need to insert blank lines across the other parameters to align correctly into rows
+  properties      <- createrows(items,properties)
+  values          <- createrows(items,values)
+  qual.properties <- createrows(items,qual.properties)
+  qual.values     <- createrows(items,qual.values)
+  src.properties  <- createrows(items,src.properties)
+  src.values      <- createrows(items,src.values)
   
   # build the basic tibble of the items and what properties and values to add as statements
-  QS <- list(items,
-             properties,
-             values)
+  QS <- list(items=items,
+             properties=properties,
+             values=values)
   QS.rowmax <- max(sapply(QS,length))
-  QS.check  <- sapply(QS,length)==1|
-    sapply(QS,length)==QS.rowmax
-  if(!all(QS.check)){stop("not all quickstatement columns equal length")}
+  QS.check  <- sapply(QS,length)==1|sapply(QS,length)==QS.rowmax
+  
+  # if wrong number of values or properties, stop with error message
+  if(!all(QS.check)){stop(paste0("\n Not all quickstatement columns equal length: ",
+                                sum(items!="CREATE")," items (",
+                                sum(items=="CREATE")," new QIDs to CREATE) were provided, but ",
+                                lapply(QS[lapply(QS,length)!=sum(items!="CREATE") & lapply(QS,length)!=1],length),
+                                " ",
+                                names(QS[lapply(QS,length)!=sum(items!="CREATE") & lapply(QS,length)!=1]),
+                                "."))}
   QS.tib <- tibble(Item =  QS[[1]],
                    Prop =  QS[[2]],
                    Value = QS[[3]])
@@ -114,8 +124,8 @@ as_quickstatement <- function(items,
                 qual.values)
     QSq.rowmax <- max(sapply(c(QS,QSq),length))
     QSq.check  <- sapply(c(QS,QSq),length)==1|
-                  sapply(c(QS,QSq),length)==QSq.rowmax
-    if(!all(QSq.check)){stop("incorrect number of qualifiers provided")}
+      sapply(c(QS,QSq),length)==QSq.rowmax
+    if(!all(QSq.check)){stop("Incorrect number of qualifiers provided. If no qualifers needed for a statement, use NA or \"\".")}
     
     QS.tib <- add_column(QS.tib,
                          Qual.Prop  = QSq[[1]],
@@ -138,6 +148,12 @@ as_quickstatement <- function(items,
                          Src.Prop  = QSs[[1]],
                          Src.Value = QSs[[2]])
   }
+  
+  # NAs to empty strings
+  QS.tib[is.na(QS.tib)] <- ""
+  
+  # if new QIDs are being created via tidy "CREATExyd" keywords, need to insert CREATE lines above and replace "CREATExyz" with "LAST"
+  QS.tib <- createrows.tidy(QS.tib)
   
   # output
   if (format=="csv"){

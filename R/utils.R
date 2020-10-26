@@ -131,12 +131,12 @@ is.wdURL  <- function(x){grepl("http://www.wikidata.org/entity/[PpQq][0-9]+$",x)
 is.create <- function(x){grepl("^CREATE",x)}
 is.last   <- function(x){grepl("^LAST$",x)}
 is.special<- function(x){if(grepl("^[LAD]",x)){
-                          substr(x,2,100) %in% as.matrix(lang.abbrev)
-                        }else if(grepl("^S",x)){
-                          substr(x,2,100) %in% as.matrix(abbrev.wiki)
-                        }else{
-                          FALSE
-                        }}
+  substr(x,2,100) %in% as.matrix(lang.abbrev)
+}else if(grepl("^S",x)){
+  substr(x,2,100) %in% as.matrix(abbrev.wiki)
+}else{
+  FALSE
+}}
 
 
 #'@title Extract an identifier from a wikidata URL
@@ -266,7 +266,7 @@ as_pid <- function(x){
 as_sid <- function(x){if(all(is.sid(x))){x}
   else if(all(is.pid(x))){gsub("P","S",x,ignore.case = 1)}
   else{gsub("P","S",WikidataR::find_property(x)[[1]]$id)}
-  }
+}
 
 #'@title Extract an identifier from a wikidata URL
 #'@description Convert a URL ending in an identifier (returned by SPARQL queries) to just the plan identifier (QID or PID).
@@ -435,7 +435,7 @@ unspecial <- function(x){
 }
 
 #'@title Extract a paragraph of text
-#'@description Return the nth paragraph of a section of text. 
+#'@description Return the nth paragraph of a section of text
 #'Useful for extracting information from wikipedia or other wikimarkup text
 #'
 #'@param text the input text as a string
@@ -477,4 +477,58 @@ extract_para <- function(text,
   match_exact <- lapply(match_paras,extract_para_nest1,para)
   
   return(match_exact)
+}
+
+#'@title "CREATE" rows 
+#'@description Add in empty lines for QuickStatements CREATE rows that mint new QIDs.
+#'This is a slightly messy quirk of the QuickStatements format that mints new QIDs via a line
+#'containing only "CREATE", so this function is a way to approximate that bevaviour in a tibble
+#'@param items a vector of items (which may or may not contain the keyword "CREATE")
+#'@param vector a vector of properties or values which may be expanded based on the items vector
+#'@return if the vector is NULL, return NULL. Otherwise, if the "CREATE" keyword appears in the
+#'items vector, insert blank strings at those positions in the vector.
+#'
+#'@export
+createrows <- function(items,vector){
+  if(all(any(items=="CREATE"),!is.null(vector))){
+    #expand vector to full length if just intending to repeat a single value 
+    if(length(vector)==1){
+      vector <- rep(vector,sum(items!="CREATE"))
+    }
+    
+    newQID <- which(items=="CREATE")
+    val <- c(vector, rep("",length(newQID)) )
+    id  <- c(seq_along(vector), newQID-seq_along(newQID)+0.5)
+    out <- val[order(id)]
+    return(out)
+  }else{
+    return(vector)
+  }
+}
+
+#'@title "CREATE" rows from tidy format
+#'@description Add in QuickStatements CREATE rows that mint new QIDs from tidy input data.
+#'New items are created by any item starting that starts with the text "CREATE" followed
+#'by any unique ID.
+#'
+#'@param QS.tib a tibble of items, values and properties (optionally qualifiers and sources).
+#'
+#'@return a tibble, with items that start with "CREATE" followed by any unique text causing the
+#'addition of a "Create" line above, being replaced with "LAST" in the Quickstatemnts format
+#'to create new QIDs.
+#'
+#'@export
+createrows.tidy <- function(QS.tib) {
+  #insert 'CREATE' blankrows above first instance of 'CREATExyz'
+  newQID <- which(!duplicated(QS.tib[,1])&sapply(QS.tib[,1],is.create))
+  val <- rbind(QS.tib, array("",dim=c(length(newQID),ncol(QS.tib)),dimnames = list(newQID,names(QS.tib))) )
+  id  <- c(seq_along(t(QS.tib)[1,]), newQID-0.5)
+  out <- val[order(id),]
+  
+  #replace 'CREATEXYZ' with 'LAST'
+  out[sapply(out[,1],is.create),1] <- "LAST"
+  
+  #replace new empty rows with 'CREATE' row
+  out[apply(is.empty(out),all,MARGIN=1),1] <- "CREATE"
+  return(out)
 }
