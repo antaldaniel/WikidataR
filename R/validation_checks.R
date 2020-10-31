@@ -11,7 +11,17 @@
                       SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
                       ?Wikidata_property_to_indicate_a_source wdt:P31 wd:Q18608359.
                    }'
-    SID.valid <- query_wikidata(sparql_query)
+  SID.valid <- query_wikidata(sparql_query)
+  
+  #The required data type for each property
+  message(' ... Checking required data type for each property')
+  sparql_query <- 'SELECT ?property ?propertyLabel ?wbtype WHERE {
+                      SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+                      ?property rdf:type               wikibase:Property.
+                      ?property wikibase:propertyType  ?wbtype.
+                   }'
+  PID.datatype <- query_wikidata(sparql_query)
+  PID.datatype$wbtype <- gsub("ontology#","",PID.datatype$wbtype)
   
   #The expected regex match for each property
   message(' ... Checking expected regex match for each property')
@@ -21,22 +31,13 @@
                       ?Wikidata_property wdt:P1793 ?fmt
                    }'
   PID.constraint <- unique(query_wikidata(sparql_query))
-  
-  #The required data type for each property
-  message(' ... Checking required data type for each property')
-  sparql_query <- 'SELECT ?property ?propertyLabel ?wbtype WHERE {
-                      SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-                      ?property rdf:type               wikibase:Property.
-                      ?property wikibase:propertyType  ?wbtype.
-                   }'
-    PID.datatype <- query_wikidata(sparql_query)
-  
+
   #Language abbreviations
   message(' ... Checking language abbreviations')
   sparql_query <- 'SELECT ?abbrev WHERE {
                       ?language wdt:P305 ?abbrev.
                    }'
-    lang.abbrev <- query_wikidata(sparql_query)
+  lang.abbrev <- query_wikidata(sparql_query)
   
   #Language abbreviations for current wikis
   message(' ... Checking language abbreviations for current wikis')
@@ -60,8 +61,8 @@
   assign(x = "WD.globalvar",
          envir = .GlobalEnv,
          value = list(SID.valid=SID.valid,
-                      PID.constraint=PID.constraint,
                       PID.datatype=PID.datatype,
+                      PID.constraint=PID.constraint,
                       lang.abbrev=lang.abbrev,
                       lang.abbrev.wiki=lang.abbrev.wiki,
                       abbrev.wiki=abbrev.wiki)

@@ -126,17 +126,30 @@ is.pid    <- function(x){gsub("S","P",x) %in% as.matrix(.GlobalEnv$WD.globalvar$
 is.sid    <- function(x){gsub("S","P",x) %in% as.matrix(.GlobalEnv$WD.globalvar$SID.valid$Wikidata_property_to_indicate_a_source)}
 is.date   <- function(x){grepl("[0-9]{1,4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",x)}
 is.quot   <- function(x){grepl("^\".+\"$",x)}
+is.empty  <- function(x){x==""}
 is.coord  <- function(x){grepl("@-?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?)/-?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$",x)}
-is.wdURL  <- function(x){grepl("http://www.wikidata.org/entity/[PpQq][0-9]+$",x)}is.empty <- function(x){x==""}
+is.wdURL  <- function(x){grepl("http://www.wikidata.org/entity/[PpQq][0-9]+$",x)}
+is.empty  <- function(x){x==""}
 is.create <- function(x){grepl("^CREATE",x)}
 is.last   <- function(x){grepl("^LAST$",x)}
 is.special<- function(x){if(grepl("^[LAD]",x)){
-  substr(x,2,100) %in% as.matrix(.GlobalEnv$WD.globalvar$lang.abbrev)
-}else if(grepl("^S",x)){
-  substr(x,2,100) %in% as.matrix(.GlobalEnv$WD.globalvar$abbrev.wiki)
-}else{
-  FALSE
-}}
+    substr(x,2,100) %in% as.matrix(.GlobalEnv$WD.globalvar$lang.abbrev)
+  }else if(grepl("^S",x)){
+    substr(x,2,100) %in% as.matrix(.GlobalEnv$WD.globalvar$abbrev.wiki)
+  }else{
+    FALSE
+  }
+}
+
+check.PID.WikibaseItem <- function(x){x %in% WD.globalvar$PID.datatype$property[WD.globalvar$PID.datatype$wbtype=="WikibaseItem"]}
+
+check.PID.constraint <- function(x){
+  check.PID.constraint.nest1 <- function(x){
+    out <- as.character(WD.globalvar$PID.constraint$fmt[WD.globalvar$PID.constraint$Wikidata_property==x])
+    if(length(out)!=0){out}else{NA}
+    }
+  sapply(x,check.PID.constraint.nest1)
+}
 
 
 #'@title Extract an identifier from a wikidata URL
@@ -201,10 +214,24 @@ as_qid <- function(x){
     if(is.qid(x)){
       x
     }else{
-      temp     <- WikidataR::find_item(x)[[1]]
-      x        <- temp$id
-      names(x) <- temp$label
-      x
+      temp       <- WikidataR::find_item(x)
+      temp       <- temp[sapply(temp,function(temp,x){temp$label==x},x)]
+      if(length(temp)==0){
+        out <- NA
+        message (paste0("no sufficiently close match for \"",x,"\". Returned \"NA\"."))
+      }else{
+        out        <- temp[[1]]$id
+        names(out) <- temp[[1]]$label
+        if(x!=temp[[1]]$label){message(paste0(
+          "Imperfect match for \"",x,
+          "\", closest match = ",temp[[1]]$label,
+          " (",out,")"))}
+        if(temp[[1]]$label==temp[[2]]$label){message(paste0(
+          "Multiple perfect matches for \"",x,
+          "\"\n match 1 = ",temp[[1]]$description,
+          "\n match 2 = ",temp[[2]]$description))}
+        }
+      out
     }
   }
   output <- unlist(lapply(x,as_qid_nest1))
@@ -234,10 +261,19 @@ as_pid <- function(x){
     if(is.pid(x)){
       x
     }else{
-      temp     <- WikidataR::find_property(x)[[1]]
-      x        <- temp$id
-      names(x) <- temp$label
-      x
+      temp       <- WikidataR::find_property(x,limit = 2)
+      if(length(temp)==0){
+          out <- NA
+          message (paste0("no sufficiently close match for \"",x,"\". Returned \"NA\"."))
+        }else{
+          out        <- temp[[1]]$id
+          names(out) <- temp[[1]]$label
+          if(x!=temp[[1]]$label){message(paste0(
+            "Imperfect match for \"",x,
+            "\", closest match = ",temp[[1]]$label,
+            " (",out,")."))}
+          }
+      out
     }
   }
   output <- unlist(lapply(x,as_pid_nest1))
