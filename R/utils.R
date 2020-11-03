@@ -214,7 +214,7 @@ as_qid <- function(x){
     if(is.qid(x)){
       x
     }else{
-      temp       <- WikidataR::find_item(x)
+      temp       <- WikidataR::find_item(x,limit = 100)
       temp       <- temp[sapply(temp,function(temp,x){temp$label==x},x)]
       if(length(temp)==0){
         out <- NA
@@ -223,13 +223,13 @@ as_qid <- function(x){
         out        <- temp[[1]]$id
         names(out) <- temp[[1]]$label
         if(x!=temp[[1]]$label){message(paste0(
-          "Imperfect match for \"",x,
+          "Inexact match for \"",x,
           "\", closest match = ",temp[[1]]$label,
           " (",out,")"))}
-        if(temp[[1]]$label==temp[[2]]$label){message(paste0(
-          "Multiple perfect matches for \"",x,
-          "\"\n match 1 = ",temp[[1]]$description,
-          "\n match 2 = ",temp[[2]]$description))}
+        if(length(temp)>1){message(paste0(
+          "Multiple exact matches for \"",x,
+          "\"\n match ",1:length(temp),
+          " = ",sapply(temp,function(temp){temp$description})))}
         }
       out
     }
@@ -269,7 +269,7 @@ as_pid <- function(x){
           out        <- temp[[1]]$id
           names(out) <- temp[[1]]$label
           if(x!=temp[[1]]$label){message(paste0(
-            "Imperfect match for \"",x,
+            "Inexact match for \"",x,
             "\", closest match = ",temp[[1]]$label,
             " (",out,")."))}
           }

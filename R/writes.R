@@ -74,6 +74,8 @@ as_quickstatement <- function(items,
   items           <- sapply(items,function(x){if(is.create(x)|is.last(x)){x}else{as_qid(x)}})
   items[remove]   <- paste0("-",items[remove])
   properties      <- sapply(properties,function(x){if(is.special(x)){x}else{as_pid(x)}})
+  values [check.PID.WikibaseItem(properties)] <- sapply(values[check.PID.WikibaseItem(properties)],function(x){as_qid(x)})
+
   
   # strings need quotation marks, and in APIs those are indicated as $22 
   if (format=="api"){
@@ -105,12 +107,12 @@ as_quickstatement <- function(items,
   
   # if wrong number of values or properties, stop with error message
   if(!all(QS.check)){stop(paste0("\n Not all quickstatement columns equal length: ",
-                                sum(items!="CREATE")," items (",
-                                sum(items=="CREATE")," new QIDs to CREATE) were provided, but ",
-                                lapply(QS[lapply(QS,length)!=sum(items!="CREATE") & lapply(QS,length)!=1],length),
-                                " ",
-                                names(QS[lapply(QS,length)!=sum(items!="CREATE") & lapply(QS,length)!=1]),
-                                "."))}
+                                 sum(items!="CREATE")," items (",
+                                 sum(items=="CREATE")," new QIDs to CREATE) were provided, but ",
+                                 lapply(QS[lapply(QS,length)!=sum(items!="CREATE") & lapply(QS,length)!=1],length),
+                                 " ",
+                                 names(QS[lapply(QS,length)!=sum(items!="CREATE") & lapply(QS,length)!=1]),
+                                 "."))}
   QS.tib <- tibble(Item =  QS[[1]],
                    Prop =  QS[[2]],
                    Value = QS[[3]])
