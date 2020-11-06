@@ -79,15 +79,15 @@ as_quickstatement <- function(items,
   
   # strings need quotation marks, and in APIs those are indicated as $22 
   if (format=="api"){
-    values <- sapply(values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)){x}else{paste0('$22',x,'$22')}})
-    if(!is.null(qual.values)){qual.values <- sapply(qual.values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)){x}else{paste0('$22',x,'$22')}})}
-    if(!is.null(src.values)) {src.values  <- sapply(src.values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)){x}else{paste0('$22',x,'$22')}})}
+    values <- sapply(values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)){x}else{paste0('$22',x,'$22')}})
+    if(!is.null(qual.values)){qual.values <- sapply(qual.values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)){x}else{paste0('$22',x,'$22')}})}
+    if(!is.null(src.values)) {src.values  <- sapply(src.values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)){x}else{paste0('$22',x,'$22')}})}
   }
   
   if (format=="tibble"|format=="csv"){
-    values <- sapply(values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)){x}else{paste0('"',x,'"')}})
-    if(!is.null(qual.values)){qual.values <- sapply(qual.values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)){x}else{paste0('"',x,'"')}})}
-    if(!is.null(src.values)) {src.values  <- sapply(src.values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)){x}else{paste0('"',x,'"')}})}
+    values <- sapply(values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)){x}else{paste0('"',x,'"')}})
+    if(!is.null(qual.values)){qual.values <- sapply(qual.values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)){x}else{paste0('"',x,'"')}})}
+    if(!is.null(src.values)) {src.values  <- sapply(src.values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)){x}else{paste0('"',x,'"')}})}
   }
   
   # if new QIDs are being created via the "CREATE" keyword, need to insert blank lines across the other parameters to align correctly into rows

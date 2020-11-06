@@ -215,21 +215,27 @@ as_qid <- function(x){
       x
     }else{
       temp       <- WikidataR::find_item(x,limit = 100)
-      temp       <- temp[sapply(temp,function(temp,x){temp$label==x},x)]
       if(length(temp)==0){
         out <- NA
         message (paste0("no sufficiently close match for \"",x,"\". Returned \"NA\"."))
       }else{
-        out        <- temp[[1]]$id
-        names(out) <- temp[[1]]$label
+        toinclude    <- sapply(temp,function(temp,x){temp$label==x},x)
+        toinclude[1] <- TRUE
+        temp         <- temp[toinclude]
+        out          <- temp[[1]]$id
+        names(out)   <- temp[[1]]$label
         if(x!=temp[[1]]$label){message(paste0(
           "Inexact match for \"",x,
           "\", closest match = ",temp[[1]]$label,
-          " (",out,")"))}
-        if(length(temp)>1){message(paste0(
-          "Multiple exact matches for \"",x,
-          "\"\n match ",1:length(temp),
-          " = ",sapply(temp,function(temp){temp$description})))}
+          " (",out,") "))}
+        if(length(temp)>1){
+          message(paste0(
+          "Multiple exact matches for \"",x,"\""))
+          message(paste0(
+            "  match ",1:length(temp),
+            " = (",sapply(temp,function(temp){temp$id}),
+            ") ",sapply(temp,function(temp){temp$description}),
+            "\n"))}
         }
       out
     }
