@@ -13,15 +13,15 @@
 #'Four special properties can also be used: labels, aliases, descriptions and sitelinks. See [this link](https://www.wikidata.org/wiki/Help:QuickStatements#Adding_labels,_aliases,_descriptions_and_sitelinks) for the syntax.
 #'@param values a vector of strings indicating the values to add as statements (as QIDs or strings).
 #'Note: if strings are provided, they will be treated as plain text.
-#'@param qual.properties a vector of strings indicating the properties to add as qualifiers to statements (as PIDs or labels).
+#'@param qual.properties a vector, data frame, or tibble of strings indicating the properties to add as qualifiers to statements (as PIDs or labels).
 #'Note: if labels are provided, and multiple items match, the first matching item will be used
 #'(see \code{as_pid} function), so use with caution.
-#'@param qual.values a vector of strings indicating the values to add as statements (as QIDs or strings).
+#'@param qual.values a vector, data frame, or tibble of strings indicating the values to add as statements (as QIDs or strings).
 #'Note: if strings are provided, they will be treated as plain text.
-#'@param src.properties a vector of strings indicating the properties to add as reference sources to statements (as SIDs or labels).
+#'@param src.properties a vector, data frame, or tibble of strings indicating the properties to add as reference sources to statements (as SIDs or labels).
 #'Note: if labels are provided, and multiple items match, the first matching item will be used
 #'(see \code{as_sid} function), so use with caution.
-#'@param src.values a vector of strings indicating the values to add reference sources to statements (as QIDs or strings).
+#'@param src.values a vector, data frame, or tibble of strings indicating the values to add reference sources to statements (as QIDs or strings).
 #'Note: if strings are provided, they will be treated as plain text.
 #'@param remove a vector of boolians for each statemnt indicating whether it should
 #'be removed from the item rather than added (default = FALSE)
@@ -65,96 +65,119 @@ as_quickstatement <- function(items,
                               remove          = FALSE,
                               format          = "tibble",
                               api.username    = "Evolution_and_evolvability",
-                              api.token       = NULL,
+                              api.token       = NULL, # Find yours from [your user page](https://tools.wmflabs.org/quickstatements/#/user)
                               api.format      = "v1",
                               api.batchname   = NULL,
                               api.submit      = TRUE
 ){
-  
-  items           <- sapply(items,function(x){if(is.create(x)|is.last(x)){x}else{as_qid(x)}})
-  items[remove]   <- paste0("-",items[remove])
-  properties      <- sapply(properties,function(x){if(is.special(x)){x}else{as_pid(x)}})
-  values [check.PID.WikibaseItem(properties)] <- sapply(values[check.PID.WikibaseItem(properties)],function(x){as_qid(x)})
+  # Place all the quickstatemtnes variables into a list 
+  QS       <- list(items           = items,
+                   properties      = properties,
+                   values          = values,
+                   qual.properties = qual.properties,
+                   qual.values     = qual.values,
+                   src.properties  = src.properties,
+                   src.values      = src.values)
+  QS <- lapply(QS,function(x){if(!is.null(x)){tibble(x)}})
 
+  # If new QIDs are being created via the "CREATE" keyword, need to insert blank lines across the other parameters to align correctly into rows
+  # This is the most similar to the standard quickstatemsnts method, though the "CREATExyz" method is preferred (see createrows.tidy function later)
+  QS$properties      <- createrows(QS$items,QS$properties)
+  QS$values          <- createrows(QS$items,QS$values)
+  QS$qual.properties <- createrows(QS$items,QS$qual.properties)
+  QS$qual.values     <- createrows(QS$items,QS$qual.values)
+  QS$src.properties  <- createrows(QS$items,QS$src.properties)
+  QS$src.values      <- createrows(QS$items,QS$src.values)
   
-  # strings need quotation marks, and in APIs those are indicated as $22 
-  if (format=="api"){
-    values <- sapply(values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)){x}else{paste0('$22',x,'$22')}})
-    if(!is.null(qual.values)){qual.values <- sapply(qual.values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)){x}else{paste0('$22',x,'$22')}})}
-    if(!is.null(src.values)) {src.values  <- sapply(src.values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)){x}else{paste0('$22',x,'$22')}})}
+  # If same number of rows as the rowmax, do nothing
+  # If only one row, repeat it rowmax times
+  # If wrong number of rows, stop with an error message
+  rowcount <- unlist(lapply(QS,nrow))
+  rowmax   <- max(rowcount)
+  stoprun  <- FALSE
+  
+  if(var(unlist(rowcount))!=0){
+    for (x in 1:length(QS)){
+      if(nrow(QS[[x]])==rowmax){ 
+        QS[[x]] <- QS[[x]]
+      }else if (nrow(QS[[x]])==1){ 
+        QS[[x]] <- slice(QS[[x]],rep(1:n(), each=rowmax)) 
+      }else{
+        stoprun<-TRUE
+        warning(paste0("Not all quickstatement columns have equal rows: ",
+                       nrow(QS$items)," items (including ",
+                       sum(is.create(unlist(QS$items)))," new QIDs to CREATE) were provided, but ",
+                       names(QS)[x],
+                       " has ",
+                       nrow(QS[[x]]),
+                       " rows (expecting ",
+                       nrow(QS$items),
+                       ")."))
+      }
+    }
   }
+  if(stoprun){stop("Therefore stopping")}
   
-  if (format=="tibble"|format=="csv"){
-    values <- sapply(values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)){x}else{paste0('"',x,'"')}})
-    if(!is.null(qual.values)){qual.values <- sapply(qual.values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)){x}else{paste0('"',x,'"')}})}
-    if(!is.null(src.values)) {src.values  <- sapply(src.values,function(x){if(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)){x}else{paste0('"',x,'"')}})}
-  }
+  # Convert values to QIDs where possible and identify which (if any) to remove
+  QS$items           <- as_qid(QS$items)
+  QS$items[remove,]  <- paste0("-",QS$items[remove,])
   
-  # if new QIDs are being created via the "CREATE" keyword, need to insert blank lines across the other parameters to align correctly into rows
-  properties      <- createrows(items,properties)
-  values          <- createrows(items,values)
-  qual.properties <- createrows(items,qual.properties)
-  qual.values     <- createrows(items,qual.values)
-  src.properties  <- createrows(items,src.properties)
-  src.values      <- createrows(items,src.values)
+  # Convert properties to PIDs where possible, unless special functions (such as lables and aliases)
+  QS$properties      <- as_pid(QS$properties)
+
+  # Convert values to QIDs where possible, unless property is expecting a string
+  QS$values          <- tibble(QS$values)
+  QS$values[sapply(QS$properties,check.PID.WikibaseItem),] <- as_qid(QS$values[sapply(QS$properties,check.PID.WikibaseItem),])
+  QS$values      <- as_quot(QS$values,format)
   
-  # build the basic tibble of the items and what properties and values to add as statements
-  QS <- list(items=items,
-             properties=properties,
-             values=values)
-  QS.rowmax <- max(sapply(QS,length))
-  QS.check  <- sapply(QS,length)==1|sapply(QS,length)==QS.rowmax
+  # Convert first three columns into tibble (tibbulate?)
+  colnames(QS$items)      <- "Item"
+  colnames(QS$properties) <- "Prop"
+  colnames(QS$values)     <- "Value"
   
-  # if wrong number of values or properties, stop with error message
-  if(!all(QS.check)){stop(paste0("\n Not all quickstatement columns equal length: ",
-                                 sum(items!="CREATE")," items (",
-                                 sum(items=="CREATE")," new QIDs to CREATE) were provided, but ",
-                                 lapply(QS[lapply(QS,length)!=sum(items!="CREATE") & lapply(QS,length)!=1],length),
-                                 " ",
-                                 names(QS[lapply(QS,length)!=sum(items!="CREATE") & lapply(QS,length)!=1]),
-                                 "."))}
-  QS.tib <- tibble(Item =  QS[[1]],
-                   Prop =  QS[[2]],
-                   Value = QS[[3]])
-  
+  QS.tib <- bind_cols(QS$items,
+                      QS$properties,
+                      QS$values)  
+
   # optionally, append columns for qualifier properties and qualifier values for those statements
-  if(!is.null(qual.properties)|!is.null(qual.values)){
-    qual.properties <- sapply(qual.properties,function(x){if(!is.null(x)){as_pid(x)}else{x}})
-    qual.values     <- sapply(qual.values,function(x){if(!(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)|is.empty(x))){paste0('"',x,'"')}else{x}})
+  if(!is.null(QS$qual.properties)|!is.null(QS$qual.values)){
+    QS$qual.properties <- as_pid(QS$qual.properties)
+    QS$qual.values     <- as_quot(QS$qual.values,format)
     
-    QSq <- list(qual.properties,
-                qual.values)
-    QSq.rowmax <- max(sapply(c(QS,QSq),length))
-    QSq.check  <- sapply(c(QS,QSq),length)==1|
-      sapply(c(QS,QSq),length)==QSq.rowmax
-    if(!all(QSq.check)){stop("Incorrect number of qualifiers provided. If no qualifers needed for a statement, use NA or \"\".")}
+    colnames(QS$qual.properties) <- paste0("Qual.prop.",1:ncol(QS$qual.properties))
+    colnames(QS$qual.values)     <- paste0("Qual.value.",1:ncol(QS$qual.values))
     
-    QS.tib <- add_column(QS.tib,
-                         Qual.Prop  = QSq[[1]],
-                         Qual.Value = QSq[[2]])
+    QSq <- list(QS$qual.properties,
+                QS$qual.values)
+    QSq.check  <- var(sapply(c(QS,QSq),function(x){if(is.null(dim(x))){length(x)}else{nrow(x)}}))==0
+    if(!QSq.check){stop("Incorrect number of qualifiers provided. If no qualifers needed for a statement, use NA or \"\".")}
+    
+    QS.qual.tib <- as_tibble(cbind(QSq[[1]],QSq[[2]])[,c(rbind(1:ncol(QSq[[1]]),ncol(QSq[[1]])+1:ncol(QSq[[2]])))])
+    
+    QS.tib <- tibble(QS.tib,
+                     QS.qual.tib)
   }
   
   # optionally, append columns for source properties and source values for those statements
   if(!is.null(src.properties)|!is.null(src.values)){
-    src.properties <- sapply(src.properties,function(x){if(!is.null(x)){as_sid(x)}else{x}})
-    src.values     <- sapply(src.values,function(x){if(!(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)|is.empty(x))){paste0('"',x,'"')}else{x}})
+    QS$src.properties <- as_sid(QS$src.properties)
+    QS$src.values     <- as_quot(QS$src.values,format)
+
+    colnames(QS$src.properties) <- paste0("Src.prop.",1:ncol(QS$src.properties))
+    colnames(QS$src.values)     <- paste0("Src.values.",1:ncol(QS$src.values))
     
-    QSs <- list(src.properties,
-                src.values)
-    QSs.rowmax <- max(sapply(c(QS,QSs),length))
-    QSs.check  <- sapply(c(QS,QSs),length)==1|
-      sapply(c(QS,QSs),length)==QSs.rowmax
-    if(!all(QSs.check)){stop("incorrect number of sources provided")}
+    QSs <- list(QS$src.properties,
+                QS$src.values)
+    QSs.check  <- var(sapply(c(QS,QSs),function(x){if(is.null(dim(x))){length(x)}else{nrow(x)}}))==0
+    if(!QSs.check){stop("incorrect number of sources provided")}
     
-    QS.tib <- add_column(QS.tib,
-                         Src.Prop  = QSs[[1]],
-                         Src.Value = QSs[[2]])
+    QS.src.tib <- as_tibble(cbind(QSs[[1]],QSs[[2]])[,c(rbind(1:ncol(QSs[[1]]),ncol(QSs[[1]])+1:ncol(QSs[[2]])))])
+    
+    QS.tib <- tibble(QS.tib,
+                     QS.src.tib)
   }
   
-  # NAs to empty strings
-  QS.tib[is.na(QS.tib)] <- ""
-  
-  # if new QIDs are being created via tidy "CREATExyd" keywords, need to insert CREATE lines above and replace "CREATExyz" with "LAST"
+  # if new QIDs are being created via tidy "CREATExyz" keywords, need to insert CREATE lines above and replace subsequent "CREATExyz" with "LAST"
   QS.tib <- createrows.tidy(QS.tib)
   
   # output
@@ -171,8 +194,7 @@ as_quickstatement <- function(items,
     api.temp2 <- gsub("\t","%09",api.temp1) # Replace TAB with "%09"
     api.temp3 <- gsub("\n","%0A",api.temp2) # Replace end-of-line with "%0A"
     api.temp4 <- gsub(" ", "%20",api.temp3) # Replace space with "%20"
-    api.temp5 <- gsub("\"","%22",api.temp4) # Replace double quote with "%22"
-    api.data  <- gsub("/", "%2F",api.temp5) # Replace slash with "%2F"
+    api.data  <- gsub("/", "%2F",api.temp4) # Replace slash with "%2F"
     
     API.url <- paste0("https://tools.wmflabs.org/quickstatements/api.php",
                       "?action=",   "import",

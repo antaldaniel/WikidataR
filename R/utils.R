@@ -102,7 +102,7 @@ search <- function(search_term, language, limit, type, ...){
 #' }
 #' @seealso [query_wikidata]
 #' @export
-get_example <- function(example_name) {
+get_example <- function(example_name){
   content <- WikipediR::page_content(
     domain = "www.wikidata.org",
     page_name = "Wikidata:SPARQL query service/queries/examples",
@@ -110,7 +110,7 @@ get_example <- function(example_name) {
   )
   wiki <- strsplit(content$parse$wikitext$`*`, "\n")[[1]]
   wiki <- wiki[wiki != ""]
-  return(vapply(example_name, function(example_name) {
+  return(vapply(example_name, function(example_name){
     heading_line <- which(grepl(paste0("^===\\s?", example_name, "\\s?===$"), wiki, fixed = FALSE))
     start_line <- which(grepl("{{SPARQL", wiki[(heading_line + 1):length(wiki)], fixed = TRUE))[1]
     end_line <- which(grepl("}}", wiki[(heading_line + start_line + 1):length(wiki)], fixed = TRUE))[1]
@@ -119,20 +119,21 @@ get_example <- function(example_name) {
   }, ""))
 }
 
+
 # -------- Format checkers --------
 # Simple tests of strings for whether they adhere to common wikidata formats
-is.qid    <- function(x){grepl("^[Qq][0-9]+$",x)}
-is.pid    <- function(x){gsub("S","P",x) %in% as.matrix(.GlobalEnv$WD.globalvar$PID.datatype$property)}
-is.sid    <- function(x){gsub("S","P",x) %in% as.matrix(.GlobalEnv$WD.globalvar$SID.valid$Wikidata_property_to_indicate_a_source)}
-is.date   <- function(x){grepl("[0-9]{1,4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",x)}
-is.quot   <- function(x){grepl("^\".+\"$",x)}
-is.empty  <- function(x){x==""}
-is.coord  <- function(x){grepl("@-?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?)/-?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$",x)}
-is.wdURL  <- function(x){grepl("http://www.wikidata.org/entity/[PpQq][0-9]+$",x)}
-is.empty  <- function(x){x==""}
-is.create <- function(x){grepl("^CREATE",x)}
-is.last   <- function(x){grepl("^LAST$",x)}
-is.special<- function(x){if(grepl("^[LAD]",x)){
+is.qid     <- function(x){grepl("^[Qq][0-9]+$",x)}
+is.pid     <- function(x){gsub("S","P",x) %in% as.matrix(.GlobalEnv$WD.globalvar$PID.datatype$property)}
+is.sid     <- function(x){gsub("S","P",x) %in% as.matrix(.GlobalEnv$WD.globalvar$SID.valid$Wikidata_property_to_indicate_a_source)}
+is.date    <- function(x){grepl("[0-9]{1,4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",x)}
+is.quot    <- function(x){grepl("^\".+\"$",x)}
+is.empty   <- function(x){x==""}
+is.coord   <- function(x){grepl("@-?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?)/-?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$",x)}
+is.wdURL   <- function(x){grepl("http://www.wikidata.org/entity/[PpQq][0-9]+$",x)}
+is.create  <- function(x){grepl("^CREATE",x)}
+is.createx <- function(x){grepl("^CREATE.+",x)}
+is.last    <- function(x){grepl("^LAST$",x)}
+is.special <- function(x){if(grepl("^[LAD]",x)){
     substr(x,2,100) %in% as.matrix(.GlobalEnv$WD.globalvar$lang.abbrev)
   }else if(grepl("^S",x)){
     substr(x,2,100) %in% as.matrix(.GlobalEnv$WD.globalvar$abbrev.wiki)
@@ -150,7 +151,6 @@ check.PID.constraint <- function(x){
     }
   sapply(x,check.PID.constraint.nest1)
 }
-
 
 #'@title Extract an identifier from a wikidata URL
 #'@description Convert a URL ending in an identifier (returned by SPARQL queries) to just the plan identifier (QID or PID).
@@ -188,13 +188,15 @@ check_input <- function(input, substitution){
   }
   return(input)
 }
+
+
 # -------- Converters --------
 # Simple functions to convert plain text descriptions into their most likely QID/PIDs
 
 #'@title Convert an input to a item QID
 #'@description Convert an input string to the most likely item QID
 #'
-#'@param x a vector of strings representaing wikidata items
+#'@param x a vector, data frame, or tibble of strings representaing wikidata items
 #'
 #'@return if the inputted string is a valid QID, return the string.
 #'If the inputted string matches an item label, return its QID.
@@ -211,43 +213,47 @@ check_input <- function(input, substitution){
 #'@export
 as_qid <- function(x){
   as_qid_nest1 <- function(x){
-    if(is.qid(x)){
-      x
-    }else{
-      temp       <- WikidataR::find_item(x,limit = 100)
-      if(length(temp)==0){
-        out <- NA
-        message (paste0("no sufficiently close match for \"",x,"\". Returned \"NA\"."))
+    as_qid_nest2 <- function(x){
+      if(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)|is.null(x)|is.empty(x)|is.createx(x)|is.create(x)|is.last(x)){
+        x
       }else{
-        toinclude    <- sapply(temp,function(temp,x){temp$label==x},x)
-        toinclude[1] <- TRUE
-        temp         <- temp[toinclude]
-        out          <- temp[[1]]$id
-        names(out)   <- temp[[1]]$label
-        if(x!=temp[[1]]$label){message(paste0(
-          "Inexact match for \"",x,
-          "\", closest match = ",temp[[1]]$label,
-          " (",out,") "))}
-        if(length(temp)>1){
-          message(paste0(
-          "Multiple exact matches for \"",x,"\""))
-          message(paste0(
-            "  match ",1:length(temp),
-            " = (",sapply(temp,function(temp){temp$id}),
-            ") ",sapply(temp,function(temp){temp$description}),
-            "\n"))}
-        }
-      out
+        temp       <- WikidataR::find_item(x,limit = 100)
+        if(length(temp)==0){
+          out <- NA
+          message (paste0("no sufficiently close match for \"",x,"\". Returned \"NA\"."))
+        }else{
+          toinclude    <- sapply(temp,function(temp,x){temp$label==x},x)
+          toinclude[1] <- TRUE
+          temp         <- temp[toinclude]
+          out          <- temp[[1]]$id
+          names(out)   <- temp[[1]]$label
+          if(x!=temp[[1]]$label){message(paste0(
+            "Inexact match for \"",x,
+            "\", closest match = ",temp[[1]]$label,
+            " (",out,") "))}
+          if(length(temp)>1){
+            message(paste0(
+            "Multiple exact matches for \"",x,"\""))
+            message(paste0(
+              "  match ",1:length(temp),
+              " = (",sapply(temp,function(temp){temp$id}),
+              ") ",sapply(temp,function(temp){temp$description}),
+              "\n"))}
+          }
+        out
+      }
     }
+    out <- unlist(lapply(x,as_qid_nest2))
+    out
   }
-  output <- unlist(lapply(x,as_qid_nest1))
+  output <- bind_cols(lapply(tibble(x),as_qid_nest1))
   return(output)
 }
 
 #'@title Convert an input to a property PID
 #'@description Convert an input string to the most likely property PID
 #'
-#'@param x a vector of strings representaing wikidata properties
+#'@param x a vector, data frame, or tibble of strings representaing wikidata properties
 #'
 #'@return if the inputted string is a valid PID, return the string.
 #'If the inputted string matches a property label, return its PID.
@@ -264,33 +270,36 @@ as_qid <- function(x){
 #'@export
 as_pid <- function(x){
   as_pid_nest1 <- function(x){
-    if(is.pid(x)){
-      x
-    }else{
-      temp       <- WikidataR::find_property(x,limit = 2)
-      if(length(temp)==0){
-          out <- NA
-          message (paste0("no sufficiently close match for \"",x,"\". Returned \"NA\"."))
-        }else{
-          out        <- temp[[1]]$id
-          names(out) <- temp[[1]]$label
-          if(x!=temp[[1]]$label){message(paste0(
-            "Inexact match for \"",x,
-            "\", closest match = ",temp[[1]]$label,
-            " (",out,")."))}
-          }
-      out
+    as_pid_nest2 <- function(x){
+      if(is.pid(x)|is.date(x)|is.quot(x)|is.na(x)|is.null(x)|is.empty(x)|is.special(x)){
+        x
+      }else{
+        temp       <- WikidataR::find_property(x,limit = 2)
+        if(length(temp)==0){
+            out <- NA
+            message (paste0("no sufficiently close match for \"",x,"\". Returned \"NA\"."))
+          }else{
+            out        <- temp[[1]]$id
+            names(out) <- temp[[1]]$label
+            if(x!=temp[[1]]$label){message(paste0(
+              "Inexact match for \"",x,
+              "\", closest match = ",temp[[1]]$label,
+              " (",out,")."))}
+            }
+        out
+      }
     }
+    out <- unlist(lapply(x,as_pid_nest2))
+    out
   }
-  output <- unlist(lapply(x,as_pid_nest1))
+  output <- bind_cols(lapply(tibble(x),as_pid_nest1))
   return(output)
 }
-
 
 #'@title Convert an input to a source property SID
 #'@description Convert an input string to the most likely source SID (equivalent to PID)
 #'
-#'@param x a vector of strings representaing wikidata source properties
+#'@param x a vector, data frame, or tibble of strings representaing wikidata source properties
 #'
 #'@return if the inputted string is a valid SID, return the string.
 #'If the inputted string matches a property label, return its SID
@@ -305,9 +314,58 @@ as_pid <- function(x){
 #'as_pid("Reference URL")
 #'
 #'@export
-as_sid <- function(x){if(all(is.sid(x))){x}
-  else if(all(is.pid(x))){gsub("P","S",x,ignore.case = 1)}
-  else{gsub("P","S",WikidataR::find_property(x)[[1]]$id)}
+as_sid <- function(x){
+  as_sid_nest1 <- function(x){
+    as_sid_nest2 <- function(x){
+      if(is.sid(x)|is.date(x)|is.quot(x)|is.na(x)|is.null(x)|is.empty(x)){
+        x
+      }else if(all(is.pid(x))){
+        gsub("P","S",x,ignore.case = 1)
+      }else{
+        gsub("P","S",WikidataR::find_property(x)[[1]]$id)
+      }
+    }
+    out <- unlist(lapply(x,as_sid_nest2))
+    out
+  }
+  output <- bind_cols(lapply(tibble(x),as_sid_nest1))
+  return(output)
+}
+
+#'@title Add quotations marks
+#'@description Add escaped quotation marks around strings that need them ready for submision to an API
+#'
+#'@param x a vector, data frame, or tibble of strings
+#'
+#'@param format either "tibble" to use plain quotation marks (default), or "api" to use '%22'
+#'
+#'@return tibble of items inside of escaped quotation marks
+#'unless they are already in escaped quotation marks, is a QID, (in which chase it is returned unchanged) 
+#'
+#'@examples
+#'as_quot("text")
+#'
+#'@export
+as_quot <- function(x,format="tibble"){
+  if(is.null(x)){
+    return(NULL)
+  }else if (format=="api"){
+    q_mark <- '%22'
+  }else if (format=="tibble"|format=="csv"){
+    q_mark <- '"'
+  }
+  as_quot_nest1 <- function(x){
+    as_quot_nest2 <- function(x){
+      if(!(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)|is.empty(x)))
+      {paste0(q_mark,x,q_mark)}
+      else
+      {x}
+    }
+    out <- unlist(lapply(x,as_quot_nest2))
+    out
+  }
+  output <- bind_cols(lapply(tibble(x),as_quot_nest1))
+  return(output)
 }
 
 #'@title Extract an identifier from a wikidata URL
@@ -318,12 +376,13 @@ as_sid <- function(x){if(all(is.sid(x))){x}
 #'@return QID or PID
 #'
 #'@examples
-#'url_to_id("http://www.wikidata.org/entity/42")
+#'url_to_id("http://www.wikidata.org/Q42")
 #'
 #'@export
-url_to_id <- function (x){
-  sapply(sapply(x,pattern = "/",stringr::str_split),tail,1)
+url_to_id <- function(x){
+  sapply(sapply(x,pattern = "/|:",stringr::str_split),tail,1)
 }
+
 
 # -------- Wikidata object manipulation --------
 #'@title Extract Claims from Returned Item Data
@@ -352,10 +411,10 @@ url_to_id <- function (x){
 extract_claims <- function (items,
                             claims){
   claims <- sapply(claims,as_pid)
-  output <- lapply(items, function(x, claims) {
-    return(lapply(claims, function(claim, obj) {
+  output <- lapply(items, function(x, claims){
+    return(lapply(claims, function(claim, obj){
       which_match <- which(names(obj$claims) == claim)
-      if (!length(which_match)) {
+      if (!length(which_match)){
         return(NA)
       }
       return(obj$claims[[which_match[1]]])
@@ -433,6 +492,7 @@ get_names_from_properties <- function(properties){
   property_names      <- lapply(lapply(property_names,unlist),enframe,name = "QID") 
   return(property_names)
 }
+
 
 # -------- Misc. string manipulation --------
 #'@title Format short form person names
@@ -525,26 +585,30 @@ extract_para <- function(text,
 #'@description Add in empty lines for QuickStatements CREATE rows that mint new QIDs.
 #'This is a slightly messy quirk of the QuickStatements format that mints new QIDs via a line
 #'containing only "CREATE", so this function is a way to approximate that bevaviour in a tibble
-#'@param items a vector of items (which may or may not contain the keyword "CREATE")
+#'@param items a vector, data frame or tibble of items (which may or may not contain the keyword "CREATE")
 #'@param vector a vector of properties or values which may be expanded based on the items vector
 #'@return if the vector is NULL, return NULL. Otherwise, if the "CREATE" keyword appears in the
 #'items vector, insert blank strings at those positions in the vector.
 #'
 #'@export
 createrows <- function(items,vector){
-  if(all(any(items=="CREATE"),!is.null(vector))){
+  if(is.null(vector)){
+    return(NULL)
+  }
+  if(any(items=="CREATE",na.rm = 1)){
     #expand vector to full length if just intending to repeat a single value 
-    if(length(vector)==1){
+    if(length(unlist(vector))==1){
       vector <- rep(vector,sum(items!="CREATE"))
     }
+    vector <- tibble(vector)
     
     newQID <- which(items=="CREATE")
-    val <- c(vector, rep("",length(newQID)) )
-    id  <- c(seq_along(vector), newQID-seq_along(newQID)+0.5)
-    out <- val[order(id)]
+    val <- bind_rows(vector,tibble(data.frame(array("",dim=c(length(newQID),ncol(vector)),dimnames = list(NULL,colnames(vector))))))
+    id  <- c(1:nrow(vector), newQID-seq_along(newQID)+0.5)
+    out <- tibble(val[order(id),])
     return(out)
   }else{
-    return(vector)
+    return(tibble(vector))
   }
 }
 
@@ -560,15 +624,15 @@ createrows <- function(items,vector){
 #'to create new QIDs.
 #'
 #'@export
-createrows.tidy <- function(QS.tib) {
+createrows.tidy <- function(QS.tib){
   #insert 'CREATE' blankrows above first instance of 'CREATExyz'
-  newQID <- which(!duplicated(QS.tib[,1])&sapply(QS.tib[,1],is.create))
+  newQID <- which(!duplicated(QS.tib[,1])&sapply(QS.tib[,1],is.createx))
   val <- rbind(QS.tib, array("",dim=c(length(newQID),ncol(QS.tib)),dimnames = list(newQID,names(QS.tib))) )
   id  <- c(seq_along(t(QS.tib)[1,]), newQID-0.5)
   out <- val[order(id),]
   
   #replace 'CREATEXYZ' with 'LAST'
-  out[sapply(out[,1],is.create),1] <- "LAST"
+  out[sapply(out[,1],is.createx),1] <- "LAST"
   
   #replace new empty rows with 'CREATE' row
   out[apply(is.empty(out),all,MARGIN=1),1] <- "CREATE"
