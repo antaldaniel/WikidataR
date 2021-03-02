@@ -71,14 +71,23 @@ search <- function(search_term, language, limit, type, ...){
   return(result)
 }
 
-# sparql_query <- function(params, ...){
-#   result <- httr::GET("https://query.wikidata.org/bigdata/namespace/wdq/sparql",
-#                       query = list(query = params),
-#                       httr::user_agent("WikidataR - https://github.com/Ironholds/WikidataR"),
-#                       ...)
-#   httr::stop_for_status(result)
-#   return(httr::content(result, as = "parsed", type = "application/json"))
-# }
+#sparql query function for direct Wikidata calls.
+#'@title Download full Wikidata items matching a sparql query 
+#'@description Utility wrapper for wikidata spargle endpoint to download items. Used by \code{get_geo_entity} and \code{get_geo_box}
+#'
+#'@param query the sparql query as a string
+#'
+#'@return a download of the full wikidata objects formatted as a nested json list
+#'
+#'@export
+sparql_query <- function(query, ...){
+  result <- httr::GET("https://query.wikidata.org/bigdata/namespace/wdq/sparql",
+                      query = list(query = query),
+                      httr::user_agent("WikidataR - https://github.com/TS404/WikidataR"),
+                      ...)
+  httr::stop_for_status(result)
+  return(httr::content(result, as = "parsed", type = "application/json"))
+}
 
 #' @title Get an example SPARQL query from Wikidata
 #' @description Gets the specified example(s) from
