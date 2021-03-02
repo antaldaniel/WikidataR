@@ -84,4 +84,4 @@ first_aaron <- get_item(all_aarons[[1]]$id)
 
 ## Other and future functionality
 If you have ideas for other types of useful Wikidata access, the best approach
-is to either [request it](https://github.com/Ironholds/WikidataR/issues) or [add it](https://github.com/Ironholds/WikidataR/pulls)!
+is to either [request it](https://github.com/TS404/WikidataR/issues) or [add it](https://github.com/TS404/WikidataR/pulls)!
