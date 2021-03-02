@@ -3,19 +3,20 @@ Type: Package
 Title: API Client Library for 'Wikidata'
 Version: 1.4.0
 Date: 2017-09-21
-Author: Oliver Keyes [aut, cre], Serena Signorelli [aut, cre],
-        Christian Graul [ctb], Mikhail Popov [ctb]
-Maintainer: Oliver Keyes <ironholds@gmail.com>
+Author: Thomas Shafee [aut, cre], Oliver Keyes [aut, cre], Serena Signorelli [aut, cre],
+        Alex Lum [ctb], Christian Graul [ctb], Mikhail Popov [ctb]
+Maintainer: Thomas Shafee <T.Shafee@latrobe.edu.au>
 Description: An API client for the Wikidata <http://wikidata.org/> store of
-    semantic data.
-BugReports: https://github.com/Ironholds/WikidataR/issues
-URL: https://github.com/Ironholds/WikidataR/issues
+             semantic data.
+BugReports: https://github.com/TS404/WikidataR/issues
+URL: https://github.com/TS404/WikidataR/issues
 License: MIT + file LICENSE
 Imports:
     httr,
     jsonlite,
     WikipediR (>= 1.4.0),
-    utils
+    utils,
+    tidyverse
 Suggests:
     testthat,
     knitr,
