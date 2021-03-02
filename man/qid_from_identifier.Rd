@@ -10,7 +10,7 @@ qid_from_identifier(
 )
 }
 \arguments{
-\item{property}{the identifier property to search (for caveats, see \code {as_property})}
+\item{property}{the identifier property to search (for caveats, see \code{as_pid})}
 
 \item{value}{the identifier value to match}
 }

@@ -37,7 +37,7 @@ query_wikidata <- function(...) {
 #' @param property the identifier property to search (for caveats, see \code{as_pid})
 #' @param value the identifier value to match
 #' @return tibble of QIDs corresponding to DOIs submitted
-#' @example
+#' @examples
 #' qid_from_identifier('ISBN-13','978-0-262-53817-6')
 #' @export
 qid_from_identifier <- function(property = 'DOI',
