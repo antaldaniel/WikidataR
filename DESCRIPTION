@@ -15,6 +15,7 @@ Imports:
     httr,
     jsonlite,
     WikipediR,
+    WikidataQueryServiceR,
     utils,
     tidyverse
 Suggests:
