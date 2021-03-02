@@ -43,14 +43,15 @@
 #'@examples
 #'Add a statement to the "Wikidata sandbox" item (Q4115189)
 #'to say that it is an "instance of" (P31) of Q1 (the universe).
-#'The instruction will submit directly to wikidata via the API (if you include your wikimedai username and token)
+#'The instruction will submit directly to wikidata via the API
+#'(if you include your wikimedai username and token)
 #'
 #'as_quickstatement(items        = "Wikidata Sandbox",
 #'                  properties   = "instance of",
 #'                  values       = "Q1",
 #'                  format       = "api",
 #'                  api.username = "myusername", 
-#'                  api.token    = , #REDACTED# Find yours from [your user page](https://tools.wmflabs.org/quickstatements/#/user)
+#'                  api.token    = , #REDACTED# Find yours at [your user page](https://tools.wmflabs.org/quickstatements/#/user)
 #'                  )
 #'
 #'@export
