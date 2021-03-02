@@ -12,6 +12,10 @@
 #'for using search functionality to pull out item or property IDs where the descriptions
 #'or aliases match a particular search term.
 #' @import WikidataQueryServiceR
+#' @import tidyverse,
+#' @import stringr,
+#' @import Hmisc,
+#' @import pbapply
 #' @importFrom WikipediR page_content random_page query
 #' @importFrom httr user_agent
 #' @importFrom jsonlite fromJSON
