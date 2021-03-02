@@ -14,7 +14,7 @@ License: MIT + file LICENSE
 Imports:
     httr,
     jsonlite,
-    WikipediR (>= 1.4.0),
+    WikipediR,
     utils,
     tidyverse
 Suggests:

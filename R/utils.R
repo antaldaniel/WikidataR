@@ -337,7 +337,7 @@ as_sid <- function(x){
 #'
 #'@param x a vector, data frame, or tibble of strings
 #'
-#'@param format either "tibble" to use plain quotation marks (default), or "api" to use '%22'
+#'@param format either "tibble" to use plain quotation marks (default), or "api" to use '\%22'
 #'
 #'@return tibble of items inside of escaped quotation marks
 #'unless they are already in escaped quotation marks, is a QID, (in which chase it is returned unchanged) 
