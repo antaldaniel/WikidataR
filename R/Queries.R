@@ -32,7 +32,7 @@ query_wikidata <- function(...) {
   output
 }
 
-#' @title QID from DOI
+#' @title QID from identifier
 #' @description convert unique identifiers to QIDs (for items in wikidata). 
 #' @param property the identifier property to search (for caveats, see \code {as_property})
 #' @param value the identifier value to match
