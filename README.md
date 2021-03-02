@@ -52,6 +52,15 @@ and
 ```
 Elements within those lists include basic information from wikidata (ID, description, labels). The QID or PID can then be used to get the full data for the item (see below).
 
+It's also possible to convert from any identifier to wikidata QIDs.
+``` r
+qid_from_identifier('ISBN-13','978-0-262-53817-6')
+```
+Which returns the list: 
+```
+    978-0-262-53817-6 Q102035721 Wikipedia @ 20: Stories of an Incomplete Revolution
+```
+
 ### Get full items from Wikidata (example: journal articles)
 In this example, we search for three articles using their DOIs ([P356](https://www.wikidata.org/wiki/Property:P356)), find their QIDs, download their full wikidata entries, and then extract the "main topics" (note PID didn't have to be used).
 
