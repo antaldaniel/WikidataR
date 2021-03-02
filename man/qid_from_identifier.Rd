@@ -20,3 +20,6 @@ tibble of QIDs corresponding to DOIs submitted
 \description{
 convert unique identifiers to QIDs (for items in wikidata).
 }
+\examples{
+qid_from_identifier('ISBN-13','978-0-262-53817-6')
+}
