@@ -3,7 +3,6 @@
 \name{find_item}
 \alias{find_item}
 \alias{find_property}
-\alias{find_property}
 \title{Search for Wikidata items or properties that match a search term}
 \usage{
 find_item(search_term, language = "en", limit = 10, ...)

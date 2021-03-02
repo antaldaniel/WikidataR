@@ -4,8 +4,14 @@
 \alias{get_geo_box}
 \title{Get geographic entities based on a bounding box}
 \usage{
-get_geo_box(first_city_code, first_corner, second_city_code, second_corner,
-  language = "en", ...)
+get_geo_box(
+  first_city_code,
+  first_corner,
+  second_city_code,
+  second_corner,
+  language = "en",
+  ...
+)
 }
 \arguments{
 \item{first_city_code}{a Wikidata item, or series of items, to use for

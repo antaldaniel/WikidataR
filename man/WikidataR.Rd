@@ -4,10 +4,12 @@
 \name{WikidataR}
 \alias{WikidataR}
 \alias{WikidataR-package}
-\alias{WikidataR-package}
 \title{API client library for Wikidata}
 \description{
-This package serves as an API client for \href{Wikidata}{https://www.wikidata.org}.
+This package serves as an API client for reading and writing
+to and from \href{Wikidata}{https://www.wikidata.org}, (including 
+via the \href{QuickStatements}{https://quickstatements.toolforge.org/} format),
+as well as for reading from \href{Wikipedia}{https://www.wikipedia.org}
 See the accompanying vignette for more details.
 }
 \seealso{

@@ -3,7 +3,6 @@
 \name{get_item}
 \alias{get_item}
 \alias{get_property}
-\alias{get_property}
 \title{Retrieve specific Wikidata items or properties}
 \usage{
 get_item(id, ...)

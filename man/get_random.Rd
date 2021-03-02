@@ -4,7 +4,6 @@
 \alias{get_random_item}
 \alias{get_random}
 \alias{get_random_property}
-\alias{get_random_property}
 \title{Retrieve randomly-selected Wikidata items or properties}
 \usage{
 get_random_item(limit = 1, ...)
