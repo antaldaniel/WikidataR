@@ -42,11 +42,18 @@ wd_rand_query <- function(ns, limit, ...){
 #'@title Convert an input to a item QID
 #'@description Convert an input string to the most likely item QID
 #'
-#'@param x a vector of strings representaing wikidata items
+#'@param search_term a term to search for.
 #'
-#'@return if the inputted string is a valid QID, return the string.
-#'If the inputted string matches an item label, return its QID.
+#'@param language the language to return the labels and descriptions in; this should
+#'consist of an ISO language code. Set to "en" by default.
+#'
+#'@param limit the number of results to return; set to 10 by default.
+#'
+#'@param type type of wikidata object to return (default = "item")
+#'
+#'@return If the inputted string matches an item label, return its QID.
 #'If the inputted string matches multiple labels of multiple items, return the QID of the first hit.
+#'If the inputted string is already a QID, return the string.
 #'
 #'@examples
 #'# if input string is a valid QID
@@ -57,7 +64,7 @@ wd_rand_query <- function(ns, limit, ...){
 #'as_qid("Douglas Adams and the question of arterial blood pressure in mammals")
 #'
 #'@export
-search <- function(search_term, language, limit, type, ...){
+searcher <- function(search_term, language, limit, type, ...){
   result <- WikipediR::query(url = "https://www.wikidata.org/w/api.php", out_class = "list", clean_response = FALSE,
                              query_param = list(
                                action   = "wbsearchentities", 
@@ -435,10 +442,10 @@ extract_claims <- function (items,
 #'@title List properties of a Wikidata item
 #'@description for a downloaded wikidata item, list the properties of all statements
 #'
-#'@param items a list of one or more Wikidata items returned with
+#'@param item a list of one or more Wikidata items returned with
 #'\code{\link{get_item}}.
 #'
-#'@param claims a vector of claims (in the form "P321", "P12") to look for
+#'@param names a boolian for whether to return property names, or just P numbers
 #'and extract.
 #'
 #'@return a list containing one sub-list for each entry in \code{items},

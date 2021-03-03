@@ -12,7 +12,8 @@
 #'for using search functionality to pull out item or property IDs where the descriptions
 #'or aliases match a particular search term.
 #' @import WikidataQueryServiceR
-#' @import tidyverse
+#' @import tibble
+#' @import dplyr
 #' @import stringr
 #' @import Hmisc
 #' @import pbapply

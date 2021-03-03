@@ -36,7 +36,7 @@ qid_from_name <- function(name  = 'Thomas Shafee',
 
 #' @title QID from ORCID
 #' @description simple converter from ORCIDs to QIDs (for items in wikidata)
-#' @param DOI digital object identifiers submitted as strings
+#' @param ORCID digital object identifiers submitted as strings
 #' @return tibble of QIDs corresponding to ORCIDs submitted
 #' @export
 qid_from_ORCID <- function(ORCID = '0000-0002-2298-7593'){
