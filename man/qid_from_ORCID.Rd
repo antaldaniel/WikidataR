@@ -7,7 +7,7 @@
 qid_from_ORCID(ORCID = "0000-0002-2298-7593")
 }
 \arguments{
-\item{DOI}{digital object identifiers submitted as strings}
+\item{ORCID}{digital object identifiers submitted as strings}
 }
 \value{
 tibble of QIDs corresponding to ORCIDs submitted

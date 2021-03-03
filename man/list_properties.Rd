@@ -7,10 +7,10 @@
 list_properties(item, names = FALSE)
 }
 \arguments{
-\item{items}{a list of one or more Wikidata items returned with
+\item{item}{a list of one or more Wikidata items returned with
 \code{\link{get_item}}.}
 
-\item{claims}{a vector of claims (in the form "P321", "P12") to look for
+\item{names}{a boolian for whether to return property names, or just P numbers
 and extract.}
 }
 \value{

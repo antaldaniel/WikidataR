@@ -46,30 +46,30 @@
 #'The instruction will submit directly to wikidata via the API
 #'(if you include your wikimedai username and token)
 #'
-#'as_quickstatement(items        = "Wikidata Sandbox",
-#'                  properties   = "instance of",
-#'                  values       = "Q1",
-#'                  format       = "api",
-#'                  api.username = "myusername", 
-#'                  api.token    = , #REDACTED# Find yours at [your user page](https://tools.wmflabs.org/quickstatements/#/user)
-#'                  )
+#'write_wikidata(items        = "Wikidata Sandbox",
+#'               properties   = "instance of",
+#'               values       = "Q1",
+#'               format       = "api",
+#'               api.username = "myusername", 
+#'               api.token    = , #REDACTED# Find yours at [your user page](https://tools.wmflabs.org/quickstatements/#/user)
+#'               )
 #'
 #'@export
 
-as_quickstatement <- function(items,
-                              properties      = NULL,
-                              values          = NULL,
-                              qual.properties = NULL,
-                              qual.values     = NULL,
-                              src.properties  = NULL,
-                              src.values      = NULL,
-                              remove          = FALSE,
-                              format          = "tibble",
-                              api.username    = "Evolution_and_evolvability",
-                              api.token       = NULL, # Find yours from [your user page](https://tools.wmflabs.org/quickstatements/#/user)
-                              api.format      = "v1",
-                              api.batchname   = NULL,
-                              api.submit      = TRUE
+write_wikidata <- function(items,
+                           properties      = NULL,
+                           values          = NULL,
+                           qual.properties = NULL,
+                           qual.values     = NULL,
+                           src.properties  = NULL,
+                           src.values      = NULL,
+                           remove          = FALSE,
+                           format          = "tibble",
+                           api.username    = "Evolution_and_evolvability",
+                           api.token       = NULL, # Find yours from [your user page](https://tools.wmflabs.org/quickstatements/#/user)
+                           api.format      = "v1",
+                           api.batchname   = NULL,
+                           api.submit      = TRUE
 ){
   # Place all the quickstatemtnes variables into a list 
   QS       <- list(items           = items,

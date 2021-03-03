@@ -139,12 +139,12 @@ For more example SPARQL queries, see [this page](https://www.wikidata.org/wiki/W
 ### Write to Wikidata (example: paintings)  
 In this example we'll write directly to wikidata via the [QuickStatements](https://tools.wmflabs.org/quickstatements) format.
 ``` r
-as_quickstatement(items      = c("Q12418","Q471379"),
-                  properties = "Creator",
-                  values     = c("Q762","Q41406"),
-                  format     = "api",
-                  token=,#REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
-                  )
+write_wikidata(items      = c("Q12418","Q471379"),
+               properties = "Creator",
+               values     = c("Q762","Q41406"),
+               format     = "api",
+               token=,#REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
+               )
 ```
 Results in the statements being directly added to wikidata under your username via the API.  
 > The Mona Lisa (Q12418) has the Creator (P170) of Leonardo da Vinci (Q762)  
@@ -171,19 +171,19 @@ review.URLs <- paste0('https://en.wikiversity.org/wiki/Talk:',
                      )
 review.URLs <- gsub(" ","_",review.URLs)
 
-as_quickstatement(items      = sapply(sapply(articles.qr$Article,pattern = "/",stringr::str_split),tail,1),
-                  properties = "Peer review URL",
-                  values     = review.URLs,
-                  format     = "tibble",
-                  )
+write_wikidata(items      = sapply(sapply(articles.qr$Article,pattern = "/",stringr::str_split),tail,1),
+               properties = "Peer review URL",
+               values     = review.URLs,
+               format     = "tibble",
+               )
                   
-as_quickstatement(items        = sapply(sapply(articles.qr$Article,pattern = "/",stringr::str_split),tail,1),
-                  properties   = "Peer review URL",
-                  values       = review.URLs,
-                  format       = "api",
-                  api.username = "myusername", 
-                  api.token    = , #REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
-                  )
+write_wikidata(items        = sapply(sapply(articles.qr$Article,pattern = "/",stringr::str_split),tail,1),
+               properties   = "Peer review URL",
+               values       = review.URLs,
+               format       = "api",
+               api.username = "myusername", 
+               api.token    = , #REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
+               )
 ```
 ### Acknowledgements
 This package combines and builds on the utilities of Os Keyes' [WikidataR](https://github.com/Ironholds/WikidataR), Christian Graul's
