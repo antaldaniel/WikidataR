@@ -24,5 +24,4 @@ as_pid("P50")
 as_pid("author")
 # if input string matches a single unique label
 as_pid("Scopus author ID")
-
 }

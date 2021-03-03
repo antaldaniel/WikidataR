@@ -24,5 +24,4 @@ as_pid("S854")
 as_pid("URL")
 # if input string matches a single unique label
 as_pid("Reference URL")
-
 }

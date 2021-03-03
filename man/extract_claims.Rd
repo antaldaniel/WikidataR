@@ -26,8 +26,6 @@ extract claim information from data returned using
 \examples{
 # Get item data
 adams_data <- get_item("42")
-
 # Get claim data
 claims <- extract_claims(adams_data, "P31")
-
 }

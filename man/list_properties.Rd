@@ -25,8 +25,6 @@ for a downloaded wikidata item, list the properties of all statements
 \examples{
 # Get item data
 adams_data <- get_item("42")
-
 # Get claim data
 claims <- extract_claims(adams_data, "P31")
-
 }

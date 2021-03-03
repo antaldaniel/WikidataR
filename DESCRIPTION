@@ -21,7 +21,9 @@ Imports:
     dplyr,
     stringr,
     Hmisc,
-    pbapply
+    pbapply,
+    stats,
+    readr
 Suggests:
     testthat,
     tidyverse,

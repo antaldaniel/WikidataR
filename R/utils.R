@@ -2,12 +2,10 @@
 
 #Generic queryin' function for direct Wikidata calls. Wraps around WikipediR::page_content. - Ironholds
 #'@title Download a Wikidata item
-#'@description Utility wrapper for wikidata API to download item. Used by \code{get_item} and \code{get_property}
-#'
+#'@description Utility wrapper for wikidata API to download item.
+#'Used by \code{get_item} and \code{get_property}
 #'@param title the wikidata item or property as a string
-#'
 #'@return a download of the full wikidata object (item or property) formatted as a nested json list
-#'
 #'@export
 wd_query <- function(title, ...){
   result <- WikipediR::page_content(domain = "wikidata.org", page_name = title, as_wikitext = TRUE,
@@ -20,13 +18,9 @@ wd_query <- function(title, ...){
 # Query for a random item in "namespace" (ns). Essentially a wrapper around WikipediR::random_page. - Ironholds
 #'@title Download random Wikidata items
 #'@description Utility wrapper for wikidata API to download random items. Used by \code{random_item}
-#'
 #'@param ns string indicating namespace, most commonly "Main" for QID items, "Property" for PID properties
-#'
 #'@param limit how many random objesct to return
-#'
 #'@return a download of the full wikidata objects (items or properties) formatted as nested json lists
-#'
 #'@export
 wd_rand_query <- function(ns, limit, ...){
   result <- WikipediR::random_page(domain = "wikidata.org", as_wikitext = TRUE, namespaces = ns,
@@ -41,20 +35,14 @@ wd_rand_query <- function(ns, limit, ...){
 #Generic, direct access to Wikidata's search functionality.
 #'@title Convert an input to a item QID
 #'@description Convert an input string to the most likely item QID
-#'
 #'@param search_term a term to search for.
-#'
 #'@param language the language to return the labels and descriptions in; this should
 #'consist of an ISO language code. Set to "en" by default.
-#'
 #'@param limit the number of results to return; set to 10 by default.
-#'
 #'@param type type of wikidata object to return (default = "item")
-#'
 #'@return If the inputted string matches an item label, return its QID.
 #'If the inputted string matches multiple labels of multiple items, return the QID of the first hit.
 #'If the inputted string is already a QID, return the string.
-#'
 #'@examples
 #'# if input string is a valid QID
 #'as_qid("Q42")
@@ -62,7 +50,6 @@ wd_rand_query <- function(ns, limit, ...){
 #'as_qid("Douglas Adams")
 #'# if input string matches a single unique label
 #'as_qid("Douglas Adams and the question of arterial blood pressure in mammals")
-#'
 #'@export
 searcher <- function(search_term, language, limit, type, ...){
   result <- WikipediR::query(url = "https://www.wikidata.org/w/api.php", out_class = "list", clean_response = FALSE,
@@ -80,12 +67,10 @@ searcher <- function(search_term, language, limit, type, ...){
 
 #sparql query function for direct Wikidata calls.
 #'@title Download full Wikidata items matching a sparql query 
-#'@description Utility wrapper for wikidata spargle endpoint to download items. Used by \code{get_geo_entity} and \code{get_geo_box}
-#'
+#'@description Utility wrapper for wikidata spargle endpoint to download items.
+#'Used by \code{get_geo_entity} and \code{get_geo_box}
 #'@param query the sparql query as a string
-#'
 #'@return a download of the full wikidata objects formatted as a nested json list
-#'
 #'@export
 sparql_query <- function(query, ...){
   result <- httr::GET("https://query.wikidata.org/bigdata/namespace/wdq/sparql",
@@ -111,7 +96,6 @@ sparql_query <- function(query, ...){
 #' query_wikidata(sparql_query)
 #' # returns a named list with two data frames
 #' # one called "Cats" and one called "Horses"
-#'
 #' sparql_query <- extract_example("Largest cities with female mayor")
 #' cat(sparql_query)
 #' query_wikidata(sparql_query)
@@ -169,15 +153,12 @@ check.PID.constraint <- function(x){
 }
 
 #'@title Extract an identifier from a wikidata URL
-#'@description Convert a URL ending in an identifier (returned by SPARQL queries) to just the plan identifier (QID or PID).
-#'
+#'@description Convert a URL ending in an identifier (returned by SPARQL queries) to just
+#'the plain identifier (QID or PID).
 #'@param x a strings representing a wikidata URL
-#'
 #'@return if the URL ends in a QID or PID, return that PID or QID, else return the original string
-#'
 #'@examples
 #'url_to_id("http://www.wikidata.org/entity/42")
-#'
 #'@export
 url_to_id <- function (x){
   if(is.wdURL(x)){x <- sapply(sapply(x,pattern = "/",stringr::str_split),tail,1)}
@@ -189,13 +170,9 @@ url_to_id <- function (x){
 #because namespaces are weird, yo. - Ironholds
 #'@title Generic input checker
 #'@description Utility function to handle namespaces. Used by \code{get_item} and \code{get_property}
-#'
 #'@param input string to check
-#'
 #'@param substitution string for what's been looked for
-#'
 #'@return boolian indicating whether the checked string contains a match for the substitution string 
-#'
 #'@export
 check_input <- function(input, substitution){
   in_fit <- grepl("^\\d+$",input)
@@ -208,16 +185,12 @@ check_input <- function(input, substitution){
 
 # -------- Converters --------
 # Simple functions to convert plain text descriptions into their most likely QID/PIDs
-
 #'@title Convert an input to a item QID
 #'@description Convert an input string to the most likely item QID
-#'
 #'@param x a vector, data frame, or tibble of strings representaing wikidata items
-#'
 #'@return if the inputted string is a valid QID, return the string.
 #'If the inputted string matches an item label, return its QID.
 #'If the inputted string matches multiple labels of multiple items, return the QID of the first hit.
-#'
 #'@examples
 #'# if input string is a valid QID
 #'as_qid("Q42")
@@ -225,7 +198,6 @@ check_input <- function(input, substitution){
 #'as_qid("Douglas Adams")
 #'# if input string matches a single unique label
 #'as_qid("Douglas Adams and the question of arterial blood pressure in mammals")
-#'
 #'@export
 as_qid <- function(x){
   as_qid_nest1 <- function(x){
@@ -268,13 +240,10 @@ as_qid <- function(x){
 
 #'@title Convert an input to a property PID
 #'@description Convert an input string to the most likely property PID
-#'
 #'@param x a vector, data frame, or tibble of strings representaing wikidata properties
-#'
 #'@return if the inputted string is a valid PID, return the string.
 #'If the inputted string matches a property label, return its PID.
 #'If the inputted string matches multiple labels of multiple properties, return the PID of the first hit.
-#'
 #'@examples
 #'# if input string is a valid PID
 #'as_pid("P50")
@@ -282,7 +251,6 @@ as_qid <- function(x){
 #'as_pid("author")
 #'# if input string matches a single unique label
 #'as_pid("Scopus author ID")
-#'
 #'@export
 as_pid <- function(x){
   as_pid_nest1 <- function(x){
@@ -314,13 +282,10 @@ as_pid <- function(x){
 
 #'@title Convert an input to a source property SID
 #'@description Convert an input string to the most likely source SID (equivalent to PID)
-#'
 #'@param x a vector, data frame, or tibble of strings representaing wikidata source properties
-#'
 #'@return if the inputted string is a valid SID, return the string.
 #'If the inputted string matches a property label, return its SID
 #'If the inputted string matches multiple labels of multiple properties, return the SID of the first hit.
-#'
 #'@examples
 #'# if input string is a valid SID
 #'as_pid("S854")
@@ -328,7 +293,6 @@ as_pid <- function(x){
 #'as_pid("URL")
 #'# if input string matches a single unique label
 #'as_pid("Reference URL")
-#'
 #'@export
 as_sid <- function(x){
   as_sid_nest1 <- function(x){
@@ -350,17 +314,12 @@ as_sid <- function(x){
 
 #'@title Add quotations marks
 #'@description Add escaped quotation marks around strings that need them ready for submision to an API
-#'
 #'@param x a vector, data frame, or tibble of strings
-#'
 #'@param format either "tibble" to use plain quotation marks (default), or "api" to use '\%22'
-#'
 #'@return tibble of items inside of escaped quotation marks
 #'unless they are already in escaped quotation marks, is a QID, (in which chase it is returned unchanged) 
-#'
 #'@examples
 #'as_quot("text")
-#'
 #'@export
 as_quot <- function(x,format="tibble"){
   if(is.null(x)){
@@ -385,15 +344,12 @@ as_quot <- function(x,format="tibble"){
 }
 
 #'@title Extract an identifier from a wikidata URL
-#'@description Convert a URL ending in an identifier (returned by SPARQL queries) to just the plan identifier (QID or PID).
-#'
+#'@description Convert a URL ending in an identifier (returned by SPARQL queries)
+#'to just the plan identifier (QID or PID).
 #'@param x a vector of strings representing wikidata URLs
-#'
 #'@return QID or PID
-#'
 #'@examples
 #'url_to_id("http://www.wikidata.org/Q42")
-#'
 #'@export
 url_to_id <- function(x){
   sapply(sapply(x,pattern = "/|:",stringr::str_split),tail,1)
@@ -404,25 +360,19 @@ url_to_id <- function(x){
 #'@title Extract Claims from Returned Item Data
 #'@description extract claim information from data returned using
 #'\code{\link{get_item}}.
-#'
 #'@param items a list of one or more Wikidata items returned with
 #'\code{\link{get_item}}.
-#'
 #'@param claims a vector of claims (in the form "P321", "P12") to look for
 #'and extract.
-#'
 #'@return a list containing one sub-list for each entry in \code{items},
 #'and (below that) the found data for each claim. In the event a claim
 #'cannot be found for an item, an \code{NA} will be returned
 #'instead.
-#'
 #'@examples
 #'# Get item data
 #'adams_data <- get_item("42")
-#'
 #'# Get claim data
 #'claims <- extract_claims(adams_data, "P31")
-#'
 #'@export
 extract_claims <- function (items,
                             claims){
@@ -441,25 +391,19 @@ extract_claims <- function (items,
 
 #'@title List properties of a Wikidata item
 #'@description for a downloaded wikidata item, list the properties of all statements
-#'
 #'@param item a list of one or more Wikidata items returned with
 #'\code{\link{get_item}}.
-#'
 #'@param names a boolian for whether to return property names, or just P numbers
 #'and extract.
-#'
 #'@return a list containing one sub-list for each entry in \code{items},
 #'and (below that) the found data for each claim. In the event a claim
 #'cannot be found for an item, an \code{NA} will be returned
 #'instead.
-#'
 #'@examples
 #'# Get item data
 #'adams_data <- get_item("42")
-#'
 #'# Get claim data
 #'claims <- extract_claims(adams_data, "P31")
-#'
 #'@export
 list_properties <- function (item,
                              names=FALSE){
@@ -476,11 +420,8 @@ list_properties <- function (item,
 
 #'@title Get names of properties
 #'@description For a clam or set of claims, return the names of the properties  
-#'
 #'@param properties a claims list from \code{extract_claims}
-#'
 #'@return tibble of labels for each property for a set of claims
-#'
 #'@export
 get_names_from_properties <- function(properties){
   get_names_from_properties_nest1 <- function(x){
@@ -513,14 +454,10 @@ get_names_from_properties <- function(properties){
 # -------- Misc. string manipulation --------
 #'@title Format short form person names
 #'@description Converting names into first initial and surname, or just initials
-#'
 #'@param x a vector of people's names as strings
-#'
 #'@param format a vector of strings of either "FLast" or "FL" to indicate the output format
-#'
 #'@return the inputted name strings with first names shortened based on the
 #'selected format.
-#'
 #'@export
 initials <- function(x,format="FLast"){
   if (format=="FLast"){
@@ -532,12 +469,9 @@ initials <- function(x,format="FLast"){
 
 #'@title Remove special characters
 #'@description Special characters can otherwise mess up wikidata read-writes
-#'
 #'@param x a vector of strings to check for special characters
-#'
 #'@return the inputted strings with special characters replaced with
 #'closest match plan characters.
-#'
 #'@export
 unspecial <- function(x){
   out <- x
@@ -555,16 +489,11 @@ unspecial <- function(x){
 #'@title Extract a paragraph of text
 #'@description Return the nth paragraph of a section of text
 #'Useful for extracting information from wikipedia or other wikimarkup text
-#'
 #'@param text the input text as a string
-#'
 #'@param para number indicating whichparagraph(s) to return (default=1)
-#'
 #'@param templ an optional string specifying a mediawikitemplate within
 #'which to restrict the search restrict search 
-#'
 #'@return the nth paragraph of the input text.
-#'
 #'@export
 extract_para <- function(text,
                          para=1,
@@ -605,7 +534,6 @@ extract_para <- function(text,
 #'@param vector a vector of properties or values which may be expanded based on the items vector
 #'@return if the vector is NULL, return NULL. Otherwise, if the "CREATE" keyword appears in the
 #'items vector, insert blank strings at those positions in the vector.
-#'
 #'@export
 createrows <- function(items,vector){
   if(is.null(vector)){
@@ -632,13 +560,10 @@ createrows <- function(items,vector){
 #'@description Add in QuickStatements CREATE rows that mint new QIDs from tidy input data.
 #'New items are created by any item starting that starts with the text "CREATE" followed
 #'by any unique ID.
-#'
 #'@param QS.tib a tibble of items, values and properties (optionally qualifiers and sources).
-#'
 #'@return a tibble, with items that start with "CREATE" followed by any unique text causing the
 #'addition of a "Create" line above, being replaced with "LAST" in the Quickstatemnts format
 #'to create new QIDs.
-#'
 #'@export
 createrows.tidy <- function(QS.tib){
   #insert 'CREATE' blankrows above first instance of 'CREATExyz'

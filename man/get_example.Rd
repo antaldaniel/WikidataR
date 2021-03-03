@@ -28,7 +28,6 @@ sparql_query <- extract_example(c("Cats", "Horses"))
 query_wikidata(sparql_query)
 # returns a named list with two data frames
 # one called "Cats" and one called "Horses"
-
 sparql_query <- extract_example("Largest cities with female mayor")
 cat(sparql_query)
 query_wikidata(sparql_query)

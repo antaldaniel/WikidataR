@@ -13,5 +13,6 @@ wd_query(title, ...)
 a download of the full wikidata object (item or property) formatted as a nested json list
 }
 \description{
-Utility wrapper for wikidata API to download item. Used by \code{get_item} and \code{get_property}
+Utility wrapper for wikidata API to download item.
+Used by \code{get_item} and \code{get_property}
 }

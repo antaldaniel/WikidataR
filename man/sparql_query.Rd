@@ -13,5 +13,6 @@ sparql_query(query, ...)
 a download of the full wikidata objects formatted as a nested json list
 }
 \description{
-Utility wrapper for wikidata spargle endpoint to download items. Used by \code{get_geo_entity} and \code{get_geo_box}
+Utility wrapper for wikidata spargle endpoint to download items.
+Used by \code{get_geo_entity} and \code{get_geo_box}
 }

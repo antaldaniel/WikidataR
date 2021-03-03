@@ -20,5 +20,4 @@ Add escaped quotation marks around strings that need them ready for submision to
 }
 \examples{
 as_quot("text")
-
 }

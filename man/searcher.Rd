@@ -31,5 +31,4 @@ as_qid("Q42")
 as_qid("Douglas Adams")
 # if input string matches a single unique label
 as_qid("Douglas Adams and the question of arterial blood pressure in mammals")
-
 }

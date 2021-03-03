@@ -17,13 +17,13 @@ if the URL ends in a QID or PID, return that PID or QID, else return the origina
 QID or PID
 }
 \description{
-Convert a URL ending in an identifier (returned by SPARQL queries) to just the plan identifier (QID or PID).
+Convert a URL ending in an identifier (returned by SPARQL queries) to just
+the plain identifier (QID or PID).
 
-Convert a URL ending in an identifier (returned by SPARQL queries) to just the plan identifier (QID or PID).
+Convert a URL ending in an identifier (returned by SPARQL queries)
+to just the plan identifier (QID or PID).
 }
 \examples{
 url_to_id("http://www.wikidata.org/entity/42")
-
 url_to_id("http://www.wikidata.org/Q42")
-
 }
