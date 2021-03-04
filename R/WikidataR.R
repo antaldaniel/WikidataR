@@ -15,10 +15,10 @@
 #' @import tibble
 #' @import dplyr
 #' @import stringr
-#' @import Hmisc
 #' @import pbapply
 #' @importFrom readr format_tsv
 #' @importFrom readr format_delim
+#' @importFrom dplyr bind_cols
 #' @importFrom stats var
 #' @importFrom stats cor
 #' @importFrom utils write.table
