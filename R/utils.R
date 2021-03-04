@@ -245,7 +245,12 @@ as_qid <- function(x){
 #'If the inputted string matches a property label, return its PID.
 #'If the inputted string matches multiple labels of multiple properties, return the PID of the first hit.
 #'@examples
-
+#'# if input string is a valid PID
+#'as_pid("P50")
+#'# if input string matches multiple item labels
+#'as_pid("author")
+#'# if input string matches a single unique label
+#'as_pid("Scopus author ID")
 #'@export
 as_pid <- function(x){
   as_pid_nest1 <- function(x){
