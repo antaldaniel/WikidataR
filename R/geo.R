@@ -1,18 +1,3 @@
-clean_geo <- function(results){
-  do.call("rbind", lapply(results, function(item){
-    point <- unlist(strsplit(gsub(x = item$coord$value, pattern = "(Point\\(|\\))", replacement = ""),
-                             " "))
-    wd_id <- gsub(x = item$item$value, pattern = "http://www.wikidata.org/entity/",
-                  replacement = "", fixed = TRUE)
-    return(data.frame(item = wd_id,
-                      name = ifelse(item$name$value == wd_id, NA, item$name$value),
-                      latitutde = as.numeric(point[1]),
-                      longitude = as.numeric(point[2]),
-                      stringsAsFactors = FALSE))
-  
-  }))
-}
-
 #'@title Retrieve geographic information from Wikidata
 #'@description \code{get_geo_entity} retrieves the item ID, latitude
 #'and longitude of any object with geographic data associated with \emph{another}
@@ -180,6 +165,24 @@ get_geo_box <- function(first_city_code, first_corner, second_city_code, second_
   output <- clean_geo(sparql_query(query)$results$bindings)
   return(output)
 }
+
+
+# Cleanup function
+clean_geo <- function(results){
+  do.call("rbind", lapply(results, function(item){
+    point <- unlist(strsplit(gsub(x = item$coord$value, pattern = "(Point\\(|\\))", replacement = ""),
+                             " "))
+    wd_id <- gsub(x = item$item$value, pattern = "http://www.wikidata.org/entity/",
+                  replacement = "", fixed = TRUE)
+    return(data.frame(item = wd_id,
+                      name = ifelse(item$name$value == wd_id, NA, item$name$value),
+                      latitutde = as.numeric(point[1]),
+                      longitude = as.numeric(point[2]),
+                      stringsAsFactors = FALSE))
+    
+  }))
+}
+
 
 # Conversion function to convert dms coordinate string to decimal format for QuickStatements
 dms2num <- function(coord) {
