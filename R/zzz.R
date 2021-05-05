@@ -5,7 +5,10 @@
 
 .onAttach <- function(){
   message('Updating key variables from saved file in github repo (estimated time <10 seconds)')
-  WD.globalvar <- readRDS(gzcon(url("https://github.com/TS404/WikidataR/raw/master/data/WD.globalvar.RDS")))
+  WD.globalvar.temp <- readRDS(gzcon(url("https://github.com/TS404/WikidataR/raw/master/data/WD.globalvar.RDS")))
+   assign(x = "WD.globalvar",
+         envir = .GlobalEnv,
+         value = WD.globalvar.temp)
   
 #   message('Updating key variables from wikidata (estimated time <1 min)')
   
