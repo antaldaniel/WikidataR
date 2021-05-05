@@ -214,7 +214,7 @@ as_qid <- function(x){
       if(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)|is.null(x)|is.empty(x)|is.createx(x)|is.create(x)|is.last(x)){
         x
       }else{
-        temp       <- WikidataR::find_item(x,limit = 100)
+        temp       <- find_item(x,limit = 100)
         if(length(temp)==0){
           out <- NA
           message (paste0("no sufficiently close match for \"",x,"\". Returned \"NA\"."))
@@ -267,7 +267,7 @@ as_pid <- function(x){
       if(is.pid(x)|is.date(x)|is.quot(x)|is.na(x)|is.null(x)|is.empty(x)|is.special(x)){
         x
       }else{
-        temp       <- WikidataR::find_property(x,limit = 2)
+        temp       <- find_property(x,limit = 2)
         if(length(temp)==0){
             out <- NA
             message (paste0("no sufficiently close match for \"",x,"\". Returned \"NA\"."))
@@ -311,7 +311,7 @@ as_sid <- function(x){
       }else if(all(is.pid(x))){
         gsub("P","S",x,ignore.case = 1)
       }else{
-        gsub("P","S",WikidataR::find_property(x)[[1]]$id)
+        gsub("P","S",find_property(x)[[1]]$id)
       }
     }
     out <- unlist(lapply(x,as_sid_nest2))
