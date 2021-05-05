@@ -123,10 +123,10 @@ get_geo_entity <- function(entity, language = "en", radius = NULL, ...){
 #'
 #'@examples
 #'# Simple bounding box
-#'bruges_box <- WikidataR:::get_geo_box("Q12988", "NorthEast", "Q184287", "SouthWest")
+#'bruges_box <- get_geo_box("Q12988", "NorthEast", "Q184287", "SouthWest")
 #'
 #'# Custom language
-#'bruges_box_fr <- WikidataR:::get_geo_box("Q12988", "NorthEast", "Q184287", "SouthWest",
+#'bruges_box_fr <- get_geo_box("Q12988", "NorthEast", "Q184287", "SouthWest",
 #'                                         language = "fr")
 #'
 #'@seealso \code{\link{get_geo_entity}} for using an unrestricted search or simple radius,
