@@ -71,7 +71,7 @@ write_wikidata <- function(items,
                            api.batchname   = NULL,
                            api.submit      = TRUE
 ){
-  # Place all the quickstatemtnes variables into a list 
+  # Place all the quickstatements variables into a list 
   QS       <- list(items           = items,
                    properties      = properties,
                    values          = values,
@@ -82,7 +82,7 @@ write_wikidata <- function(items,
   QS <- lapply(QS,function(x){if(!is.null(x)){tibble(x)}})
 
   # If new QIDs are being created via the "CREATE" keyword, need to insert blank lines across the other parameters to align correctly into rows
-  # This is the most similar to the standard quickstatemsnts method, though the "CREATExyz" method is preferred (see createrows.tidy function later)
+  # This is the most similar to the standard quickstatements method, though the "CREATExyz" method is preferred (see createrows.tidy function later)
   QS$properties      <- createrows(QS$items,QS$properties)
   QS$values          <- createrows(QS$items,QS$values)
   QS$qual.properties <- createrows(QS$items,QS$qual.properties)
