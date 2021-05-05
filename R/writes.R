@@ -65,7 +65,7 @@ write_wikidata <- function(items,
                            src.values      = NULL,
                            remove          = FALSE,
                            format          = "tibble",
-                           api.username    = "Evolution_and_evolvability",
+                           api.username    = NULL,
                            api.token       = NULL, # Find yours from [your user page](https://tools.wmflabs.org/quickstatements/#/user)
                            api.format      = "v1",
                            api.batchname   = NULL,
