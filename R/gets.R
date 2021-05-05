@@ -115,7 +115,7 @@ get_random_property <- function(limit = 1, ...){
 find_item <- function(search_term, language = "en", limit = 10, ...){
   res <- searcher(search_term, language, limit, "item")
   class(res) <- "find_item"
-  
+  return(res)
 }
 
 #'@rdname find_item
