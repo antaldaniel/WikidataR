@@ -143,8 +143,8 @@ write_wikidata(items      = c("Q4115189","Q13406268"),
                properties = "author",
                values     = c("Q762","Q41406"),
                format     = "api",
-               api.username = ,#REDACTED# Enter your Wikimedia username here
-               api.token=,#REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
+               api.username = "myusername", # Enter your Wikimedia username here
+               api.token  = "" #REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
                )
 ```
 Results in the statements being directly added to wikidata under your username via the API.  
