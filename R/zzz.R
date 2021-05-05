@@ -3,13 +3,8 @@
 # Run these on startup or something? The parameters will change not frequently.
 # Useful for checking whether quickstatements inputs will be valid to warn early.
 
-.onAttach <- function(){
-  message('Updating key variables from saved file in github repo (estimated time <10 seconds)')
-  WD.globalvar.temp <- readRDS(gzcon(url("https://github.com/TS404/WikidataR/raw/master/data/WD.globalvar.RDS")))
-   assign(x = "WD.globalvar",
-         envir = .GlobalEnv,
-         value = WD.globalvar.temp)
-  
+# .onAttach <- function(){
+ 
 #   message('Updating key variables from wikidata (estimated time <1 min)')
   
 #   #Valid reference source properties
@@ -76,4 +71,4 @@
 #   )
   
 #   message('Update complete (data saved as WD.globalvar)')
-}
+# }
