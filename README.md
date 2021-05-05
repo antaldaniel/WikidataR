@@ -139,11 +139,12 @@ For more example SPARQL queries, see [this page](https://www.wikidata.org/wiki/W
 ### Write to Wikidata (example: paintings)  
 In this example we'll write directly to wikidata via the [QuickStatements](https://tools.wmflabs.org/quickstatements) format.
 ``` r
-write_wikidata(items      = c("Q12418","Q471379"),
-               properties = "Creator",
+write_wikidata(items      = c("Q4115189","Q13406268"),
+               properties = "author",
                values     = c("Q762","Q41406"),
                format     = "api",
-               token=,#REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
+               api.username = ,#REDACTED# Enter your Wikimedia username here
+               api.token=,#REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
                )
 ```
 Results in the statements being directly added to wikidata under your username via the API.  
