@@ -36,7 +36,7 @@ query_wikidata <- function(...) {
 #' @description convert unique identifiers to QIDs (for items in wikidata). 
 #' @param property the identifier property to search (for caveats, see \code{as_pid})
 #' @param value the identifier value to match
-#' @return tibble of QIDs corresponding to DOIs submitted
+#' @return tibble of QIDs corresponding to identifiers submitted
 #' @examples
 #' qid_from_identifier('ISBN-13','978-0-262-53817-6')
 #' @export
@@ -52,18 +52,19 @@ qid_from_identifier <- function(property = 'DOI',
                                                        '"}',
                                                        sep='')}
   sparql_query <- lapply(value,property,FUN=qid_from_property1)
-  article.qr   <- if(length(value)>1){pbapply::pblapply(sparql_query,FUN=query_wikidata)}else{lapply(sparql_query,FUN=query_wikidata)}
-  article.qid  <- tibble(value,qid=unlist(article.qr))
-  return(article.qid)
+  output.qr    <- if(length(value)>1){pbapply::pblapply(sparql_query,FUN=query_wikidata)}else{lapply(sparql_query,FUN=query_wikidata)}
+  output       <- tibble(value,qid=unlist(output.qr))
+  return(output)
 }
 
-#' @title QID from identifier
-#' @description convert unique identifiers to QIDs (for items in wikidata). 
+#' @title identifier from identifier
+#' @description convert unique identifiers to other unique identifiers 
 #' @param property the identifier property to search (for caveats, see \code{as_pid})
+#' @param return the identifier property to convert to
 #' @param value the identifier value to match
-#' @return tibble of QIDs corresponding to DOIs submitted
+#' @return tibble of identifiers corresponding to identifiers submitted
 #' @examples
-#' qid_from_identifier('ISBN-13','978-0-262-53817-6')
+#' identifier_from_identifier('ORCID iD','IMDb ID',c('0000-0002-7865-7235','0000-0003-1079-5604'))
 #' @export
 identifier_from_identifier <- function(property = 'ORCID iD',
                                        return   = 'IMDb ID',
@@ -81,7 +82,7 @@ identifier_from_identifier <- function(property = 'ORCID iD',
                                                        ' ?return.}',
                                                        sep='')}
   sparql_query <- lapply(value,return,property,FUN=qid_from_property1)
-  article.qr   <- if(length(value)>1){pbapply::pblapply(sparql_query,FUN=query_wikidata)}else{lapply(sparql_query,FUN=query_wikidata)}
-  article.qid  <- tibble(value,qid=unlist(article.qr))
-  return(article.qid)
+  output.qr    <- if(length(value)>1){pbapply::pblapply(sparql_query,FUN=query_wikidata)}else{lapply(sparql_query,FUN=query_wikidata)}
+  output       <- tibble(value,return=unlist(output.qr))
+  return(output)
 }
