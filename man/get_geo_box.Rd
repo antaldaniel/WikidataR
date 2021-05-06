@@ -51,10 +51,10 @@ with geographic attributes (usually cities).
 }
 \examples{
 # Simple bounding box
-bruges_box <- WikidataR:::get_geo_box("Q12988", "NorthEast", "Q184287", "SouthWest")
+bruges_box <- get_geo_box("Q12988", "NorthEast", "Q184287", "SouthWest")
 
 # Custom language
-bruges_box_fr <- WikidataR:::get_geo_box("Q12988", "NorthEast", "Q184287", "SouthWest",
+bruges_box_fr <- get_geo_box("Q12988", "NorthEast", "Q184287", "SouthWest",
                                         language = "fr")
 
 }

@@ -25,6 +25,7 @@ Imports:
     stats,
     readr
 Suggests:
+	markdown,
     testthat,
     tidyverse,
     knitr,

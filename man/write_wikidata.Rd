@@ -14,7 +14,7 @@ write_wikidata(
   src.values = NULL,
   remove = FALSE,
   format = "tibble",
-  api.username = "Evolution_and_evolvability",
+  api.username = NULL,
   api.token = NULL,
   api.format = "v1",
   api.batchname = NULL,

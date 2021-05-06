@@ -17,3 +17,11 @@ If the inputted string matches multiple labels of multiple properties, return th
 \description{
 Convert an input string to the most likely property PID
 }
+\examples{
+# if input string is a valid PID
+as_pid("P50")
+# if input string matches multiple item labels
+as_pid("author")
+# if input string matches a single unique label
+as_pid("Scopus author ID")
+}
