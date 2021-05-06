@@ -1,6 +1,6 @@
 Package: WikidataR
 Type: Package
-Title: API Client Library for 'Wikidata'
+Title: Read-write API Client Library for 'Wikidata'
 Version: 2.1.1
 Date: 2021-05-06
 Author: Thomas Shafee [aut, cre], Oliver Keyes [aut, cre], Serena Signorelli [aut, cre],
