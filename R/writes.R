@@ -41,10 +41,10 @@
 #'optionally also directly uploded to wikidata (see \code{format} parameter. 
 #'
 #'@examples
-#'Add a statement to the "Wikidata sandbox" item (Q4115189)
-#'to say that it is an "instance of" (P31) of Q1 (the universe).
-#'The instruction will submit directly to wikidata via the API
-#'(if you include your wikimedia username and token)
+#'# Add a statement to the "Wikidata sandbox" item (Q4115189)
+#'# to say that it is an "instance of" (P31) of Q1 (the universe).
+#'# The instruction will submit directly to wikidata via the API
+#'# (if you include your wikimedia username and token)
 #'
 #'write_wikidata(items        = "Wikidata Sandbox",
 #'               properties   = "instance of",
