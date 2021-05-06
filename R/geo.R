@@ -169,7 +169,6 @@ get_geo_box <- function(first_city_code, first_corner, second_city_code, second_
   return(output)
 }
 
-
 # Cleanup function
 clean_geo <- function(results){
   do.call("rbind", lapply(results, function(item){
@@ -186,21 +185,20 @@ clean_geo <- function(results){
   }))
 }
 
-
 # Conversion function to convert dms coordinate string to decimal format for QuickStatements
-dms2num <- function(coord) {
-  getdeg <- regexec("([0-9]{1,3})°", coord)
-  getmin <- regexec("([0-9]{1,2})'", coord)
-  getsec <- regexec("([1-9]?[0-9](\\.[0-9]+)?)\"", coord)
-  getdir <- regexec("[N|S|E|W]", coord)
-  d <- regmatches(coord, getdeg)
-  m <- regmatches(coord, getmin)
-  s <- regmatches(coord, getsec)
-  dir <- regmatches(coord, getdir)
-  degval <- as.numeric(sapply(d, getmatch))
-  minval <- as.numeric(sapply(m, getmatch))
-  secval <- as.numeric(sapply(s, getmatch))
-  dirval <- sapply(dir, function(x) { x[1] })
-  dirsign <- ifelse ((dirval == "S" || dirval == "W"), -1, 1)
-  return(round(dirsign * (degval + (minval / 60) + (secval / 3600)),6))
-}
+#dms2num <- function(coord) {
+#  getdeg <- regexec("([0-9]{1,3})\\u00B0", coord)
+#  getmin <- regexec("([0-9]{1,2})'", coord)
+#  getsec <- regexec("([1-9]?[0-9](\\.[0-9]+)?)\"", coord)
+#  getdir <- regexec("[N|S|E|W]", coord)
+#  d <- regmatches(coord, getdeg)
+#  m <- regmatches(coord, getmin)
+#  s <- regmatches(coord, getsec)
+#  dir <- regmatches(coord, getdir)
+#  degval <- as.numeric(sapply(d, getmatch))
+#  minval <- as.numeric(sapply(m, getmatch))
+#  secval <- as.numeric(sapply(s, getmatch))
+#  dirval <- sapply(dir, function(x) { x[1] })
+#  dirsign <- ifelse ((dirval == "S" || dirval == "W"), -1, 1)
+#  return(round(dirsign * (degval + (minval / 60) + (secval / 3600)),6))
+#}
