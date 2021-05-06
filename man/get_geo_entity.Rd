@@ -4,7 +4,7 @@
 \alias{get_geo_entity}
 \title{Retrieve geographic information from Wikidata}
 \usage{
-get_geo_entity(entity, language = "en", radius = NULL, ...)
+get_geo_entity(entity, language = "en", radius = NULL, limit = 100, ...)
 }
 \arguments{
 \item{entity}{a Wikidata item (\code{Q...}) or series of items, to check

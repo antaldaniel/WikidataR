@@ -71,6 +71,18 @@ write_wikidata <- function(items,
                            api.batchname   = NULL,
                            api.submit      = TRUE
 ){
+  
+  # Check if username and token provided
+  if(format=="api"){
+    if(is.null(api.username)){
+      stop("Enter your Wikimedia username")
+    }
+    if(is.null(api.token)){
+      stop("Enter your api.token (Find yours at https://tools.wmflabs.org/quickstatements/#/user)")
+    }
+      
+  }
+  
   # Place all the quickstatements variables into a list 
   QS       <- list(items           = items,
                    properties      = properties,

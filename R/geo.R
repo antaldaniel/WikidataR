@@ -45,7 +45,7 @@
 #'rather than an unrestricted search or simple radius.
 #'
 #'@export
-get_geo_entity <- function(entity, language = "en", radius = NULL, ...){
+get_geo_entity <- function(entity, language = "en", radius = NULL, limit=100, ...){
   
   entity <- check_input(entity, "Q")
   
@@ -57,7 +57,8 @@ get_geo_entity <- function(entity, language = "en", radius = NULL, ...){
                         ?item rdfs:label ?name
                       }
                     }
-                    ORDER BY ASC (?name)")
+                    ORDER BY ASC (?name)
+                    LIMIT ", limit)
   } else {
     query <- paste0("SELECT ?item ?name ?coord
                     WHERE {
@@ -72,7 +73,8 @@ get_geo_entity <- function(entity, language = "en", radius = NULL, ...){
                         bd:serviceParam wikibase:language \"", language, "\" .
                         ?item rdfs:label ?name
                       }
-                    } ORDER BY ASC (?name)")
+                    } ORDER BY ASC (?name)
+                    LIMIT ",limit)
   }
   
   if(length(query) > 1){
@@ -80,9 +82,10 @@ get_geo_entity <- function(entity, language = "en", radius = NULL, ...){
       output <- clean_geo(sparql_query(query, ...)$results$bindings)
       output$entity <- entity
       return(output)
-    }, query = query, entity = entity, ..., SIMPLIFY = FALSE)))
+    }, query = query, entity = entity, SIMPLIFY = FALSE, ...)))
   }
   output <- clean_geo(sparql_query(query)$results$bindings)
+  if(length(output)==0){warning("Query timeout. Possibly try again with lower 'limit='")}
   output$entity <- entity
   return(output)
 }
