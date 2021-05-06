@@ -84,12 +84,12 @@ adding statements to existing items (via the quickstatements format and API).
 # The instruction will submit directly to wikidata via the API
 # (if you include your wikimedia username and token)
 
-write_wikidata(items        = "Wikidata Sandbox",
-              properties   = "instance of",
-              values       = "Q1",
-              format       = "api",
-              api.username = "myusername", 
-              api.token    = , #REDACTED# Find yours at [your user page](https://tools.wmflabs.org/quickstatements/#/user)
-              )
+#write_wikidata(items        = "Wikidata Sandbox",
+#               properties   = "instance of",
+#               values       = "Q1",
+#               format       = "api",
+#               api.username = "myusername", 
+#               api.token    = , #REDACTED# Find yours at [your user page](https://tools.wmflabs.org/quickstatements/#/user)
+#               )
 
 }
