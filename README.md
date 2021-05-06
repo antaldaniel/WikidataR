@@ -52,13 +52,23 @@ and
 ```
 Elements within those lists include basic information from wikidata (ID, description, labels). The QID or PID can then be used to get the full data for the item (see below).
 
-It's also possible to convert from any identifier to wikidata QIDs.
+### Convert between identifiers
+Wikidata is an excellent thesaurus for different identifiers. For example it's possible to convert from any identifier to wikidata QIDs or between different identifiers
 ``` r
 qid_from_identifier('ISBN-13','978-0-262-53817-6')
+identifier_from_identifier('ORCID iD','IMDb ID',c('0000-0002-7865-7235','0000-0003-1079-5604'))
 ```
-Which returns the list: 
+Which returns the lists: 
 ```
     978-0-262-53817-6 Q102035721 Wikipedia @ 20: Stories of an Incomplete Revolution
+```
+and
+```
+    # A tibble: 2 x 2
+      value               return   
+      <chr>               <fct>    
+    1 0000-0002-7865-7235 nm2118834
+    2 0000-0003-1079-5604 nm1821217
 ```
 
 ### Get full items from Wikidata (example: journal articles)
