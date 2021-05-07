@@ -124,7 +124,7 @@ get_example <- function(example_name){
 # Simple tests of strings for whether they adhere to common wikidata formats
 get.WD.globalvar <- function(){assign(x = "WD.globalvar",
                                       envir = .GlobalEnv,
-                                      value = readRDS(gzcon(url("https://github.com/TS404/WikidataR/raw/master/data/WD.globalvar.RDS"))))}
+                                      value = readRDS(gzcon(url("https://github.com/TS404/WikidataR/raw/master/inst/extdata/WD.globalvar.RDS"))))}
 is.qid     <- function(x){grepl("^[Qq][0-9]+$",x)}
 is.pid     <- function(x){get.WD.globalvar()
                           gsub("S","P",x) %in% as.matrix(.GlobalEnv$WD.globalvar$PID.datatype$property)}

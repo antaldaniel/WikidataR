@@ -14,6 +14,8 @@
 #'@param radius optionally, a radius (in kilometers) around \code{entity}
 #'to restrict the search to.
 #'
+#'@param limit the maximum number of results to return.
+#'
 #'@param ... further arguments to pass to httr's GET.
 #'
 #'@return a data.frame of 5 columns:
@@ -189,7 +191,7 @@ clean_geo <- function(results){
 
 # Conversion function to convert dms coordinate string to decimal format for QuickStatements
 dms2num <- function(coord) {
-  getdeg <- regexec("([0-9]{1,3})°", coord)
+  getdeg <- regexec("([0-9]{1,3})\u00B0", coord) # note: \u00B0 is the degrees symbol
   getmin <- regexec("([0-9]{1,2})'", coord)
   getsec <- regexec("([1-9]?[0-9](\\.[0-9]+)?)\"", coord)
   getdir <- regexec("[N|S|E|W]", coord)

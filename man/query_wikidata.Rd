@@ -4,16 +4,16 @@
 \alias{query_wikidata}
 \title{Send one or more SPARQL queries to WDQS}
 \usage{
-query_wikidata(...)
+query_wikidata(sparql_query, format = "simple", ...)
 }
 \arguments{
-\item{...}{Additional parameters to supply to [httr::POST]}
-
 \item{sparql_query}{SPARQL query (can be a vector of queries)}
 
 \item{format}{"simple" uses CSV and returns pure character data frame, while
 "smart" fetches JSON-formatted data and returns a data frame with datetime
 columns converted to `POSIXct`}
+
+\item{...}{Additional parameters to supply to [httr::POST]}
 }
 \value{
 A `tibble`. Note: QID values will be returned as QIDs, rather than URLs.

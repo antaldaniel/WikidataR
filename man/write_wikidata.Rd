@@ -31,7 +31,8 @@ Using the same id will add additional statemnts to those new items}
 \item{properties}{a vector of strings indicating the properties to add as statements (as PIDs or labels).
 Note: if labels are provided, and multiple items match, the first matching item will be used
 (see \code{as_pid} function), so use with caution.
-Four special properties can also be used: labels, aliases, descriptions and sitelinks. See [this link](https://www.wikidata.org/wiki/Help:QuickStatements#Adding_labels,_aliases,_descriptions_and_sitelinks) for the syntax.}
+Four special properties can also be used: labels, aliases, descriptions and sitelinks.
+See [this link](https://www.wikidata.org/wiki/Help:QuickStatements#Adding_labels,_aliases,_descriptions_and_sitelinks) for the syntax.}
 
 \item{values}{a vector of strings indicating the values to add as statements (as QIDs or strings).
 Note: if strings are provided, they will be treated as plain text.}
@@ -84,12 +85,12 @@ adding statements to existing items (via the quickstatements format and API).
 # The instruction will submit directly to wikidata via the API
 # (if you include your wikimedia username and token)
 
-#write_wikidata(items        = "Wikidata Sandbox",
-#               properties   = "instance of",
-#               values       = "Q1",
-#               format       = "api",
-#               api.username = "myusername", 
-#               api.token    = , #REDACTED# Find yours at [your user page](https://tools.wmflabs.org/quickstatements/#/user)
-#               )
+\donttest{write_wikidata(items        = "Wikidata Sandbox",
+               properties   = "instance of",
+               values       = "Q1",
+               format       = "api",
+               api.username = "myusername", 
+               api.token    = , #REDACTED# Find yours at [your user page](https://tools.wmflabs.org/quickstatements/#/user)
+               )}
 
 }

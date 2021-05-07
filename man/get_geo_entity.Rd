@@ -17,6 +17,8 @@ anglocentric westerners.}
 \item{radius}{optionally, a radius (in kilometers) around \code{entity}
 to restrict the search to.}
 
+\item{limit}{the maximum number of results to return.}
+
 \item{...}{further arguments to pass to httr's GET.}
 }
 \value{

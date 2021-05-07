@@ -10,7 +10,8 @@
 #'@param properties a vector of strings indicating the properties to add as statements (as PIDs or labels).
 #'Note: if labels are provided, and multiple items match, the first matching item will be used
 #'(see \code{as_pid} function), so use with caution.
-#'Four special properties can also be used: labels, aliases, descriptions and sitelinks. See [this link](https://www.wikidata.org/wiki/Help:QuickStatements#Adding_labels,_aliases,_descriptions_and_sitelinks) for the syntax.
+#'Four special properties can also be used: labels, aliases, descriptions and sitelinks.
+#'See [this link](https://www.wikidata.org/wiki/Help:QuickStatements#Adding_labels,_aliases,_descriptions_and_sitelinks) for the syntax.
 #'@param values a vector of strings indicating the values to add as statements (as QIDs or strings).
 #'Note: if strings are provided, they will be treated as plain text.
 #'@param qual.properties a vector, data frame, or tibble of strings indicating the properties to add as qualifiers to statements (as PIDs or labels).
@@ -46,13 +47,13 @@
 #'# The instruction will submit directly to wikidata via the API
 #'# (if you include your wikimedia username and token)
 #'
-#'write_wikidata(items        = "Wikidata Sandbox",
-#'               properties   = "instance of",
-#'               values       = "Q1",
-#'               format       = "api",
-#'               api.username = "myusername", 
-#'               api.token    = , #REDACTED# Find yours at [your user page](https://tools.wmflabs.org/quickstatements/#/user)
-#'               )
+#' \donttest{write_wikidata(items        = "Wikidata Sandbox",
+#'                properties   = "instance of",
+#'                values       = "Q1",
+#'                format       = "api",
+#'                api.username = "myusername", 
+#'                api.token    = , #REDACTED# Find yours at [your user page](https://tools.wmflabs.org/quickstatements/#/user)
+#'                )}
 #'
 #'@export
 

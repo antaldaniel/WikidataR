@@ -25,8 +25,8 @@
 #' query_wikidata(sparql_query, format = "smart")
 #' }
 #' @export
-query_wikidata <- function(...) {
-  output <- WikidataQueryServiceR::query_wikidata(...)
+query_wikidata <- function(sparql_query,format="simple",...) {
+  output <- WikidataQueryServiceR::query_wikidata(sparql_query=sparql_query,format=format,...)
   output <- suppressWarnings(mapply(url_to_id,data.frame(output)))
   output <- tibble(data.frame(output))
   output
