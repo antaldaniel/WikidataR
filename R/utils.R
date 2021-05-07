@@ -121,18 +121,12 @@ get_example <- function(example_name){
 
 
 # -------- Format checkers --------
-# Download a dataset of property format contraints (see zzz.R to update)
-utils::globalVariables(c("WD.globalvar"))
-get.WD.globalvar <- function(){assign(x = "WD.globalvar",
-                                      envir = .GlobalEnv,
-                                      value = readRDS(gzcon(url("https://github.com/TS404/WikidataR/raw/master/data/WD.globalvar.rda"))))}
-
 # Simple tests of strings for whether they adhere to common wikidata formats
 is.qid     <- function(x){grepl("^[Qq][0-9]+$",x)}
-is.pid     <- function(x){get.WD.globalvar()
-                          gsub("S","P",x) %in% as.matrix(.GlobalEnv$WD.globalvar$PID.datatype$property)}
-is.sid     <- function(x){get.WD.globalvar()
-                          gsub("S","P",x) %in% as.matrix(.GlobalEnv$WD.globalvar$SID.valid$Wikidata_property_to_indicate_a_source)}
+is.pid     <- function(x){data("WD.globalvar")
+                          gsub("S","P",x) %in% as.matrix(WD.globalvar$PID.datatype$property)}
+is.sid     <- function(x){data("WD.globalvar")
+                          gsub("S","P",x) %in% as.matrix(WD.globalvar$SID.valid$Wikidata_property_to_indicate_a_source)}
 is.date    <- function(x){grepl("[0-9]{1,4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",x)}
 is.quot    <- function(x){grepl("^\".+\"$",x)}
 is.empty   <- function(x){x==""}
@@ -142,23 +136,24 @@ is.create  <- function(x){grepl("^CREATE",x)}
 is.createx <- function(x){grepl("^CREATE.+",x)}
 is.last    <- function(x){grepl("^LAST$",x)}
 is.special <- function(x){
-  get.WD.globalvar()
+  data("WD.globalvar")
   if(grepl("^[LAD]",x)){
-    substr(x,2,100) %in% as.matrix(.GlobalEnv$WD.globalvar$lang.abbrev)
+    substr(x,2,100) %in% as.matrix(WD.globalvar$lang.abbrev)
   }else if(grepl("^S",x)){
-    substr(x,2,100) %in% as.matrix(.GlobalEnv$WD.globalvar$abbrev.wiki)
+    substr(x,2,100) %in% as.matrix(WD.globalvar$abbrev.wiki)
   }else{
     FALSE
   }
 }
 
-check.PID.WikibaseItem <- function(x){get.WD.globalvar()
-                                      x %in% .GlobalEnv$WD.globalvar$PID.datatype$property[WD.globalvar$PID.datatype$wbtype=="WikibaseItem"]}
+check.PID.WikibaseItem <- function(x){
+  data("WD.globalvar")
+  x %in% WD.globalvar$PID.datatype$property[WD.globalvar$PID.datatype$wbtype=="WikibaseItem"]}
 
 check.PID.constraint <- function(x){
-  get.WD.globalvar()
+  data("WD.globalvar")
   check.PID.constraint.nest1 <- function(x){
-    out <- as.character(.GlobalEnv$WD.globalvar$PID.constraint$fmt[.GlobalEnv$WD.globalvar$PID.constraint$Wikidata_property==x])
+    out <- as.character(WD.globalvar$PID.constraint$fmt[WD.globalvar$PID.constraint$Wikidata_property==x])
     if(length(out)!=0){out}else{NA}
     }
   sapply(x,check.PID.constraint.nest1)
