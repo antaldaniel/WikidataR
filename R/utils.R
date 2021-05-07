@@ -121,10 +121,13 @@ get_example <- function(example_name){
 
 
 # -------- Format checkers --------
-# Simple tests of strings for whether they adhere to common wikidata formats
+# Download a dataset of property format contraints (see zzz.R to update)
+utils::globalVariables(c("WD.globalvar"))
 get.WD.globalvar <- function(){assign(x = "WD.globalvar",
                                       envir = .GlobalEnv,
-                                      value = readRDS(gzcon(url("https://github.com/TS404/WikidataR/raw/master/inst/extdata/WD.globalvar.RDS"))))}
+                                      value = readRDS(gzcon(url("https://github.com/TS404/WikidataR/raw/master/data/WD.globalvar.rda"))))}
+
+# Simple tests of strings for whether they adhere to common wikidata formats
 is.qid     <- function(x){grepl("^[Qq][0-9]+$",x)}
 is.pid     <- function(x){get.WD.globalvar()
                           gsub("S","P",x) %in% as.matrix(.GlobalEnv$WD.globalvar$PID.datatype$property)}

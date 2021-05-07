@@ -187,22 +187,3 @@ clean_geo <- function(results){
     
   }))
 }
-
-
-# Conversion function to convert dms coordinate string to decimal format for QuickStatements
-dms2num <- function(coord) {
-  getdeg <- regexec("([0-9]{1,3})\u00B0", coord) # note: \u00B0 is the degrees symbol
-  getmin <- regexec("([0-9]{1,2})'", coord)
-  getsec <- regexec("([1-9]?[0-9](\\.[0-9]+)?)\"", coord)
-  getdir <- regexec("[N|S|E|W]", coord)
-  d <- regmatches(coord, getdeg)
-  m <- regmatches(coord, getmin)
-  s <- regmatches(coord, getsec)
-  dir <- regmatches(coord, getdir)
-  degval <- as.numeric(sapply(d, getmatch))
-  minval <- as.numeric(sapply(m, getmatch))
-  secval <- as.numeric(sapply(s, getmatch))
-  dirval <- sapply(dir, function(x) { x[1] })
-  dirsign <- ifelse ((dirval == "S" || dirval == "W"), -1, 1)
-  return(round(dirsign * (degval + (minval / 60) + (secval / 3600)),6))
-}

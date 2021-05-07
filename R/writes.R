@@ -52,8 +52,9 @@
 #'                values       = "Q1",
 #'                format       = "api",
 #'                api.username = "myusername", 
-#'                api.token    = , #REDACTED# Find yours at [your user page](https://tools.wmflabs.org/quickstatements/#/user)
+#'                api.token    = , #REDACTED#
 #'                )}
+#'#note: 
 #'
 #'@export
 

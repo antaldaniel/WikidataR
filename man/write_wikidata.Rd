@@ -90,7 +90,8 @@ adding statements to existing items (via the quickstatements format and API).
                values       = "Q1",
                format       = "api",
                api.username = "myusername", 
-               api.token    = , #REDACTED# Find yours at [your user page](https://tools.wmflabs.org/quickstatements/#/user)
+               api.token    = , #REDACTED#
                )}
+#note: 
 
 }
