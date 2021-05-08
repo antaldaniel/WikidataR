@@ -16,7 +16,7 @@
 #'
 #'@param limit the maximum number of results to return.
 #'
-#'@param ... further arguments to pass to httr's GET.
+#'@param \\dots further arguments to pass to httr's GET.
 #'
 #'@return a data.frame of 5 columns:
 #'\itemize{
@@ -112,7 +112,7 @@ get_geo_entity <- function(entity, language = "en", radius = NULL, limit=100, ..
 #'@param language the two-letter language code to use for the name
 #'of the item. "en" by default.
 #'
-#'@param ... further arguments to pass to httr's GET.
+#'@param \\dots further arguments to pass to httr's GET.
 #'
 #'@return a data.frame of 5 columns:
 #'\itemize{

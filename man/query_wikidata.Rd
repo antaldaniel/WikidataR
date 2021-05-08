@@ -13,7 +13,7 @@ query_wikidata(sparql_query, format = "simple", ...)
 "smart" fetches JSON-formatted data and returns a data frame with datetime
 columns converted to `POSIXct`}
 
-\item{...}{Additional parameters to supply to [httr::POST]}
+\item{\\dots}{Additional parameters to supply to [httr::POST]}
 }
 \value{
 A `tibble`. Note: QID values will be returned as QIDs, rather than URLs.

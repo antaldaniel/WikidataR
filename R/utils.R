@@ -5,6 +5,7 @@
 #'@description Utility wrapper for wikidata API to download item.
 #'Used by \code{get_item} and \code{get_property}
 #'@param title the wikidata item or property as a string
+#'@param \\dots Additional parameters to supply to [httr::POST]
 #'@return a download of the full wikidata object (item or property) formatted as a nested json list
 #'@export
 wd_query <- function(title, ...){
@@ -20,6 +21,7 @@ wd_query <- function(title, ...){
 #'@description Utility wrapper for wikidata API to download random items. Used by \code{random_item}
 #'@param ns string indicating namespace, most commonly "Main" for QID items, "Property" for PID properties
 #'@param limit how many random objesct to return
+#'@param \\dots Additional parameters to supply to [httr::POST]
 #'@return a download of the full wikidata objects (items or properties) formatted as nested json lists
 #'@export
 wd_rand_query <- function(ns, limit, ...){
@@ -40,6 +42,7 @@ wd_rand_query <- function(ns, limit, ...){
 #'consist of an ISO language code. Set to "en" by default.
 #'@param limit the number of results to return; set to 10 by default.
 #'@param type type of wikidata object to return (default = "item")
+#'@param \\dots Additional parameters to supply to [httr::POST]
 #'@return If the inputted string matches an item label, return its QID.
 #'If the inputted string matches multiple labels of multiple items, return the QID of the first hit.
 #'If the inputted string is already a QID, return the string.
@@ -70,6 +73,7 @@ searcher <- function(search_term, language, limit, type, ...){
 #'@description Utility wrapper for wikidata spargle endpoint to download items.
 #'Used by \code{get_geo_entity} and \code{get_geo_box}
 #'@param query the sparql query as a string
+#'@param \\dots Additional parameters to supply to [httr::POST]
 #'@return a download of the full wikidata objects formatted as a nested json list
 #'@export
 sparql_query <- function(query, ...){
@@ -123,10 +127,8 @@ get_example <- function(example_name){
 # -------- Format checkers --------
 # Simple tests of strings for whether they adhere to common wikidata formats
 is.qid     <- function(x){grepl("^[Qq][0-9]+$",x)}
-is.pid     <- function(x){WD.globalvar <- WikidataR:::WD.globalvar
-                          gsub("S","P",x) %in% as.matrix(WD.globalvar$PID.datatype$property)}
-is.sid     <- function(x){WD.globalvar <- WikidataR:::WD.globalvar
-                          gsub("S","P",x) %in% as.matrix(WD.globalvar$SID.valid$Wikidata_property_to_indicate_a_source)}
+is.pid     <- function(x){gsub("S","P",x) %in% as.matrix(WD.globalvar$PID.datatype$property)}
+is.sid     <- function(x){gsub("S","P",x) %in% as.matrix(WD.globalvar$SID.valid$Wikidata_property_to_indicate_a_source)}
 is.date    <- function(x){grepl("[0-9]{1,4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",x)}
 is.quot    <- function(x){grepl("^\".+\"$",x)}
 is.empty   <- function(x){x==""}
@@ -136,7 +138,6 @@ is.create  <- function(x){grepl("^CREATE",x)}
 is.createx <- function(x){grepl("^CREATE.+",x)}
 is.last    <- function(x){grepl("^LAST$",x)}
 is.special <- function(x){
-  WD.globalvar <- WikidataR:::WD.globalvar
   if(grepl("^[LAD]",x)){
     substr(x,2,100) %in% as.matrix(WD.globalvar$lang.abbrev)
   }else if(grepl("^S",x)){
@@ -147,11 +148,9 @@ is.special <- function(x){
 }
 
 check.PID.WikibaseItem <- function(x){
-  WD.globalvar <- WikidataR:::WD.globalvar
   x %in% WD.globalvar$PID.datatype$property[WD.globalvar$PID.datatype$wbtype=="WikibaseItem"]}
 
 check.PID.constraint <- function(x){
-  WD.globalvar <- WikidataR:::WD.globalvar
   check.PID.constraint.nest1 <- function(x){
     out <- as.character(WD.globalvar$PID.constraint$fmt[WD.globalvar$PID.constraint$Wikidata_property==x])
     if(length(out)!=0){out}else{NA}
@@ -212,7 +211,7 @@ as_qid <- function(x){
       if(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)|is.null(x)|is.empty(x)|is.createx(x)|is.create(x)|is.last(x)){
         x
       }else{
-        temp       <- find_item(x,limit = 100)
+        temp <- find_item(x,limit = 100)
         if(length(temp)==0){
           out <- NA
           message (paste0("no sufficiently close match for \"",x,"\". Returned \"NA\"."))
@@ -265,7 +264,7 @@ as_pid <- function(x){
       if(is.pid(x)|is.date(x)|is.quot(x)|is.na(x)|is.null(x)|is.empty(x)|is.special(x)){
         x
       }else{
-        temp       <- find_property(x,limit = 2)
+        temp <- find_property(x,limit = 2)
         if(length(temp)==0){
             out <- NA
             message (paste0("no sufficiently close match for \"",x,"\". Returned \"NA\"."))
@@ -519,7 +518,7 @@ extract_para <- function(text,
     templates <- paste0(gsub(" ","_",substr(templates,1,regexpr(" *\\|| *\\}",templates)-1)),
                         substr(templates,regexpr("*\\||*\\}",templates),nchar(templates)))
     
-    tosearch <- unlist(str_extract_all(templates,
+    tosearch  <- unlist(str_extract_all(templates,
                                        paste0("(?i)\\{\\{ *?",templ,".*?\\}\\}")))
     names(tosearch) <- paste0(templ,"_",1:length(tosearch))
   }
@@ -554,9 +553,9 @@ createrows <- function(items,vector){
     vector <- tibble(vector)
     
     newQID <- which(items=="CREATE")
-    val <- bind_rows(vector,tibble(data.frame(array("",dim=c(length(newQID),ncol(vector)),dimnames = list(NULL,colnames(vector))))))
-    id  <- c(1:nrow(vector), newQID-seq_along(newQID)+0.5)
-    out <- tibble(val[order(id),])
+    val    <- bind_rows(vector,tibble(data.frame(array("",dim=c(length(newQID),ncol(vector)),dimnames = list(NULL,colnames(vector))))))
+    id     <- c(1:nrow(vector), newQID-seq_along(newQID)+0.5)
+    out    <- tibble(val[order(id),])
     return(out)
   }else{
     return(tibble(vector))
@@ -575,9 +574,9 @@ createrows <- function(items,vector){
 createrows.tidy <- function(QS.tib){
   #insert 'CREATE' blankrows above first instance of 'CREATExyz'
   newQID <- which(!duplicated(QS.tib[,1])&sapply(QS.tib[,1],is.createx))
-  val <- rbind(QS.tib, array("",dim=c(length(newQID),ncol(QS.tib)),dimnames = list(newQID,names(QS.tib))) )
-  id  <- c(seq_along(t(QS.tib)[1,]), newQID-0.5)
-  out <- val[order(id),]
+  val    <- rbind(QS.tib, array("",dim=c(length(newQID),ncol(QS.tib)),dimnames = list(newQID,names(QS.tib))) )
+  id     <- c(seq_along(t(QS.tib)[1,]), newQID-0.5)
+  out    <- val[order(id),]
   
   #replace 'CREATEXYZ' with 'LAST'
   out[sapply(out[,1],is.createx),1] <- "LAST"

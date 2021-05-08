@@ -10,7 +10,7 @@
 #'it appropriately. This function is vectorised and will happily accept
 #'multiple IDs.
 #'
-#'@param ... further arguments to pass to httr's GET.
+#'@param \\dots further arguments to pass to httr's GET.
 #'
 #'@seealso \code{\link{get_random}} for selecting a random item or property,
 #'or \code{\link{find_item}} for using search functionality to pull out
@@ -55,7 +55,7 @@ get_property <- function(id, ...){
 #'
 #'@param limit how many random items to return. 1 by default, but can be higher.
 #'
-#'@param ... arguments to pass to httr's GET.
+#'@param \\dots arguments to pass to httr's GET.
 #'
 #'@seealso \code{\link{get_item}} for selecting a specific item or property,
 #'or \code{\link{find_item}} for using search functionality to pull out
@@ -96,7 +96,7 @@ get_random_property <- function(limit = 1, ...){
 #'
 #'@param limit the number of results to return; set to 10 by default.
 #'
-#'@param ... further arguments to pass to httr's GET.
+#'@param \\dots further arguments to pass to httr's GET.
 #'
 #'@seealso \code{\link{get_random}} for selecting a random item or property,
 #'or \code{\link{get_item}} for selecting a specific item or property.

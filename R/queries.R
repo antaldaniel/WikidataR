@@ -5,7 +5,7 @@
 #' @param format "simple" uses CSV and returns pure character data frame, while
 #'   "smart" fetches JSON-formatted data and returns a data frame with datetime
 #'   columns converted to `POSIXct`
-#' @param ... Additional parameters to supply to [httr::POST]
+#' @param \\dots Additional parameters to supply to [httr::POST]
 #' @return A `tibble`. Note: QID values will be returned as QIDs, rather than URLs.
 #' @examples
 #' # R's versions and release dates:

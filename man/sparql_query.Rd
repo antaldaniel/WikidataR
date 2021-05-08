@@ -8,6 +8,8 @@ sparql_query(query, ...)
 }
 \arguments{
 \item{query}{the sparql query as a string}
+
+\item{\\dots}{Additional parameters to supply to [httr::POST]}
 }
 \value{
 a download of the full wikidata objects formatted as a nested json list

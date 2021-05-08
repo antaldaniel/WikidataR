@@ -8,6 +8,8 @@ wd_query(title, ...)
 }
 \arguments{
 \item{title}{the wikidata item or property as a string}
+
+\item{\\dots}{Additional parameters to supply to [httr::POST]}
 }
 \value{
 a download of the full wikidata object (item or property) formatted as a nested json list
