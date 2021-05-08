@@ -17,7 +17,7 @@ consist of an ISO language code. Set to "en" by default.}
 
 \item{limit}{the number of results to return; set to 10 by default.}
 
-\item{...}{further arguments to pass to httr's GET.}
+\item{\\dots}{further arguments to pass to httr's GET.}
 }
 \description{
 \code{find_item} and \code{find_property} allow you to retrieve a set
