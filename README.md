@@ -4,7 +4,7 @@ WikidataR
 An combined R package for reading, writing and handling Wikidata semantic data (via APIs).
 
 __Authors:__ [Thomas Shafee](https://github.com/TS404) (aut., maint.), [Os Keys](https://github.com/Ironholds) (aut., cre.)  
-__License:__ [MIT](http://opensource.org/licenses/MIT)  
+__License:__ [MIT](https://opensource.org/licenses/MIT)  
 __Status:__ Stable
 
 Description
@@ -139,7 +139,7 @@ For more example SPARQL queries, see [this page](https://www.wikidata.org/wiki/W
 -   [A beginner-friendly course for SPARQL](https://www.wikidata.org/wiki/Wikidata:A_beginner-friendly_course_for_SPARQL)
 -   Building a SPARQL query: [Museums on Instagram](https://www.wikidata.org/wiki/Help:SPARQL/Building_a_query/Museums_on_Instagram)
 -   [SPARQL Query Examples](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples) for WDQS
--   [Using SPARQL to access Linked Open Data](http://programminghistorian.org/lessons/graph-databases-and-SPARQL) by Matthew Lincoln
+-   [Using SPARQL to access Linked Open Data](https://programminghistorian.org/lessons/graph-databases-and-SPARQL) by Matthew Lincoln
 -   Interesting or illustrative [SPARQL queries](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries) for Wikidata
 -   Wikidata [2016 SPARQL Workshop](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/2016_SPARQL_Workshop)
 -   [Wikidata SPARQL Query video tutorial](https://www.youtube.com/watch?v=1jHoUkj_mKw) by Navino Evans
@@ -198,4 +198,4 @@ write_wikidata(items        = sapply(sapply(articles.qr$Article,pattern = "/",st
 ```
 ### Acknowledgements
 This package combines and builds on the utilities of Os Keyes' [WikidataR](https://github.com/Ironholds/WikidataR), Christian Graul's
-[rwikidata](https://github.com/chgrl/rwikidata), Mikhail Popov's [WikidataQueryServiceR](https://github.com/bearloga/WikidataQueryServiceR), and Serena Signorelli's [QueryWikidataR](https://github.com/serenasignorelli/QueryWikidataR) packages. It also uses the Magnus Manske's [QuickStatements](https://github.com/magnusmanske/quickstatements) tool.
+[rwikidata](https://github.com/chgrl/rwikidata), Mikhail Popov's [WikidataQueryServiceR](https://github.com/wikimedia/WikidataQueryServiceR), and Serena Signorelli's [QueryWikidataR](https://github.com/serenasignorelli/QueryWikidataR) packages. It also uses the Magnus Manske's [QuickStatements](https://github.com/magnusmanske/quickstatements) tool.
