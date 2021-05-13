@@ -29,6 +29,7 @@ query_wikidata <- function(sparql_query,format="simple",...) {
   output <- WikidataQueryServiceR::query_wikidata(sparql_query=sparql_query,format=format,...)
   output <- suppressWarnings(mapply(url_to_id,data.frame(output)))
   output <- tibble(data.frame(output))
+  if(nrow(output)==0){output <- tibble(value=NA)}
   output
 }
 
