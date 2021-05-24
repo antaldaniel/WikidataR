@@ -496,7 +496,7 @@ unspecial <- function(x){
 #'@description Return the nth paragraph of a section of text
 #'Useful for extracting information from wikipedia or other wikimarkup text
 #'@param text the input text as a string
-#'@param para number indicating which paragraph(s) to return (default=1)
+#'@param para number indicating whichparagraph(s) to return (default=1)
 #'@param templ an optional string specifying a mediawikitemplate within
 #'which to restrict the search restrict search 
 #'@return the nth paragraph of the input text.
