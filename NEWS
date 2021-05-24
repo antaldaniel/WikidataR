@@ -1,3 +1,7 @@
+2.1.5
+=================================================
+expected property values and constraints from 2.1.0 now just stored as a data file, since onAttach function caused issues
+
 2.1.0
 =================================================
 upon loading the package, it will check whether property values are expected to be strings, numbers, dates or QIDs
