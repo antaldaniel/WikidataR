@@ -22,13 +22,14 @@ Imports:
     Hmisc,
     pbapply,
     stats,
-    readr
+    readr,
+    utils
 Suggests:
     markdown,
     testthat,
     tidyverse,
     knitr,
-    pageviews,
+    pageviews
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1
 Encoding: UTF-8
