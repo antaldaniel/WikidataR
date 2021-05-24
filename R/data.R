@@ -1,4 +1,6 @@
-#' @title WD.globalvar
+#' @name WD.globalvar
+#' 
+#' @title Global variables for Wikidata properties
 #'
 #' @description A dataset of Wikidata global variables.
 #'

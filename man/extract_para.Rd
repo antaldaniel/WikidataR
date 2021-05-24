@@ -9,7 +9,7 @@ extract_para(text, para = 1, templ = NULL)
 \arguments{
 \item{text}{the input text as a string}
 
-\item{para}{number indicating which paragraph(s) to return (default=1)}
+\item{para}{number indicating whichparagraph(s) to return (default=1)}
 
 \item{templ}{an optional string specifying a mediawikitemplate within
 which to restrict the search restrict search}
