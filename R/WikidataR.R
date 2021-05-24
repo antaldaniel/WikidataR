@@ -1,8 +1,8 @@
 #' @title API client library for Wikidata
 #' @description This package serves as an API client for reading and writing
-#' to and from \href{Wikidata}{https://www.wikidata.org}, (including 
-#' via the \href{QuickStatements}{https://quickstatements.toolforge.org/} format),
-#' as well as for reading from \href{Wikipedia}{https://www.wikipedia.org}
+#' to and from \href{https://www.wikidata.org/wiki/Wikidata:Main_Page}{Wikidata}, (including 
+#' via the \href{https://quickstatements.toolforge.org/}{QuickStatements} format),
+#' as well as for reading from \href{https://www.wikipedia.org}{Wikipedia}
 #' See the accompanying vignette for more details.
 #' 
 #' @name WikidataR

@@ -7,16 +7,24 @@
 #'   columns converted to `POSIXct`
 #' @param \\dots Additional parameters to supply to [httr::POST]
 #' @return A `tibble`. Note: QID values will be returned as QIDs, rather than URLs.
+#' @section Query limits:
+#' There is a hard query deadline configured which is set to 60 seconds. There
+#' are also following limits:
+#' - One client (user agent + IP) is allowed 60 seconds of processing time each
+#'   60 seconds
+#' - One client is allowed 30 error queries per minute
+#' See [query limits section](https://www.mediawiki.org/wiki/Wikidata_Query_Service/User_Manual#Query_limits)
+#' in the WDQS user manual for more information.
 #' @examples
 #' # R's versions and release dates:
 #' sparql_query <- 'SELECT DISTINCT
 #'   ?softwareVersion ?publicationDate
-#' WHERE {
-#'   BIND(wd:Q206904 AS ?R)
-#'   ?R p:P348 [
-#'     ps:P348 ?softwareVersion;
-#'     pq:P577 ?publicationDate
-#'   ] .
+#'   WHERE {
+#'     BIND(wd:Q206904 AS ?R)
+#'     ?R p:P348 [
+#'       ps:P348 ?softwareVersion;
+#'       pq:P577 ?publicationDate
+#'     ] .
 #' }'
 #' query_wikidata(sparql_query)
 #'
