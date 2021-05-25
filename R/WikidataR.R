@@ -16,14 +16,12 @@
 #' @import dplyr
 #' @import stringr
 #' @import pbapply
+#' @import utils
 #' @importFrom readr format_tsv
 #' @importFrom readr format_delim
 #' @importFrom dplyr bind_cols
 #' @importFrom stats var
 #' @importFrom stats cor
-#' @importFrom utils write.table
-#' @importFrom utils browseURL
-#' @importFrom utils tail
 #' @importFrom WikipediR page_content random_page query
 #' @importFrom httr user_agent
 #' @importFrom jsonlite fromJSON
