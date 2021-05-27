@@ -9,7 +9,7 @@ as_quot(x, format = "tibble")
 \arguments{
 \item{x}{a vector, data frame, or tibble of strings}
 
-\item{format}{either "tibble" to use plain quotation marks (default), or "api" to use '\%22'}
+\item{format}{either "tibble" / "csv" to use plain quotation marks (default), or "api" / "website" to use '\%22'}
 }
 \value{
 tibble of items inside of escaped quotation marks

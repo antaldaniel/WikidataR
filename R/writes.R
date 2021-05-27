@@ -31,6 +31,7 @@
 #'   \item{tibble}{easiest format to further manuipulation in R}
 #'   \item{csv}{can be copy-pasted to [the QuickStatements website](https://quickstatements.toolforge.org/) (or manipulated in a spreadsheet programs)}
 #'   \item{api}{a url that can be copy-pasted into a web browser, or automatically submitted (see \code{api.submit} parameter)}
+#'   \item{website}{open a QuickStatements web browser window summarising the edits to be made to Wikidata)}
 #' }
 #'@param api.username a string indicating your wikimedia username 
 #'@param api.token a string indicating your api token (the unique identifier that you can find listed at [your user page](https://quickstatements.toolforge.org/#/user))
@@ -76,23 +77,18 @@ write_wikidata <- function(items,
   
   # Check if username and token provided
   if(format=="api"){
-    if(is.null(api.username)){
-      stop("Enter your Wikimedia username")
-    }
-    if(is.null(api.token)){
-      stop("Enter your api.token (Find yours at https://tools.wmflabs.org/quickstatements/#/user)")
-    }
-      
+    if(is.null(api.username)){stop("Enter your Wikimedia username")}
+    if(is.null(api.token))   {stop("Enter your api.token (Find yours at https://tools.wmflabs.org/quickstatements/#/user)")}
   }
   
   # Place all the quickstatements variables into a list 
-  QS       <- list(items           = items,
-                   properties      = properties,
-                   values          = values,
-                   qual.properties = qual.properties,
-                   qual.values     = qual.values,
-                   src.properties  = src.properties,
-                   src.values      = src.values)
+  QS <- list(items           = items,
+             properties      = properties,
+             values          = values,
+             qual.properties = qual.properties,
+             qual.values     = qual.values,
+             src.properties  = src.properties,
+             src.values      = src.values)
   QS <- lapply(QS,function(x){if(!is.null(x)){tibble(x)}})
 
   # If new QIDs are being created via the "CREATE" keyword, need to insert blank lines across the other parameters to align correctly into rows
@@ -142,8 +138,10 @@ write_wikidata <- function(items,
 
   # Convert values to QIDs where possible, unless property is expecting a string
   QS$values          <- tibble(QS$values)
-  QS$values[sapply(QS$properties,check.PID.WikibaseItem),] <- as_qid(QS$values[sapply(QS$properties,check.PID.WikibaseItem),])
-  QS$values      <- as_quot(QS$values,format)
+  if(any(sapply(QS$properties,check.PID.WikibaseItem))){
+    QS$values[sapply(QS$properties,check.PID.WikibaseItem),] <- as_qid(QS$values[sapply(QS$properties,check.PID.WikibaseItem),])
+  }
+  QS$values          <- as_quot(QS$values,format)
   
   # Convert first three columns into tibble (tibbulate?)
   colnames(QS$items)      <- "Item"
@@ -203,26 +201,32 @@ write_wikidata <- function(items,
   if (format=="tibble"){
     return(QS.tib)
   }
-  if (format=="api"){
-    if (is.null(api.token)){stop("API token needed. Find yours at https://quickstatements.toolforge.org/#/user")}
+  if (format=="api"|format=="website"){
     api.temp1 <- format_tsv(QS.tib)
-    api.temp2 <- gsub("\t","%09",api.temp1) # Replace TAB with "%09"
-    api.temp3 <- gsub("\n","%0A",api.temp2) # Replace end-of-line with "%0A"
+    api.temp2 <- gsub("\t","%7C",api.temp1) # Replace TAB with "%7C"
+    api.temp3 <- gsub("\n","%7C%7C",api.temp2) # Replace end-of-line with "%7C%7C"
     api.temp4 <- gsub(" ", "%20",api.temp3) # Replace space with "%20"
     api.data  <- gsub("/", "%2F",api.temp4) # Replace slash with "%2F"
     
-    API.url <- paste0("https://tools.wmflabs.org/quickstatements/api.php",
-                      "?action=",   "import",
-                      "&submit=",   "1",
-                      "&format=",   api.format,
-                      "&batchname=",api.batchname,
-                      "&username=", api.username,
-                      "&token=",    api.token,
-                      "&data=",     api.data)
+    if (format=="api"){
+      if (is.null(api.token)){stop("API token needed. Find yours at https://quickstatements.toolforge.org/#/user")}
+      url <- paste0("https://tools.wmflabs.org/quickstatements/api.php",
+                    "?action=",   "import",
+                    "&submit=",   "1",
+                    "&format=",   api.format,
+                    "&batchname=",api.batchname,
+                    "&username=", api.username,
+                    "&token=",    api.token,
+                    "&data=",     api.data)
+    }
+    if (format=="website"){
+      url <- paste0("https://quickstatements.toolforge.org/#/v1=",
+                    "&data=",     api.data)
+    }
     if(api.submit){
-      browseURL(API.url)
+      browseURL(url)
     }else{
-      return(API.url)
+      return(url)
     }
   }
 }
