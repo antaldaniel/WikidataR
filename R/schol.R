@@ -10,7 +10,7 @@ qid_from_DOI <- function(DOI = '10.15347/WJM/2019.001'){
                                           sep='')}
   sparql_query <- lapply(DOI,FUN=qid_from_DOI_nest1)
   article.qr   <- lapply(sparql_query,FUN=query_wikidata)
-  article.qid   <- tibble(DOI,qid=unlist(article.qr))
+  article.qid  <- tibble(DOI,qid=unlist(article.qr))
   return(article.qid)
 }
 
@@ -22,9 +22,9 @@ qid_from_DOI <- function(DOI = '10.15347/WJM/2019.001'){
 #' @param format output format ('vector' to return a simple vector, or 'list' to return a nested list)
 #' @return tibble of QIDs corresponding to names submitted. Note: some names may return multiple QIDs.
 #' @export
-qid_from_name <- function(name  = 'Thomas Shafee',
+qid_from_name <- function(name  = "Thomas Shafee",
                           limit = 100,
-                          format="vector"){
+                          format= "vector"){
   qid_from_name_nest1 <- function(x){lapply(x,"[[","id")}
   item.qs  <- lapply(name,find_item, limit=limit)
   item.qid <- lapply(item.qs,qid_from_name_nest1)

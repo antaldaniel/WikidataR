@@ -61,8 +61,12 @@ qid_from_identifier <- function(property = 'DOI',
                                                        '"}',
                                                        sep='')}
   sparql_query <- lapply(value,property,FUN=qid_from_property1)
-  output.qr    <- if(length(value)>1){pbapply::pblapply(sparql_query,FUN=query_wikidata)}else{lapply(sparql_query,FUN=query_wikidata)}
-  output       <- tibble(value,qid=unlist(output.qr))
+  output.qr    <- if(length(value)>1){
+    unlist(pbapply::pblapply(sparql_query,function(x) as.character(query_wikidata(x)[[1]])))
+  }else{
+      lapply(sparql_query,FUN=query_wikidata)
+    }
+  output       <- tibble(value,qid=data.frame(output.qr))
   return(output)
 }
 
@@ -91,7 +95,11 @@ identifier_from_identifier <- function(property = 'ORCID iD',
                                                        ' ?return.}',
                                                        sep='')}
   sparql_query <- lapply(value,return,property,FUN=qid_from_property1)
-  output.qr    <- if(length(value)>1){pbapply::pblapply(sparql_query,FUN=query_wikidata)}else{lapply(sparql_query,FUN=query_wikidata)}
-  output       <- tibble(value,return=unlist(output.qr))
+  output.qr    <- if(length(value)>1){
+    unlist(pbapply::pblapply(sparql_query,function(x) as.character(query_wikidata(x)[[1]])))
+  }else{
+    lapply(sparql_query,FUN=query_wikidata)
+  }
+  output       <- tibble(value,return=data.frame(output.qr))
   return(output)
 }
