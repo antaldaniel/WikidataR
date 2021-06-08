@@ -337,7 +337,7 @@ as_quot <- function(x,format="tibble"){
   }
   as_quot_nest1 <- function(x){
     as_quot_nest2 <- function(x){
-      if(!(is.qid(x)|is.date(x)|is.quot(x)|is.na(x)|is.empty(x)))
+      if(!(is.qid(x)|is.quot(x)|is.na(x)|is.empty(x)))
       {paste0(q_mark,x,q_mark)}
       else
       {x}
