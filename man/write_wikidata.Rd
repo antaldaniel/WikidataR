@@ -59,7 +59,7 @@ be removed from the item rather than added (default = FALSE)}
   \item{tibble}{easiest format to further manuipulation in R}
   \item{csv}{can be copy-pasted to [the QuickStatements website](https://quickstatements.toolforge.org/) (or manipulated in a spreadsheet programs)}
   \item{api}{a url that can be copy-pasted into a web browser, or automatically submitted (see \code{api.submit} parameter)}
-  \item{website}{open a QuickStatements web browser window summarising the edits to be made to Wikidata)}
+  \item{website}{open a [QuickStatements](https://quickstatements.toolforge.org/) web browser window summarising the edits to be made to Wikidata)}
 }}
 
 \item{api.username}{a string indicating your wikimedia username}
