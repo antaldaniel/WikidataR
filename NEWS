@@ -1,6 +1,7 @@
 2.2.0
 =================================================
-* Additional output format option for Write_wikidata() to submit to Quickstatements website
+* Additional 'website' output format option for write_wikidata() to submit to Quickstatements website
+* Patches to make writing wikidata statements with dates more reliable
 
 2.1.5
 =================================================

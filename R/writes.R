@@ -202,12 +202,13 @@ write_wikidata <- function(items,
     return(QS.tib)
   }
   if (format=="api"|format=="website"){
-    api.temp1 <- format_tsv(QS.tib)
-    api.temp2 <- gsub("\t","%7C",api.temp1) # Replace TAB with "%7C"
-    api.temp3 <- gsub("\n","%7C%7C",api.temp2) # Replace end-of-line with "%7C%7C"
-    api.temp4 <- gsub(" ", "%20",api.temp3) # Replace space with "%20"
-    api.data  <- gsub("/", "%2F",api.temp4) # Replace slash with "%2F"
-    
+    api.temp1 <- format_tsv(QS.tib, col_names = FALSE)
+    api.temp2 <- gsub("\t", "%7C",api.temp1) # Replace TAB with "%7C"
+    api.temp3 <- gsub("\n", "%7C%7C",api.temp2) # Replace end-of-line with "%7C%7C"
+    api.temp4 <- gsub(" ",  "%20",api.temp3) # Replace space with "%20"
+    api.temp5 <- gsub("\\+","%2B",api.temp4) # Replace plus with "%2B"
+    api.data  <- gsub("/",  "%2F",api.temp5) # Replace slash with "%2F"
+
     if (format=="api"){
       if (is.null(api.token)){stop("API token needed. Find yours at https://quickstatements.toolforge.org/#/user")}
       url <- paste0("https://tools.wmflabs.org/quickstatements/api.php",

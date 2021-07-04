@@ -31,7 +31,6 @@ wd_rand_query <- function(ns, limit, ...){
   output <- lapply(result, function(x){jsonlite::fromJSON(x$wikitext[[1]])})
   class(output) <- "wikidata"
   return(output)
-  
 }
 
 #Generic, direct access to Wikidata's search functionality.
@@ -337,7 +336,7 @@ as_quot <- function(x,format="tibble"){
   }
   as_quot_nest1 <- function(x){
     as_quot_nest2 <- function(x){
-      if(!(is.qid(x)|is.quot(x)|is.na(x)|is.empty(x)))
+      if(!(is.qid(x)|is.quot(x)|is.date(x)|is.na(x)|is.empty(x)))
       {paste0(q_mark,x,q_mark)}
       else
       {x}
