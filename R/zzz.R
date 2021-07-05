@@ -83,6 +83,7 @@
 # 
 #   message('Update complete (data saved as WD.globalvar)')
 # }
-# 
+
+
 # # Below used to save as system data within an R package
-# save(list="WD.globalvar",file="R//sysdata.rda")
+# save(list="WD.globalvar",file="R//sysdata.rda", compress = "xz")
