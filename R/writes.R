@@ -40,7 +40,7 @@
 #'@param api.submit boolian indicating whether to submit instruction directly to wikidata (else returns the URL that can be copy-pasted into a web browser)
 #'
 #'@return data formatted to upload to wikidata (via quickstatemsnts),
-#'optionally also directly uploded to wikidata (see \code{format} parameter. 
+#'optionally also directly uploded to wikidata (see \code{format} parameter). 
 #'
 #'@examples
 #'# Add a statement to the "Wikidata sandbox" item (Q4115189)
