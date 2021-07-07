@@ -1,8 +1,8 @@
 Package: WikidataR
 Type: Package
 Title: Read-Write API Client Library for 'Wikidata'
-Version: 2.2.0
-Date: 2021-05-10
+Version: 2.2.1
+Date: 2021-07-07
 Author: Thomas Shafee [aut, cre], Oliver Keyes [aut, cre], Serena Signorelli [aut, cre],
         Alex Lum [ctb], Christian Graul [ctb], Mikhail Popov [ctb]
 Maintainer: Thomas Shafee <T.Shafee@latrobe.edu.au>

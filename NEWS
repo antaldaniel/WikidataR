@@ -1,3 +1,7 @@
+2.2.1
+=================================================
+* Outputs as tibbles by default with vector options where relevant
+
 2.2.0
 =================================================
 * Additional 'website' output format option for write_wikidata() to submit to Quickstatements website

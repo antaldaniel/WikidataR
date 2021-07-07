@@ -2,11 +2,13 @@
 #' @title Send one or more SPARQL queries to WDQS
 #' @description Makes a POST request to Wikidata Query Service SPARQL endpoint.
 #' @param sparql_query SPARQL query (can be a vector of queries)
-#' @param format "simple" uses CSV and returns pure character data frame, while
-#'   "smart" fetches JSON-formatted data and returns a data frame with datetime
+#' @param format
+#'   `tibble` (default) returns a pure character data frame,
+#'   `simple` returns a pure character vector, while
+#'   `smart` fetches JSON-formatted data and returns a tibble with datetime
 #'   columns converted to `POSIXct`
 #' @param \\dots Additional parameters to supply to [httr::POST]
-#' @return A `tibble`. Note: QID values will be returned as QIDs, rather than URLs.
+#' @return A `tibble` or `vector`. Note: QID values will be returned as QIDs, rather than URLs.
 #' @section Query limits:
 #' There is a hard query deadline configured which is set to 60 seconds. There
 #' are also following limits:
@@ -33,11 +35,13 @@
 #' query_wikidata(sparql_query, format = "smart")
 #' }
 #' @export
-query_wikidata <- function(sparql_query,format="simple",...) {
+query_wikidata <- function(sparql_query,format="tibble",...) {
+  if(format=="simple"){simplify<-TRUE}else{simplify<-FALSE}
+  if(format=="tibble"){format<-"simple"}
   output <- WikidataQueryServiceR::query_wikidata(sparql_query=sparql_query,format=format,...)
-  output <- suppressWarnings(mapply(url_to_id,data.frame(output), SIMPLIFY = FALSE))
+  output <- suppressWarnings(mapply(url_to_id,data.frame(output),SIMPLIFY=simplify))
   output <- tibble(data.frame(output))
-  if(nrow(output)==0){output <- tibble(value=NA)}
+  if(nrow(output)==0){output<-tibble(value=NA)}
   output
 }
 
