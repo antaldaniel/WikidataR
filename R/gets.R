@@ -1,3 +1,5 @@
+# -------- Gets --------
+
 #'@title Retrieve specific Wikidata items or properties
 #'@description \code{get_item} and \code{get_property} allow you to retrieve the data associated
 #'with individual Wikidata items and properties, respectively. As with
@@ -83,6 +85,48 @@ get_random_property <- function(limit = 1, ...){
   return(wd_rand_query(ns = 120, limit = limit, ...))
 }
 
+
+#' @title Get an example SPARQL query from Wikidata
+#' @description Gets the specified example(s) from
+#'   [SPARQL query service examples page](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples)
+#'   using [Wikidata's MediaWiki API](https://www.wikidata.org/w/api.php).
+#' @details If you are planning on extracting multiple examples, please provide
+#'   all the names as a single vector for efficiency.
+#' @param example_name the names of the examples as they appear on
+#'   [this page](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples)
+#' @return The SPARQL query as a character vector.
+#' @examples
+#' \dontrun{
+#' sparql_query <- extract_example(c("Cats", "Horses"))
+#' query_wikidata(sparql_query)
+#' # returns a named list with two data frames
+#' # one called "Cats" and one called "Horses"
+#' sparql_query <- extract_example("Largest cities with female mayor")
+#' cat(sparql_query)
+#' query_wikidata(sparql_query)
+#' }
+#' @seealso [query_wikidata]
+#' @export
+get_example <- function(example_name){
+  content <- WikipediR::page_content(
+    domain = "www.wikidata.org",
+    page_name = "Wikidata:SPARQL query service/queries/examples",
+    as_wikitext = TRUE
+  )
+  wiki <- strsplit(content$parse$wikitext$`*`, "\n")[[1]]
+  wiki <- wiki[wiki != ""]
+  return(vapply(example_name, function(example_name){
+    heading_line <- which(grepl(paste0("^===\\s?", example_name, "\\s?===$"), wiki, fixed = FALSE))
+    start_line <- which(grepl("{{SPARQL", wiki[(heading_line + 1):length(wiki)], fixed = TRUE))[1]
+    end_line <- which(grepl("}}", wiki[(heading_line + start_line + 1):length(wiki)], fixed = TRUE))[1]
+    query <- paste0(wiki[(heading_line + start_line):(heading_line + start_line + end_line - 1)], collapse = "\n")
+    return(sub("^\\s*\\{\\{SPARQL2?\\n?\\|query\\=", "", query))
+  }, ""))
+}
+
+
+# -------- Finds --------
+
 #'@title Search for Wikidata items or properties that match a search term
 #'@description \code{find_item} and \code{find_property} allow you to retrieve a set
 #'of Wikidata items or properties where the aliase or descriptions match a particular
@@ -124,4 +168,38 @@ find_property <- function(search_term, language = "en", limit = 10){
   res <- searcher(search_term, language, limit, "property")
   class(res) <- "find_property"
   return(res)
+}
+
+#Generic, direct access to Wikidata's search functionality.
+#'@title Convert an input to a item QID
+#'@description Convert an input string to the most likely item QID
+#'@param search_term a term to search for.
+#'@param language the language to return the labels and descriptions in; this should
+#'consist of an ISO language code. Set to "en" by default.
+#'@param limit the number of results to return; set to 10 by default.
+#'@param type type of wikidata object to return (default = "item")
+#'@param \\dots Additional parameters to supply to [httr::POST]
+#'@return If the inputted string matches an item label, return its QID.
+#'If the inputted string matches multiple labels of multiple items, return the QID of the first hit.
+#'If the inputted string is already a QID, return the string.
+#'@examples
+#'# if input string is a valid QID
+#'as_qid("Q42")
+#'# if input string matches multiple item labels
+#'as_qid("Douglas Adams")
+#'# if input string matches a single unique label
+#'as_qid("Douglas Adams and the question of arterial blood pressure in mammals")
+#'@export
+searcher <- function(search_term, language, limit, type, ...){
+  result <- WikipediR::query(url = "https://www.wikidata.org/w/api.php", out_class = "list", clean_response = FALSE,
+                             query_param = list(
+                               action   = "wbsearchentities", 
+                               type     = type,
+                               language = language,
+                               limit    = limit,
+                               search   = search_term
+                             ),
+                             ...)
+  result <- result$search
+  return(result)
 }

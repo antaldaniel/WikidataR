@@ -1,128 +1,3 @@
-# -------- Gets --------
-
-#Generic queryin' function for direct Wikidata calls. Wraps around WikipediR::page_content. - Ironholds
-#'@title Download a Wikidata item
-#'@description Utility wrapper for wikidata API to download item.
-#'Used by \code{get_item} and \code{get_property}
-#'@param title the wikidata item or property as a string
-#'@param \\dots Additional parameters to supply to [httr::POST]
-#'@return a download of the full wikidata object (item or property) formatted as a nested json list
-#'@export
-wd_query <- function(title, ...){
-  result <- WikipediR::page_content(domain = "wikidata.org", page_name = title, as_wikitext = TRUE,
-                                    httr::user_agent("WikidataR - https://github.com/TS404/WikidataR"),
-                                    ...)
-  output <- jsonlite::fromJSON(result$parse$wikitext[[1]])
-  return(output)
-}
-
-# Query for a random item in "namespace" (ns). Essentially a wrapper around WikipediR::random_page. - Ironholds
-#'@title Download random Wikidata items
-#'@description Utility wrapper for wikidata API to download random items. Used by \code{random_item}
-#'@param ns string indicating namespace, most commonly "Main" for QID items, "Property" for PID properties
-#'@param limit how many random objesct to return
-#'@param \\dots Additional parameters to supply to [httr::POST]
-#'@return a download of the full wikidata objects (items or properties) formatted as nested json lists
-#'@export
-wd_rand_query <- function(ns, limit, ...){
-  result <- WikipediR::random_page(domain = "wikidata.org", as_wikitext = TRUE, namespaces = ns,
-                                   httr::user_agent("WikidataR - https://github.com/TS404/WikidataR"),
-                                   limit = limit, ...)
-  output <- lapply(result, function(x){jsonlite::fromJSON(x$wikitext[[1]])})
-  class(output) <- "wikidata"
-  return(output)
-}
-
-#Generic, direct access to Wikidata's search functionality.
-#'@title Convert an input to a item QID
-#'@description Convert an input string to the most likely item QID
-#'@param search_term a term to search for.
-#'@param language the language to return the labels and descriptions in; this should
-#'consist of an ISO language code. Set to "en" by default.
-#'@param limit the number of results to return; set to 10 by default.
-#'@param type type of wikidata object to return (default = "item")
-#'@param \\dots Additional parameters to supply to [httr::POST]
-#'@return If the inputted string matches an item label, return its QID.
-#'If the inputted string matches multiple labels of multiple items, return the QID of the first hit.
-#'If the inputted string is already a QID, return the string.
-#'@examples
-#'# if input string is a valid QID
-#'as_qid("Q42")
-#'# if input string matches multiple item labels
-#'as_qid("Douglas Adams")
-#'# if input string matches a single unique label
-#'as_qid("Douglas Adams and the question of arterial blood pressure in mammals")
-#'@export
-searcher <- function(search_term, language, limit, type, ...){
-  result <- WikipediR::query(url = "https://www.wikidata.org/w/api.php", out_class = "list", clean_response = FALSE,
-                             query_param = list(
-                               action   = "wbsearchentities", 
-                               type     = type,
-                               language = language,
-                               limit    = limit,
-                               search   = search_term
-                             ),
-                             ...)
-  result <- result$search
-  return(result)
-}
-
-#sparql query function for direct Wikidata calls.
-#'@title Download full Wikidata items matching a sparql query 
-#'@description Utility wrapper for wikidata spargle endpoint to download items.
-#'Used by \code{get_geo_entity} and \code{get_geo_box}
-#'@param query the sparql query as a string
-#'@param \\dots Additional parameters to supply to [httr::POST]
-#'@return a download of the full wikidata objects formatted as a nested json list
-#'@export
-sparql_query <- function(query, ...){
-  result <- httr::GET("https://query.wikidata.org/bigdata/namespace/wdq/sparql",
-                      query = list(query = query),
-                      httr::user_agent("WikidataR - https://github.com/TS404/WikidataR"),
-                      ...)
-  httr::stop_for_status(result)
-  return(httr::content(result, as = "parsed", type = "application/json"))
-}
-
-#' @title Get an example SPARQL query from Wikidata
-#' @description Gets the specified example(s) from
-#'   [SPARQL query service examples page](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples)
-#'   using [Wikidata's MediaWiki API](https://www.wikidata.org/w/api.php).
-#' @details If you are planning on extracting multiple examples, please provide
-#'   all the names as a single vector for efficiency.
-#' @param example_name the names of the examples as they appear on
-#'   [this page](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples)
-#' @return The SPARQL query as a character vector.
-#' @examples
-#' \dontrun{
-#' sparql_query <- extract_example(c("Cats", "Horses"))
-#' query_wikidata(sparql_query)
-#' # returns a named list with two data frames
-#' # one called "Cats" and one called "Horses"
-#' sparql_query <- extract_example("Largest cities with female mayor")
-#' cat(sparql_query)
-#' query_wikidata(sparql_query)
-#' }
-#' @seealso [query_wikidata]
-#' @export
-get_example <- function(example_name){
-  content <- WikipediR::page_content(
-    domain = "www.wikidata.org",
-    page_name = "Wikidata:SPARQL query service/queries/examples",
-    as_wikitext = TRUE
-  )
-  wiki <- strsplit(content$parse$wikitext$`*`, "\n")[[1]]
-  wiki <- wiki[wiki != ""]
-  return(vapply(example_name, function(example_name){
-    heading_line <- which(grepl(paste0("^===\\s?", example_name, "\\s?===$"), wiki, fixed = FALSE))
-    start_line <- which(grepl("{{SPARQL", wiki[(heading_line + 1):length(wiki)], fixed = TRUE))[1]
-    end_line <- which(grepl("}}", wiki[(heading_line + start_line + 1):length(wiki)], fixed = TRUE))[1]
-    query <- paste0(wiki[(heading_line + start_line):(heading_line + start_line + end_line - 1)], collapse = "\n")
-    return(sub("^\\s*\\{\\{SPARQL2?\\n?\\|query\\=", "", query))
-  }, ""))
-}
-
-
 # -------- Format checkers --------
 # Simple tests of strings for whether they adhere to common wikidata formats
 is.qid     <- function(x){grepl("^[Qq][0-9]+$",x)}
@@ -188,7 +63,7 @@ check_input <- function(input, substitution){
 }
 
 
-# -------- Converters --------
+# -------- Format converters --------
 # Simple functions to convert plain text descriptions into their most likely QID/PIDs
 #'@title Convert an input to a item QID
 #'@description Convert an input string to the most likely item QID
@@ -421,10 +296,9 @@ list_properties <- function (item,
   return(properties.p)
 }
 
-#Note: This one isn't very well named. not really the property names, more the predicate names
-
+#Note: This one isn't very well named. not really the property names, more the predicate names, but you get the idea
 #'@title Get names of properties
-#'@description For a clam or set of claims, return the names of the properties  
+#'@description For a claim or set of claims, return the names of the properties  
 #'@param properties a claims list from \code{extract_claims}
 #'@return tibble of labels for each property for a set of claims
 #'@export
@@ -453,6 +327,73 @@ get_names_from_properties <- function(properties){
   property_names      <- lapply(property_values.q, get_names_from_properties_nest3)
   property_names      <- lapply(lapply(property_names,unlist),enframe,name = "QID") 
   return(property_names)
+}
+
+
+#'@title Filter QIDs
+#'@description For a QID or vector of QIDs, remove ones that match a particular statement
+#'(e.g. remove all that are instances of academic publications or books).
+#'@param ids QIDs to check
+#'@param properties property to check (default = P31 to filter on "instance of")
+#'@param filter values of that property to use to filter out
+#'(default = Q737498, Q5633421, Q7725634, Q13442814, and Q18918145 to remove academic publications or books)
+#'@return a vector of QIDs that do not match the property filter
+#'@example 
+#' \dontrun{
+#' # Filter three items called "Earth Science" to show only those that aren't books, journals or journal articles
+#' filter_qids(ids = c("Q96695546","Q8008","Q58966429"),
+#'             property = "P31",
+#'             filter = c("Q737498","Q5633421","Q7725634","Q13442814","Q18918145"))
+#' }
+#'@export
+filter_qids <- function (ids,
+                         property = "P31",
+                         filter = c("Q737498",
+                                    "Q5633421",
+                                    "Q7725634",
+                                    "Q13442814",
+                                    "Q18918145"),
+                         message=NULL){
+  out <- NULL
+  pb <- progress_bar$new(total  = length(ids),
+                         format = paste0(message,":bar :percent eta::eta"),
+                         width  = 75,
+                         show_after = 0)
+  for (i in 1:length(ids)){
+    pb$tick()
+    qid  <- ids[i]
+    item <- get_item(qid)
+    P31  <- item[[1]]$claims[[property]]$mainsnak$datavalue$value$id
+    if(all(is.null(P31))){P31<-"other"}
+    if(!any(P31 %in% filter)){
+      label <- item[[1]]$labels[[1]]$value
+      if(length(item[[1]]$descriptions)>0){
+        if(!is.null(item[[1]]$descriptions$en$value)){
+          desc <- item[[1]]$descriptions$en$value
+        }else{
+          desc <- item[[1]]$descriptions[[1]]$value
+        }
+      }else{
+        desc <- "no description"
+      }
+      if(length(item[[1]]$labels)>0){
+        if(!is.null(item[[1]]$labels$en$value)){
+          label <- item[[1]]$labels$en$value
+        }else{
+          label <- item[[1]]$labels[[1]]$value
+        }
+      }else{
+        label <- "no label"
+      }
+      out <- bind_rows(out,tibble(qid=qid,label=label,desc=desc))
+    }
+  }
+  if(is.null(out)){
+    out <- tibble(qid=NA,
+                  label=NA,
+                  desc="No current matching Wikidata item")
+  }
+  return(out)
 }
 
 

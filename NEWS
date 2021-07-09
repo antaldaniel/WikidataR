@@ -1,3 +1,7 @@
+2.3.0
+=================================================
+* New disambiguate_QIDs() function for manual item-by-item disambiguation
+
 2.2.1
 =================================================
 * Outputs as tibbles by default with vector options where relevant

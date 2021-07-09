@@ -23,6 +23,7 @@ Imports:
     pbapply,
     stats,
     readr,
+    progress,
     utils
 Suggests:
     markdown,

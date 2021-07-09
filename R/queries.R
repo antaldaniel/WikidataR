@@ -49,7 +49,7 @@ query_wikidata <- function(sparql_query,format="tibble",...) {
 #' @description convert unique identifiers to QIDs (for items in wikidata). 
 #' @param property the identifier property to search (for caveats, see \code{as_pid})
 #' @param value the identifier value to match
-#' @return tibble of QIDs corresponding to identifiers submitted
+#' @return vector of QIDs corresponding to identifiers submitted
 #' @examples
 #' qid_from_identifier('ISBN-13','978-0-262-53817-6')
 #' @export
@@ -65,12 +65,12 @@ qid_from_identifier <- function(property = 'DOI',
                                                        '"}',
                                                        sep='')}
   sparql_query <- lapply(value,property,FUN=qid_from_property1)
-  output.qr    <- if(length(value)>1){
+  output       <- if(length(value)>1){
     unlist(pbapply::pblapply(sparql_query,function(x) as.character(query_wikidata(x)[[1]])))
   }else{
-      lapply(sparql_query,FUN=query_wikidata)
-    }
-  output       <- tibble(value,qid=data.frame(output.qr))
+    as.character(unlist(lapply(sparql_query,FUN=query_wikidata)))
+  }
+  names(output) <- value
   return(output)
 }
 
@@ -79,7 +79,7 @@ qid_from_identifier <- function(property = 'DOI',
 #' @param property the identifier property to search (for caveats, see \code{as_pid})
 #' @param return the identifier property to convert to
 #' @param value the identifier value to match
-#' @return tibble of identifiers corresponding to identifiers submitted
+#' @return vector of identifiers corresponding to identifiers submitted
 #' @examples
 #' identifier_from_identifier('ORCID iD','IMDb ID',c('0000-0002-7865-7235','0000-0003-1079-5604'))
 #' @export
@@ -99,11 +99,11 @@ identifier_from_identifier <- function(property = 'ORCID iD',
                                                        ' ?return.}',
                                                        sep='')}
   sparql_query <- lapply(value,return,property,FUN=qid_from_property1)
-  output.qr    <- if(length(value)>1){
+  output       <- if(length(value)>1){
     unlist(pbapply::pblapply(sparql_query,function(x) as.character(query_wikidata(x)[[1]])))
   }else{
-    lapply(sparql_query,FUN=query_wikidata)
+    as.character(unlist(lapply(sparql_query,FUN=query_wikidata)))
   }
-  output       <- tibble(value,return=data.frame(output.qr))
+  names(output) <- value
   return(output)
 }
