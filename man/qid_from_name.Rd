@@ -14,7 +14,7 @@ qid_from_name(name = "Thomas Shafee", limit = 100, format = "vector")
 \item{format}{output format ('vector' to return a simple vector, or 'list' to return a nested list)}
 }
 \value{
-tibble of QIDs corresponding to names submitted. Note: some names may return multiple QIDs.
+vector of QIDs corresponding to names submitted. Note: some names may return multiple QIDs.
 }
 \description{
 simple converter from label names to QIDs (for items in wikidata).

@@ -10,7 +10,7 @@ qid_from_ORCID(ORCID = "0000-0002-2298-7593")
 \item{ORCID}{digital object identifiers submitted as strings}
 }
 \value{
-tibble of QIDs corresponding to ORCIDs submitted
+vector of QIDs corresponding to ORCIDs submitted
 }
 \description{
 simple converter from ORCIDs to QIDs (for items in wikidata)

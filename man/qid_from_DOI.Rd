@@ -10,7 +10,7 @@ qid_from_DOI(DOI = "10.15347/WJM/2019.001")
 \item{DOI}{digital object identifiers submitted as strings}
 }
 \value{
-tibble of QIDs corresponding to DOIs submitted
+vector of QIDs corresponding to DOIs submitted
 }
 \description{
 simple converter from DOIs to QIDs (for items in wikidata)

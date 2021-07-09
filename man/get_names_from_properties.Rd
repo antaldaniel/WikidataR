@@ -13,5 +13,5 @@ get_names_from_properties(properties)
 tibble of labels for each property for a set of claims
 }
 \description{
-For a clam or set of claims, return the names of the properties
+For a claim or set of claims, return the names of the properties
 }

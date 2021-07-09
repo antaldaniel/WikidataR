@@ -18,7 +18,7 @@ identifier_from_identifier(
 \item{value}{the identifier value to match}
 }
 \value{
-tibble of identifiers corresponding to identifiers submitted
+vector of identifiers corresponding to identifiers submitted
 }
 \description{
 convert unique identifiers to other unique identifiers

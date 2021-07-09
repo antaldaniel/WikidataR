@@ -74,7 +74,7 @@ be removed from the item rather than added (default = FALSE)}
 }
 \value{
 data formatted to upload to wikidata (via quickstatemsnts),
-optionally also directly uploded to wikidata (see \code{format} parameter.
+optionally also directly uploded to wikidata (see \code{format} parameter).
 }
 \description{
 Upload data to wikidata, including creating items,

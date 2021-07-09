@@ -4,19 +4,20 @@
 \alias{query_wikidata}
 \title{Send one or more SPARQL queries to WDQS}
 \usage{
-query_wikidata(sparql_query, format = "simple", ...)
+query_wikidata(sparql_query, format = "tibble", ...)
 }
 \arguments{
 \item{sparql_query}{SPARQL query (can be a vector of queries)}
 
-\item{format}{"simple" uses CSV and returns pure character data frame, while
-"smart" fetches JSON-formatted data and returns a data frame with datetime
+\item{format}{`tibble` (default) returns a pure character data frame,
+`simple` returns a pure character vector, while
+`smart` fetches JSON-formatted data and returns a tibble with datetime
 columns converted to `POSIXct`}
 
 \item{\\dots}{Additional parameters to supply to [httr::POST]}
 }
 \value{
-A `tibble`. Note: QID values will be returned as QIDs, rather than URLs.
+A `tibble` or `vector`. Note: QID values will be returned as QIDs, rather than URLs.
 }
 \description{
 Makes a POST request to Wikidata Query Service SPARQL endpoint.

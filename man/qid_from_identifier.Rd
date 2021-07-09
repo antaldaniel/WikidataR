@@ -15,7 +15,7 @@ qid_from_identifier(
 \item{value}{the identifier value to match}
 }
 \value{
-tibble of QIDs corresponding to identifiers submitted
+vector of QIDs corresponding to identifiers submitted
 }
 \description{
 convert unique identifiers to QIDs (for items in wikidata).
