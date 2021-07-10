@@ -16,6 +16,8 @@
 #' @import dplyr
 #' @import stringr
 #' @import pbapply
+#' @import progress
+#' @import crayon
 #' @import utils
 #' @importFrom readr format_tsv
 #' @importFrom readr format_delim

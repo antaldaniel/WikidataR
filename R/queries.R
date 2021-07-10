@@ -1,3 +1,53 @@
+#Generic queryin' function for direct Wikidata calls. Wraps around WikipediR::page_content. - Ironholds
+#'@title Download a Wikidata item
+#'@description Utility wrapper for wikidata API to download item.
+#'Used by \code{get_item} and \code{get_property}
+#'@param title the wikidata item or property as a string
+#'@param \\dots Additional parameters to supply to [httr::POST]
+#'@return a download of the full wikidata object (item or property) formatted as a nested json list
+#'@export
+wd_query <- function(title, ...){
+  result <- WikipediR::page_content(domain = "wikidata.org", page_name = title, as_wikitext = TRUE,
+                                    httr::user_agent("WikidataR - https://github.com/TS404/WikidataR"),
+                                    ...)
+  output <- jsonlite::fromJSON(result$parse$wikitext[[1]])
+  return(output)
+}
+
+# Query for a random item in "namespace" (ns). Essentially a wrapper around WikipediR::random_page. - Ironholds
+#'@title Download random Wikidata items
+#'@description Utility wrapper for wikidata API to download random items. Used by \code{random_item}
+#'@param ns string indicating namespace, most commonly "Main" for QID items, "Property" for PID properties
+#'@param limit how many random objesct to return
+#'@param \\dots Additional parameters to supply to [httr::POST]
+#'@return a download of the full wikidata objects (items or properties) formatted as nested json lists
+#'@export
+wd_rand_query <- function(ns, limit, ...){
+  result <- WikipediR::random_page(domain = "wikidata.org", as_wikitext = TRUE, namespaces = ns,
+                                   httr::user_agent("WikidataR - https://github.com/TS404/WikidataR"),
+                                   limit = limit, ...)
+  output <- lapply(result, function(x){jsonlite::fromJSON(x$wikitext[[1]])})
+  class(output) <- "wikidata"
+  return(output)
+}
+
+#sparql query function for direct Wikidata calls.
+#'@title Download full Wikidata items matching a sparql query 
+#'@description Utility wrapper for wikidata spargle endpoint to download items.
+#'Used by \code{get_geo_entity} and \code{get_geo_box}
+#'@param query the sparql query as a string
+#'@param \\dots Additional parameters to supply to [httr::POST]
+#'@return a download of the full wikidata objects formatted as a nested json list
+#'@export
+sparql_query <- function(query, ...){
+  result <- httr::GET("https://query.wikidata.org/bigdata/namespace/wdq/sparql",
+                      query = list(query = query),
+                      httr::user_agent("WikidataR - https://github.com/TS404/WikidataR"),
+                      ...)
+  httr::stop_for_status(result)
+  return(httr::content(result, as = "parsed", type = "application/json"))
+}
+
 #Wrapper around WikidataQueryServiceR::query_wikidata
 #' @title Send one or more SPARQL queries to WDQS
 #' @description Makes a POST request to Wikidata Query Service SPARQL endpoint.

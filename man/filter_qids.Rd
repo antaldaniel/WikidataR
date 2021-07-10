@@ -14,10 +14,13 @@ filter_qids(
 \arguments{
 \item{ids}{QIDs to check}
 
-\item{filter}{values of that property to use to filter out
-(default = Q737498, Q5633421, Q7725634, Q13442814, and Q18918145 to remove academic publications or books)}
+\item{property}{property to check (default = P31 to filter on "instance of")}
 
-\item{properties}{property to check (default = P31 to filter on "instance of")}
+\item{filter}{values of that property to use to filter out
+(default = Q737498, Q5633421, Q7725634, Q13442814, and Q18918145 to remove academic
+publications or books)}
+
+\item{message}{messager to return (useful for disambiguate_QIDs function)}
 }
 \value{
 a vector of QIDs that do not match the property filter
@@ -25,4 +28,13 @@ a vector of QIDs that do not match the property filter
 \description{
 For a QID or vector of QIDs, remove ones that match a particular statement
 (e.g. remove all that are instances of academic publications or books).
+}
+\examples{
+\dontrun{
+# Filter three items called "Earth Science" to show only those that aren't
+# books, journals or journal articles
+filter_qids(ids = c("Q96695546","Q8008","Q58966429"),
+            property = "P31",
+            filter = c("Q737498","Q5633421","Q7725634","Q13442814","Q18918145"))
+}
 }

@@ -334,13 +334,16 @@ get_names_from_properties <- function(properties){
 #'@description For a QID or vector of QIDs, remove ones that match a particular statement
 #'(e.g. remove all that are instances of academic publications or books).
 #'@param ids QIDs to check
-#'@param properties property to check (default = P31 to filter on "instance of")
+#'@param property property to check (default = P31 to filter on "instance of")
 #'@param filter values of that property to use to filter out
-#'(default = Q737498, Q5633421, Q7725634, Q13442814, and Q18918145 to remove academic publications or books)
+#'(default = Q737498, Q5633421, Q7725634, Q13442814, and Q18918145 to remove academic
+#'publications or books)
+#'@param message message to return (useful for disambiguate_QIDs function)
 #'@return a vector of QIDs that do not match the property filter
-#'@example 
+#'@examples 
 #' \dontrun{
-#' # Filter three items called "Earth Science" to show only those that aren't books, journals or journal articles
+#' # Filter three items called "Earth Science" to show only those that aren't
+#' # books, journals or journal articles
 #' filter_qids(ids = c("Q96695546","Q8008","Q58966429"),
 #'             property = "P31",
 #'             filter = c("Q737498","Q5633421","Q7725634","Q13442814","Q18918145"))
@@ -359,33 +362,44 @@ filter_qids <- function (ids,
                          format = paste0(message,":bar :percent eta::eta"),
                          width  = 75,
                          show_after = 0)
-  for (i in 1:length(ids)){
-    pb$tick()
-    qid  <- ids[i]
-    item <- get_item(qid)
-    P31  <- item[[1]]$claims[[property]]$mainsnak$datavalue$value$id
-    if(all(is.null(P31))){P31<-"other"}
-    if(!any(P31 %in% filter)){
-      label <- item[[1]]$labels[[1]]$value
-      if(length(item[[1]]$descriptions)>0){
-        if(!is.null(item[[1]]$descriptions$en$value)){
-          desc <- item[[1]]$descriptions$en$value
-        }else{
-          desc <- item[[1]]$descriptions[[1]]$value
-        }
-      }else{
-        desc <- "no description"
-      }
-      if(length(item[[1]]$labels)>0){
-        if(!is.null(item[[1]]$labels$en$value)){
-          label <- item[[1]]$labels$en$value
-        }else{
-          label <- item[[1]]$labels[[1]]$value
-        }
-      }else{
-        label <- "no label"
-      }
+  if(is.null(property)|is.null(filter)){
+    for (i in 1:length(ids)){
+      pb$tick()
+      qid   <- ids[i]
+      item  <- find_item(qid,limit=1)
+      label <- item[[1]]$label
+      desc  <- item[[1]]$description
       out <- bind_rows(out,tibble(qid=qid,label=label,desc=desc))
+    }
+  }else{
+    for (i in 1:length(ids)){
+      pb$tick()
+      qid  <- ids[i]
+      item <- get_item(qid)
+      P31  <- item[[1]]$claims[[property]]$mainsnak$datavalue$value$id
+      if(all(is.null(P31))){P31<-"other"}
+      if(!any(P31 %in% filter)){
+        label <- item[[1]]$labels[[1]]$value
+        if(length(item[[1]]$descriptions)>0){
+          if(!is.null(item[[1]]$descriptions$en$value)){
+            desc <- item[[1]]$descriptions$en$value
+          }else{
+            desc <- item[[1]]$descriptions[[1]]$value
+          }
+        }else{
+          desc <- "no description"
+        }
+        if(length(item[[1]]$labels)>0){
+          if(!is.null(item[[1]]$labels$en$value)){
+            label <- item[[1]]$labels$en$value
+          }else{
+            label <- item[[1]]$labels[[1]]$value
+          }
+        }else{
+          label <- "no label"
+        }
+        out <- bind_rows(out,tibble(qid=qid,label=label,desc=desc))
+      }
     }
   }
   if(is.null(out)){

@@ -1,18 +1,62 @@
 # -------- Disambiguator functions --------
-
+#
+#'@title Disambiguate QIDs
+#'@description Interactive function that presents alternative possible QID matches for a list of text
+#'strings and provides options for choosing between alternatives, rejecting all presented alternatives,
+#'or creating new items. Useful in cases where a lit of text strings may have either missing wikidata items
+#'or multiple alternative potenetial matches that need to be manually disambuguated. For long lists of items,
+#'the process can be stopped partway through and the returned vector will indicate where the process was stopped. 
+#'@param list a list or vector of text strings to find potential QID matches to.
+#'            Can also be a list of lists (see examples)
+#'@param variablename type of items in the list that are being disambiguated (used in messages)
+#'@param variableinfo additional information about items that are being disambiguated (used in messages)
+#'@param filter_property property to check (default = P31 to filter on "instance of")
+#'@param filter_variable values of that property to use to filter out
+#'@param limit number of alternative possible wikidata items to present if multiple potential matches
+#'@return a vector of:
+#' \describe{
+#'   \item{QID}{Selected QID (for when an appropriate Wikidata match exists)}
+#'   \item{CREATE}{Mark that a new Wikidata item should be created (for when no appropriate Wikidata match yet exists)}
+#'   \item{NA}{Mark that no Wikidata item is needed}
+#'   \item{STOP}{Mark that the process was halted at this point (so that output can be used as input to the function later)}
+#' }
+#'@examples
+#'\dontrun{
+#'#Disambiguating possible QID matches for these three words, but not the music genre
+#'#Results should be:
+#'# "Q22731" as the first match
+#'# "Q147538" as the first match
+#'# "Q3947" as the second alternative match
+#'disambiguate_QIDs(list=c("Rock","Pop","House"),
+#'                  "music genre")
+#'
+#'#Disambiguating possible QID matches for these three words, but not the music genres
+#'#This will take longer as the filtering step is slower
+#'#Results should be:
+#'# "Q22731" (the material) as the first match
+#'# "Q147538" (the soft drink) as teh second alternative match
+#'# "Q3947" (the building) as the first match
+#'disambiguate_QIDs(list=c("Rock","Pop","House"),
+#'                  filter_property="instance of",
+#'                  filter_variable="music genre",
+#'                  "concept, not the music genre")
+#'}
+#'@export
 disambiguate_QIDs <- function(list,
                               variablename="variables",
                               variableinfo=NULL,
+                              filter_property=NULL,
+                              filter_variable=NULL,
                               limit=10){
-  #make sure formatted as a list (e.g. if vector)
-  if(!all(class(list)=="list")){
-    list <- as.list(list)
-  }
-
+  #make list is formatted as a list (e.g. if vector)
+  if(!all(class(list)=="list")){list <- as.list(list)}
+  if(!is.null(filter_property)){filter_property <- as_pid(filter_property)[[1]][1]}
+  if(!is.null(filter_variable)){filter_variable <- as_qid(filter_variable)[[1]][1]}
+  
   #is the list the outut from a previous half-done run?
   if(any(unlist(lapply(list,function(x) x=="STOP")),na.rm = TRUE)){
     item_to_start_from    <- which(unlist(lapply(list,function(x) any(x=="STOP"))))
-    subitem_to_start_from <- first(which(list[[item_done_so_far]] == "STOP"))
+    subitem_to_start_from <- first(which(list == "STOP"))
     output <- list
   }else{
     item_to_start_from    <- 1
@@ -40,8 +84,11 @@ disambiguate_QIDs <- function(list,
       message_header(list,item,subitem,variablename,variableinfo)
       pb_main$tick()
       #execute search and record choice
-      first_hit_qid <- firsthit(list[[item]][subitem])
-      output[[item]][[subitem]] <- makechoice(first_hit_qid,limit=limit)
+      first_hit_qid <- firsthit(list[[item]][subitem],filter_property,filter_variable)
+      output[[item]][[subitem]] <- makechoice(qid = first_hit_qid,
+                                              filter_property=filter_property,
+                                              filter_variable=filter_variable,
+                                              limit=limit)
 
       #check if stop request made
       if(!is.na(output[[item]][[subitem]])){if(output[[item]][[subitem]]=="STOP"){
@@ -60,6 +107,8 @@ disambiguate_QIDs <- function(list,
 makechoice <- function(qid=NULL,
                        text=NULL,
                        table=NULL,
+                       filter_property=NULL,
+                       filter_variable=NULL,
                        limit=10){
   if(is.null(text)){
     text <- names(qid)
@@ -85,7 +134,7 @@ makechoice <- function(qid=NULL,
 
   }else if(selection=="?"){                                     #? = loop up in browser
     browseURL(paste0("https://www.wikidata.org/wiki/",qid))
-    output <- makechoice(qid,text,table,limit)
+    output <- makechoice(qid,text,table,filter_property,filter_variable,limit)
 
   }else if(grepl("^[Qq][0-9]+$",selection)){                    #Q123 = id
     output <- selection
@@ -94,7 +143,7 @@ makechoice <- function(qid=NULL,
   }else if(grepl("^[Qq][0-9]+?$",selection)){                   #Q123? = search that id
     browseURL(paste0("https://www.wikidata.org/wiki/",
                      gsub("\\?","",selection)))
-    output <- makechoice(qid,text,table,limit)
+    output <- makechoice(qid,text,table,filter_property,filter_variable,limit)
 
   }else if(grepl("^[0-9]+$",selection) & !is.null(table)){      #number = select row
     output <- table$qid[as.numeric(selection)]
@@ -103,19 +152,19 @@ makechoice <- function(qid=NULL,
   }else if(grepl("^[0-9]+\\?$",selection)& !is.null(table)){    #number? = loop up row in browser
     browseURL(paste0("https://www.wikidata.org/wiki/",
                      table$qid[as.numeric(gsub("\\?","",selection))]))
-    output <- makechoice(qid,text,table,limit)
+    output <- makechoice(qid,text,table,filter_property,filter_variable,limit)
     label  <- table$label[as.numeric(selection)]
 
   }else if((selection=="a"|selection=="alt") & !is.null(text)){ #a = alternative
-    table  <- choices_alt(text,limit)
-    output <- makechoice(qid,text,table,limit)
+    table  <- choices_alt(text,filter_property,filter_variable,limit)
+    output <- makechoice(qid,text,table,filter_property,filter_variable,limit)
     if(!is.null(names(output)) & !is.null(text)){if(names(output)!=text){
       names(output) <- paste0(text," -> ",names(output))
     }}
 
   }else{                                                        #freetext = freetext to search
-    table  <- choices_alt(selection,limit)
-    output <- makechoice(qid,selection,table,limit)
+    table  <- choices_alt(selection,filter_property,filter_variable,limit)
+    output <- makechoice(qid,selection,table,filter_property,filter_variable,limit)
     if(!is.null(names(output)) & !is.null(text)){if(names(output)!=text){
       names(output) <- paste0(text," -> ",names(output))
     }}
@@ -186,9 +235,9 @@ message_choices_alt <- function(table){
 
 message_stop <- function(done_so_far,total){
   message("Stopping. You've completed ",
-          bold$white(done_so_far),
+          bold$white(done_so_far - 1),
           " so far (",
-          bold$white(total - done_so_far),
+          bold$white(total - done_so_far + 1),
           " remaining). \n",
           "To restart from where you left off, use the output from this function as the list for disambiguate_QIDs()")
 }
@@ -198,26 +247,47 @@ message_stop <- function(done_so_far,total){
 
 # pulling and formatting the first hit from wikidata
 # and presenting appropriate choice text options in prep for makechoice()
-firsthit <- function(text){
-  item <- find_item(text,limit = 1)
-  if(length(item)>0){
-    if(is.null(item[[1]]$description)){
-      desc <- "no description"
+firsthit <- function(text,
+                     filter_property=NULL,
+                     filter_variable=NULL,
+                     limit=10){
+  if(!is.null(filter_property) & !is.null(filter_variable)){
+    filtered_items <- filter_qids(ids=sapply(find_item(text,limit = limit),"[[",1),
+                                  property=filter_property,
+                                  filter=filter_variable,
+                                  message="Checking for item that doesn't match the filter ")
+    if(!is.na(filtered_items$qid[1])){
+      qid   <- filtered_items$qid[1]
+      label <- filtered_items$label[1]
+      desc  <- filtered_items$desc[1]
+      message(white(qid,"   ",label,"   ",desc,sep=""))
+      message_choices()
     }else{
-      desc <- item[[1]]$description
+      qid <- NA
+      message(white("No good match found that matches filters"))
+      message_choices_na()
     }
-    if(is.null(item[[1]]$label)){
-      label <- "no label"
-    }else{
-      label <- item[[1]]$label
-    }
-    qid <- item[[1]]$id
-    message(white(qid,"   ",label,"   ",desc,sep=""))
-    message_choices()
   }else{
-    qid <- NA
-    message(white("No good match found"))
-    message_choices_na()
+    item <- find_item(text,limit = 1)
+    if(length(item)>0){
+      if(is.null(item[[1]]$description)){
+        desc <- "no description"
+      }else{
+        desc <- item[[1]]$description
+      }
+      if(is.null(item[[1]]$label)){
+        label <- "no label"
+      }else{
+        label <- item[[1]]$label
+      }
+      qid <- item[[1]]$id
+      message(white(qid,"   ",label,"   ",desc,sep=""))
+      message_choices()
+    }else{
+      qid <- NA
+      message(white("No good match found"))
+      message_choices_na()
+    }
   }
   names(qid) <- text
   return(qid)
@@ -252,7 +322,7 @@ restarted_output_list <- function(list){
   return(output)
 }
 
-choices_alt <- function(selection,limit=10){
+choices_alt <- function(selection,filter_property,filter_variable,limit){
   altqids <- unlist(lapply(find_item(selection,limit=limit),function(x) x$id))
   if(is.null(altqids)){
     message("Searching for ",bold$white(selection)," as an alternative term")
@@ -261,7 +331,9 @@ choices_alt <- function(selection,limit=10){
                       desc="No current matching Wikidata item")
   }else{
     message("Searching for ",bold$white(selection)," as an alternative term")
-    results <- filter_qids(altqids)
+    results <- filter_qids(ids = altqids,
+                           property = filter_property,
+                           filter = filter_variable)
   }
   if(all(is.na(results$qid))){
     message(white("No good match found"))
