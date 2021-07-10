@@ -3,15 +3,18 @@
 #'@title Disambiguate QIDs
 #'@description Interactive function that presents alternative possible QID matches for a list of text
 #'strings and provides options for choosing between alternatives, rejecting all presented alternatives,
-#'or creating new items. Useful in cases where a lit of text strings may have either missing wikidata items
-#'or multiple alternative potenetial matches that need to be manually disambuguated. For long lists of items,
-#'the process can be stopped partway through and the returned vector will indicate where the process was stopped. 
+#'or creating new items. Useful in cases where a list of text strings may have either missing wikidata items
+#'or multiple alternative potential matches that need to be manually disambuguated. Can also used on
+#'lists of lists (see examples). For long lists of items, the process can be stopped partway through and
+#'the returned vector will indicate where the process was stopped. 
 #'@param list a list or vector of text strings to find potential QID matches to.
 #'            Can also be a list of lists (see examples)
 #'@param variablename type of items in the list that are being disambiguated (used in messages)
 #'@param variableinfo additional information about items that are being disambiguated (used in messages)
-#'@param filter_property property to check (default = P31 to filter on "instance of")
-#'@param filter_variable values of that property to use to filter out
+#'@param filter_property property to filter on (e.g. "P31" to filter on "instance of")
+#'@param filter_variable values of that property to use to filter out (e.g. "Q571" to filter out books)
+#'@param filter_firsthit apply filter to the first match presented or only if alternatives requested?
+#'                       (default = FALSE, note: true is slower if filter not needed on most matches)
 #'@param limit number of alternative possible wikidata items to present if multiple potential matches
 #'@return a vector of:
 #' \describe{
@@ -22,7 +25,7 @@
 #' }
 #'@examples
 #'\dontrun{
-#'#Disambiguating possible QID matches for these three words, but not the music genre
+#'#Disambiguating possible QID matches for these music genres
 #'#Results should be:
 #'# "Q22731" as the first match
 #'# "Q147538" as the first match
@@ -40,6 +43,14 @@
 #'                  filter_property="instance of",
 #'                  filter_variable="music genre",
 #'                  "concept, not the music genre")
+#'
+#'#Disambiguating possible QID matches for the multiple expertise of these three people
+#'#
+#'#Results should be:
+#'disambiguate_QIDs(list= list(alice = list("physics","chemistry","maths"),
+#'                             bob   = list("history"),
+#'                             clair = list("law","genetics","ethics")),
+#'                  variablename="expertise")
 #'}
 #'@export
 disambiguate_QIDs <- function(list,
@@ -47,6 +58,7 @@ disambiguate_QIDs <- function(list,
                               variableinfo=NULL,
                               filter_property=NULL,
                               filter_variable=NULL,
+                              filter_firsthit=FALSE,
                               limit=10){
   #make list is formatted as a list (e.g. if vector)
   if(!all(class(list)=="list")){list <- as.list(list)}
@@ -85,10 +97,13 @@ disambiguate_QIDs <- function(list,
       pb_main$tick()
       #execute search and record choice
       first_hit_qid <- firsthit(list[[item]][subitem],filter_property,filter_variable)
-      output[[item]][[subitem]] <- makechoice(qid = first_hit_qid,
+      choice <- makechoice(qid = first_hit_qid,
+                                              text= names(first_hit_qid),
                                               filter_property=filter_property,
                                               filter_variable=filter_variable,
                                               limit=limit)
+      output[[item]][[subitem]] <- choice
+      names(output[[item]])[[subitem]] <- names(choice)
 
       #check if stop request made
       if(!is.na(output[[item]][[subitem]])){if(output[[item]][[subitem]]=="STOP"){

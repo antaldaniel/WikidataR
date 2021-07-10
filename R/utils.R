@@ -368,7 +368,15 @@ filter_qids <- function (ids,
       qid   <- ids[i]
       item  <- find_item(qid,limit=1)
       label <- item[[1]]$label
-      desc  <- item[[1]]$description
+      if(length(item[[1]]$description)>0){
+        if(!is.null(item[[1]]$description)){
+          desc <- item[[1]]$description
+        }else{
+          desc <- item[[1]]$description
+        }
+      }else{
+        desc <- "no description"
+      }
       out <- bind_rows(out,tibble(qid=qid,label=label,desc=desc))
     }
   }else{

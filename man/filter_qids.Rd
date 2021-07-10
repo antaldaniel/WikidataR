@@ -20,7 +20,7 @@ filter_qids(
 (default = Q737498, Q5633421, Q7725634, Q13442814, and Q18918145 to remove academic
 publications or books)}
 
-\item{message}{messager to return (useful for disambiguate_QIDs function)}
+\item{message}{message to return (useful for disambiguate_QIDs function)}
 }
 \value{
 a vector of QIDs that do not match the property filter
