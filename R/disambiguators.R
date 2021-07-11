@@ -45,12 +45,11 @@
 #'                  filter_firsthit=TRUE,
 #'                  variablename="concept, not the music genre")
 #'
-#'#Disambiguating possible QID matches for the multiple expertise of these three people
-#'#
-#'#Results should be:
-#'disambiguate_QIDs(list= list(alice = list("physics","chemistry","maths"),
-#'                             bob   = list("history"),
-#'                             clair = list("law","genetics","ethics")),
+#'#Disambiguating possible QID matches for the multiple expertise of
+#'#these three people as list of lists
+#'disambiguate_QIDs(list=list(alice=list("physics","chemistry","maths"),
+#'                            barry=list("history"),
+#'                            clair=list("law","genetics","ethics")),
 #'                  variablename="expertise")
 #'}
 #'@export
