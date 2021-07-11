@@ -10,6 +10,7 @@ disambiguate_QIDs(
   variableinfo = NULL,
   filter_property = NULL,
   filter_variable = NULL,
+  filter_firsthit = FALSE,
   limit = 10
 )
 }
@@ -21,9 +22,12 @@ Can also be a list of lists (see examples)}
 
 \item{variableinfo}{additional information about items that are being disambiguated (used in messages)}
 
-\item{filter_property}{property to check (default = P31 to filter on "instance of")}
+\item{filter_property}{property to filter on (e.g. "P31" to filter on "instance of")}
 
-\item{filter_variable}{values of that property to use to filter out}
+\item{filter_variable}{values of that property to use to filter out (e.g. "Q571" to filter out books)}
+
+\item{filter_firsthit}{apply filter to the first match presented or only if alternatives requested?
+(default = FALSE, note: true is slower if filter not needed on most matches)}
 
 \item{limit}{number of alternative possible wikidata items to present if multiple potential matches}
 }
@@ -39,29 +43,39 @@ a vector of:
 \description{
 Interactive function that presents alternative possible QID matches for a list of text
 strings and provides options for choosing between alternatives, rejecting all presented alternatives,
-or creating new items. Useful in cases where a lit of text strings may have either missing wikidata items
-or multiple alternative potenetial matches that need to be manually disambuguated. For long lists of items,
-the process can be stopped partway through and the returned vector will indicate where the process was stopped.
+or creating new items. Useful in cases where a list of text strings may have either missing wikidata items
+or multiple alternative potential matches that need to be manually disambuguated. Can also used on
+lists of lists (see examples). For long lists of items, the process can be stopped partway through and
+the returned vector will indicate where the process was stopped.
 }
 \examples{
 \dontrun{
-#Disambiguating possible QID matches for these three words, but not the music genre
+#Disambiguating possible QID matches for these music genres
 #Results should be:
 # "Q22731" as the first match
 # "Q147538" as the first match
 # "Q3947" as the second alternative match
 disambiguate_QIDs(list=c("Rock","Pop","House"),
-                 "music genre")
+                 variablename="music genre")
 
 #Disambiguating possible QID matches for these three words, but not the music genres
 #This will take longer as the filtering step is slower
 #Results should be:
 # "Q22731" (the material) as the first match
-# "Q147538" (the soft drink) as teh second alternative match
+# "Q147538" (the soft drink) as the second alternative match
 # "Q3947" (the building) as the first match
 disambiguate_QIDs(list=c("Rock","Pop","House"),
                  filter_property="instance of",
                  filter_variable="music genre",
-                 "concept, not the music genre")
+                 filter_firsthit=TRUE,
+                 variablename="concept, not the music genre")
+
+#Disambiguating possible QID matches for the multiple expertise of these three people
+#
+#Results should be:
+disambiguate_QIDs(list= list(alice = list("physics","chemistry","maths"),
+                            bob   = list("history"),
+                            clair = list("law","genetics","ethics")),
+                 variablename="expertise")
 }
 }

@@ -31,18 +31,19 @@
 #'# "Q147538" as the first match
 #'# "Q3947" as the second alternative match
 #'disambiguate_QIDs(list=c("Rock","Pop","House"),
-#'                  "music genre")
+#'                  variablename="music genre")
 #'
 #'#Disambiguating possible QID matches for these three words, but not the music genres
 #'#This will take longer as the filtering step is slower
 #'#Results should be:
 #'# "Q22731" (the material) as the first match
-#'# "Q147538" (the soft drink) as teh second alternative match
+#'# "Q147538" (the soft drink) as the second alternative match
 #'# "Q3947" (the building) as the first match
 #'disambiguate_QIDs(list=c("Rock","Pop","House"),
 #'                  filter_property="instance of",
 #'                  filter_variable="music genre",
-#'                  "concept, not the music genre")
+#'                  filter_firsthit=TRUE,
+#'                  variablename="concept, not the music genre")
 #'
 #'#Disambiguating possible QID matches for the multiple expertise of these three people
 #'#
@@ -96,7 +97,11 @@ disambiguate_QIDs <- function(list,
       message_header(list,item,subitem,variablename,variableinfo)
       pb_main$tick()
       #execute search and record choice
-      first_hit_qid <- firsthit(list[[item]][subitem],filter_property,filter_variable)
+      if(filter_firsthit){
+        first_hit_qid <- firsthit(list[[item]][subitem],filter_property,filter_variable)
+      }else{
+        first_hit_qid <- firsthit(list[[item]][subitem])
+      }
       choice <- makechoice(qid = first_hit_qid,
                                               text= names(first_hit_qid),
                                               filter_property=filter_property,
