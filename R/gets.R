@@ -65,13 +65,13 @@ get_property <- function(id, ...){
 #'search term.
 #'
 #'@examples
-#'
+#'\dontrun{
 #'#Random item
 #'random_item <- get_random_item()
 #'
 #'#Random property
 #'random_property <- get_random_property()
-#'
+#'}
 #'@aliases get_random get_random_item get_random_property
 #'@rdname get_random
 #'@export

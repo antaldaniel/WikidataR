@@ -22,13 +22,13 @@ other \code{WikidataR} code, custom print methods are available; use \code{\link
 to manipulate and see the underlying structure of the data.
 }
 \examples{
-
+\dontrun{
 #Random item
 random_item <- get_random_item()
 
 #Random property
 random_property <- get_random_property()
-
+}
 }
 \seealso{
 \code{\link{get_item}} for selecting a specific item or property,
