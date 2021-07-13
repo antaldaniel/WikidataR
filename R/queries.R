@@ -108,19 +108,27 @@ qid_from_identifier <- function(property = 'DOI',
   
   property <- as_pid(property)
   
-  qid_from_property1 <- function(value,property){paste('SELECT ?value WHERE {?value wdt:',
+  qid_from_property1 <- function(value,property){out <- paste('SELECT ?value WHERE {?value wdt:',
                                                        property,
                                                        ' "',
                                                        value,
                                                        '"}',
-                                                       sep='')}
+                                                       sep='')
+                                                 names(out)<-value
+                                                 return(out)}
+ 
+  qid_from_property2 <- function(x){out <- as.character(query_wikidata(x)[[1]])
+                                    names(out) <- names(x)
+                                    return(out)}
+    
   sparql_query <- lapply(value,property,FUN=qid_from_property1)
-  output       <- if(length(value)>1){
-    unlist(pbapply::pblapply(sparql_query,function(x) as.character(query_wikidata(x)[[1]])))
+  if(length(value)>1){
+    output <- unlist(pblapply(sparql_query,qid_from_property2))
   }else{
-    as.character(unlist(lapply(sparql_query,FUN=query_wikidata)))
+    output <- as.character(unlist(lapply(sparql_query,FUN=query_wikidata)))
+    names(output) <- value
   }
-  names(output) <- value
+  if(length(value)!=length(output)){message("Caution! Some supplied values returned more than one QID.")}
   return(output)
 }
 
