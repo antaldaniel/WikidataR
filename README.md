@@ -19,15 +19,10 @@ For details on how to best use it, see the examples below.
 Installation
 ======
 
-For the 2017 read-only CRAN versions:
+To download WikidataR from CRAN:
 
     install.packages("WikidataR","WikidataQueryServiceR")
     
-For this read-write development version:
-
-    library(devtools)
-    devtools::install_github("TS404/WikidataR")
-
 Examples
 ======
 ### Search Wikidata to see if an item exists (example: pharmaceuticals)
