@@ -19,15 +19,10 @@ For details on how to best use it, see the examples below.
 Installation
 ======
 
-For the 2017 read-only CRAN versions:
+To download WikidataR from CRAN:
 
     install.packages("WikidataR","WikidataQueryServiceR")
     
-For this read-write development version:
-
-    library(devtools)
-    devtools::install_github("TS404/WikidataR")
-
 Examples
 ======
 ### Search Wikidata to see if an item exists (example: pharmaceuticals)
@@ -76,7 +71,7 @@ In this example, we search for three articles using their DOIs ([P356](https://w
 
 ``` r
 article.qid      <- qid_from_DOI(c('10.15347/WJM/2017.007','10.15347/WJM/2019.001','10.15347/WJM/2019.007'))
-article.q        <- get_item(article.qid$qid)
+article.q        <- get_item(article.qid)
 article.topics.p <- extract_claims(article.q, "main topic")
 get_names_from_properties(article.topics.p)
 ```
