@@ -133,7 +133,7 @@ write_wikidata <- function(items,
   
   # Convert values to QIDs where possible and identify which (if any) to remove
   QS$items           <- as_qid(QS$items)
-  QS$items[remove,]  <- paste0("-",QS$items[remove,])
+  QS$items[remove,]  <- paste0("-",unlist(QS$items[remove,]))
   
   # Convert properties to PIDs where possible, unless special functions (such as lables and aliases)
   QS$properties      <- as_pid(QS$properties)

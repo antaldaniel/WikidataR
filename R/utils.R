@@ -204,14 +204,14 @@ as_sid <- function(x){
 as_quot <- function(x,format="tibble"){
   if(is.null(x)){
     return(NULL)
-  }else if (format=="api"|format=="website"){
+  }else if(format=="api"|format=="website"){
     q_mark <- '%22'
-  }else if (format=="tibble"|format=="csv"){
+  }else if(format=="tibble"|format=="csv"){
     q_mark <- '"'
   }
   as_quot_nest1 <- function(x){
     as_quot_nest2 <- function(x){
-      if(!(is.qid(x)|is.quot(x)|is.date(x)|is.na(x)|is.empty(x)))
+      if(!(is.qid(x)|is.quot(x)|is.date(x)|is.na(x)|is.empty(x)|is.numeric(x)))
       {paste0(q_mark,x,q_mark)}
       else
       {x}
