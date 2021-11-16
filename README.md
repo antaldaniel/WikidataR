@@ -23,6 +23,11 @@ To download WikidataR from CRAN:
 
     install.packages("WikidataR","WikidataQueryServiceR")
     
+To get the current development version from github:
+
+    install.packages("devtools")
+    devtools::install_github("r-lib/httr")
+    
 Examples
 ======
 ### Search Wikidata to see if an item exists (example: pharmaceuticals)
