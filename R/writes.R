@@ -137,13 +137,23 @@ write_wikidata <- function(items,
   
   # Convert properties to PIDs where possible, unless special functions (such as lables and aliases)
   QS$properties      <- as_pid(QS$properties)
-
+  
   # Convert values to QIDs where possible, unless property is expecting a string
   QS$values          <- tibble(QS$values)
   if(any(sapply(QS$properties,check.PID.WikibaseItem))){
     QS$values[sapply(QS$properties,check.PID.WikibaseItem),] <- as_qid(QS$values[sapply(QS$properties,check.PID.WikibaseItem),])
   }
   QS$values          <- as_quot(QS$values,format)
+  
+  # Check if multiple values and properties supplied for each item
+  if(!is.null(dim(QS$properties))){
+    if(all (dim(QS$properties) != dim(QS$values))){
+      stop("multiple properties and values supplied for each item, but number of properties and values don't match")
+    }
+    QS$items      <- tibble(rep(unlist(QS$items),each=ncol(QS$properties)))
+    QS$properties <- tibble(as.vector(t(QS$properties)))
+    QS$values     <- tibble(as.vector(t(QS$values)))
+  }
   
   # Convert first three columns into tibble (tibbulate?)
   colnames(QS$items)      <- "Item"
@@ -160,10 +170,10 @@ write_wikidata <- function(items,
     QS$qual.values     <- as_quot(QS$qual.values,format)
     
     # if no value, clear property 
-    QS$qual.properties[QS$qual.values==""] <- NA
+    QS$qual.properties[QS$qual.values==""|is.na(QS$qual.values)] <- NA
 
-    colnames(QS$qual.properties) <- paste0("Qual.prop.",1:ncol(QS$qual.properties))
-    colnames(QS$qual.values)     <- paste0("Qual.value.",1:ncol(QS$qual.values))
+    colnames(QS$qual.properties) <- paste0("qual.prop.",1:ncol(QS$qual.properties))
+    colnames(QS$qual.values)     <- paste0("qual.value.",1:ncol(QS$qual.values))
     
     QSq <- list(QS$qual.properties,
                 QS$qual.values)
@@ -183,10 +193,10 @@ write_wikidata <- function(items,
     QS$src.values     <- as_quot(QS$src.values,format)
 
     # if no value, clear property 
-    QS$src.properties[QS$src.values==""] <- NA
+    QS$src.properties[QS$src.values==""|is.na(QS$src.values)] <- NA
 
-    colnames(QS$src.properties) <- paste0("Src.prop.",1:ncol(QS$src.properties))
-    colnames(QS$src.values)     <- paste0("Src.values.",1:ncol(QS$src.values))
+    colnames(QS$src.properties) <- paste0("src.prop.",1:ncol(QS$src.properties))
+    colnames(QS$src.values)     <- paste0("src.values.",1:ncol(QS$src.values))
     
     QSs <- list(QS$src.properties,
                 QS$src.values)
