@@ -1,7 +1,6 @@
 # History files
 .Rhistory
 .DS_Store
-
 # Example code in package build process
 *-Ex.R
 # R data files from past sessions
@@ -10,3 +9,4 @@
 .Rproj.user/
 .Rproj.user
 inst/doc
+.httr-oauth

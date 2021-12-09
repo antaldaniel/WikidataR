@@ -207,11 +207,18 @@ message_header <- function(list,
   variables    <- paste(variables,collapse = " | ")
   if(!is.null(variablename)){
     variablename <- paste0("the ",variablename," of ")
+    if (length(variablename)>1){
+      variablename <- variablename[i]
+    }
   }else{
     variablename <- NULL
   }
+
   if(!is.null(variableinfo)){
     variableinfo <- paste0(variableinfo,"\n")
+    if (length(variableinfo)>1){
+      variableinfo <- variableinfo[i]
+    }
   }else{
     variableinfo <- NULL
   }

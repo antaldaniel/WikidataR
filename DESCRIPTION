@@ -11,10 +11,10 @@ Authors@R: c(
             person("Christian", "Graul", role = "ctb"),
             person("Mikhail", "Popov", role = "ctb", comment = c(ORCID = "0000-0003-0145-8948"))
            )
-Description: Read from, interogate, and write to Wikidata <https://www.wikidata.org> -
+Description: Read from, interrogate, and write to Wikidata <https://www.wikidata.org> -
     the multilingual, interdisciplinary, semantic knowledgebase. Includes functions to:
     read from wikidata (single items, properties, or properties); query wikidata (retrieving
-    all items that match a set of criterial via Wikidata SPARQL query service); write to
+    all items that match a set of criteria via Wikidata SPARQL query service); write to
     Wikidata (adding new items or statements via QuickStatements); and handle and manipulate
     Wikidata objects (as lists and tibbles). Uses the Wikidata and Quickstatements APIs. 
 BugReports: https://github.com/TS404/WikidataR/issues

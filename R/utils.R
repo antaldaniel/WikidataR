@@ -10,6 +10,7 @@ is.coord   <- function(x){grepl("@-?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?)/-?(180(\\.0
 is.wdURL   <- function(x){grepl("http://www.wikidata.org/entity/[PpQq][0-9]+$",x)}
 is.create  <- function(x){grepl("^CREATE",x)}
 is.createx <- function(x){grepl("^CREATE.+",x)}
+is.create_x<- function(x){grepl("^CREATE_.+",x)}
 is.last    <- function(x){grepl("^LAST$",x)}
 is.special <- function(x){
   if(grepl("^[LAD]",x)){
@@ -212,9 +213,9 @@ as_quot <- function(x,format="tibble"){
   as_quot_nest1 <- function(x){
     as_quot_nest2 <- function(x){
       if(!(is.qid(x)|is.quot(x)|is.date(x)|is.na(x)|is.empty(x)|is.numeric(x)))
-      {paste0(q_mark,x,q_mark)}
+      {paste0(q_mark,as.character(x),q_mark)}
       else
-      {x}
+      {as.character(x)}
     }
     out <- unlist(lapply(x,as_quot_nest2))
     out

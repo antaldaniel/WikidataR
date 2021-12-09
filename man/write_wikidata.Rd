@@ -26,7 +26,7 @@ write_wikidata(
 Note: if labels are provided, and multiple items match, the first matching item will be used
 (see \code{as_qid} function), so use with caution.
 New QIDs can be created by using the "CREATE_xyz", where "_xyz" is any unique string.
-Using the same id will add additional statemnts to those new items}
+Using the same id will add additional statements to those new items}
 
 \item{properties}{a vector of strings indicating the properties to add as statements (as PIDs or labels).
 Note: if labels are provided, and multiple items match, the first matching item will be used

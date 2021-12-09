@@ -8,7 +8,7 @@
 #'Note: if labels are provided, and multiple items match, the first matching item will be used
 #'(see \code{as_qid} function), so use with caution.
 #'New QIDs can be created by using the "CREATE_xyz", where "_xyz" is any unique string.
-#'Using the same id will add additional statemnts to those new items 
+#'Using the same id will add additional statements to those new items 
 #'@param properties a vector of strings indicating the properties to add as statements (as PIDs or labels).
 #'Note: if labels are provided, and multiple items match, the first matching item will be used
 #'(see \code{as_pid} function), so use with caution.
@@ -159,11 +159,15 @@ write_wikidata <- function(items,
     QS$qual.properties <- as_pid(QS$qual.properties)
     QS$qual.values     <- as_quot(QS$qual.values,format)
     
+    # if no value, clear property 
+    QS$qual.properties[QS$qual.values==""] <- NA
+
     colnames(QS$qual.properties) <- paste0("Qual.prop.",1:ncol(QS$qual.properties))
     colnames(QS$qual.values)     <- paste0("Qual.value.",1:ncol(QS$qual.values))
     
     QSq <- list(QS$qual.properties,
                 QS$qual.values)
+    
     QSq.check  <- var(sapply(c(QS,QSq),function(x){if(is.null(dim(x))){length(x)}else{nrow(x)}}))==0
     if(!QSq.check){stop("Incorrect number of qualifiers provided. If no qualifers needed for a statement, use NA or \"\".")}
     
@@ -177,6 +181,9 @@ write_wikidata <- function(items,
   if(!is.null(src.properties)|!is.null(src.values)){
     QS$src.properties <- as_sid(QS$src.properties)
     QS$src.values     <- as_quot(QS$src.values,format)
+
+    # if no value, clear property 
+    QS$src.properties[QS$src.values==""] <- NA
 
     colnames(QS$src.properties) <- paste0("Src.prop.",1:ncol(QS$src.properties))
     colnames(QS$src.values)     <- paste0("Src.values.",1:ncol(QS$src.values))
@@ -195,6 +202,10 @@ write_wikidata <- function(items,
   # if new QIDs are being created via tidy "CREATExyz" keywords, need to insert CREATE lines above and replace subsequent "CREATExyz" with "LAST"
   QS.tib <- createrows.tidy(QS.tib)
   
+  # remove any impossible rows (value is NA) 
+  QS.tib <- QS.tib[!is.na(QS.tib$Value),]
+  QS.tib <- as_tibble(apply(QS.tib,2,replace_na,""))
+  
   # output
   if (format=="csv"){
     write.table(QS.tib,quote = FALSE,row.names = FALSE,sep = ",")
@@ -205,26 +216,27 @@ write_wikidata <- function(items,
   }
   if (format=="api"|format=="website"){
     api.temp1 <- format_tsv(QS.tib, col_names = FALSE)
-    api.temp2 <- gsub("\t", "%7C",api.temp1) # Replace TAB with "%7C"
-    api.temp3 <- gsub("\n", "%7C%7C",api.temp2) # Replace end-of-line with "%7C%7C"
-    api.temp4 <- gsub(" ",  "%20",api.temp3) # Replace space with "%20"
-    api.temp5 <- gsub("\\+","%2B",api.temp4) # Replace plus with "%2B"
-    api.data  <- gsub("/",  "%2F",api.temp5) # Replace slash with "%2F"
+    api.temp2 <- gsub("\t", "%7C",api.temp1)       # Replace TAB with "%7C"
+    api.temp3 <- gsub("%7C(%7C)+","%7C",api.temp2) # Replace multiple tabs (from missing values) with a single tab (to distinguish from newlines)
+    api.temp4 <- gsub("\n", "%7C%7C",api.temp3)    # Replace end-of-line with "%7C%7C"
+    api.temp5 <- gsub(" ",  "%20",api.temp4)       # Replace space with "%20"
+    api.temp6 <- gsub("\\+","%2B",api.temp5)       # Replace plus with "%2B"
+    api.data  <- gsub("/",  "%2F",api.temp6)       # Replace slash with "%2F"
 
     if (format=="api"){
       if (is.null(api.token)){stop("API token needed. Find yours at https://quickstatements.toolforge.org/#/user")}
       url <- paste0("https://tools.wmflabs.org/quickstatements/api.php",
-                    "?action=",   "import",
-                    "&submit=",   "1",
-                    "&format=",   api.format,
-                    "&batchname=",api.batchname,
-                    "&username=", api.username,
-                    "&token=",    api.token,
-                    "&data=",     api.data)
+                    "?action=",    "import",
+                    "&submit=",    "1",
+                    "&format=",    api.format,
+                    "&batchname=", api.batchname,
+                    "&username=",  api.username,
+                    "&token=",     api.token,
+                    "&data=%7C%7C",api.data)
     }
     if (format=="website"){
       url <- paste0("https://quickstatements.toolforge.org/#/v1=",
-                    "&data=",     api.data)
+                    "&data=%7C%7C",api.data)
     }
     if(api.submit){
       browseURL(url)
