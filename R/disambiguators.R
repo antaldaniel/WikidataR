@@ -15,6 +15,8 @@
 #'@param filter_variable values of that property to use to filter out (e.g. "Q571" to filter out books)
 #'@param filter_firsthit apply filter to the first match presented or only if alternatives requested?
 #'                       (default = FALSE, note: true is slower if filter not needed on most matches)
+#'@param Q_min return only possible hits with QIDs above the provided value
+#'@param auto_create if no match found, automatically assign "CREATE"
 #'@param limit number of alternative possible wikidata items to present if multiple potential matches
 #'@return a vector of:
 #' \describe{
@@ -59,6 +61,8 @@ disambiguate_QIDs <- function(list,
                               filter_property=NULL,
                               filter_variable=NULL,
                               filter_firsthit=FALSE,
+                              Q_min=NULL,
+                              auto_create=FALSE,
                               limit=10){
   #make list is formatted as a list (e.g. if vector)
   if(!all(class(list)=="list")){list <- as.list(list)}
@@ -96,16 +100,31 @@ disambiguate_QIDs <- function(list,
       message_header(list,item,subitem,variablename,variableinfo)
       pb_main$tick()
       #execute search and record choice
-      if(filter_firsthit){
-        first_hit_qid <- firsthit(list[[item]][subitem],filter_property,filter_variable)
-      }else{
-        first_hit_qid <- firsthit(list[[item]][subitem])
+      Q_min_hit=NULL
+      if(!is.null(Q_min)){
+        Q_min <- as.numeric(gsub("Q","",Q_min))
+        Q_min_hit <- sapply(find_item(list[[item]][subitem],limit = limit),"[[",1)
+        Q_min_hit <- Q_min_hit[as.numeric(gsub("Q","",Q_min_hit))>Q_min]
       }
-      choice <- makechoice(qid = first_hit_qid,
-                                              text= names(first_hit_qid),
-                                              filter_property=filter_property,
-                                              filter_variable=filter_variable,
-                                              limit=limit)
+      if(length(Q_min_hit)==1){
+          choice <- Q_min_hit
+      }else{
+        if(filter_firsthit){
+          first_hit_qid <- firsthit(list[[item]][subitem],filter_property,filter_variable)
+        }else{
+          first_hit_qid <- firsthit(list[[item]][subitem])
+        }
+        if(is.na(first_hit_qid) & auto_create){
+          choice <- "CREATE"
+        }else{
+          choice <- makechoice(qid = first_hit_qid,
+                               text= names(first_hit_qid),
+                               filter_property=filter_property,
+                               filter_variable=filter_variable,
+                               limit=limit)
+        }
+
+      }
       output[[item]][[subitem]] <- choice
       names(output[[item]])[[subitem]] <- names(choice)
 
@@ -276,7 +295,7 @@ message_stop <- function(done_so_far,total){
 firsthit <- function(text,
                      filter_property=NULL,
                      filter_variable=NULL,
-                     limit=10){
+                     limit=30){
   if(!is.null(filter_property) & !is.null(filter_variable)){
     filtered_items <- filter_qids(ids=sapply(find_item(text,limit = limit),"[[",1),
                                   property=filter_property,

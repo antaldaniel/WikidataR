@@ -111,10 +111,12 @@ write_wikidata <- function(items,
   
   if(var(unlist(rowcount))!=0){
     for (x in 1:length(QS)){
-      if(nrow(QS[[x]])==rowmax){ 
-        QS[[x]] <- QS[[x]]
+      if(is.null(nrow(QS[[x]]))){
+        QS[[x]] <- slice(tibble(QS[[x]]),rep(1:n(), each=rowmax))
       }else if (nrow(QS[[x]])==1){ 
-        QS[[x]] <- slice(QS[[x]],rep(1:n(), each=rowmax)) 
+        QS[[x]] <- slice(tibble(QS[[x]]),rep(1:n(), each=rowmax)) 
+      }else if(nrow(QS[[x]])==rowmax){ 
+        QS[[x]] <- QS[[x]]
       }else{
         stoprun<-TRUE
         warning(paste0("Not all quickstatement columns have equal rows: ",
@@ -212,29 +214,63 @@ write_wikidata <- function(items,
   # if new QIDs are being created via tidy "CREATExyz" keywords, need to insert CREATE lines above and replace subsequent "CREATExyz" with "LAST"
   QS.tib <- createrows.tidy(QS.tib)
   
-  # remove any impossible rows (value is NA) 
-  QS.tib <- QS.tib[!is.na(QS.tib$Value),]
-  QS.tib <- as_tibble(apply(QS.tib,2,replace_na,""))
+  # remove any impossible rows (value is NA)
+  if(nrow(QS.tib)!=1){
+    QS.tib <- QS.tib[!is.na(QS.tib$Value),]
+    QS.tib <- as_tibble(apply(QS.tib,2,replace_na,"")) 
+  }
   
-  # output
+  # format up the output
   if (format=="csv"){
     write.table(QS.tib,quote = FALSE,row.names = FALSE,sep = ",")
   }
-  # format up the output
+  
   if (format=="tibble"){
     return(QS.tib)
   }
-  if (format=="api"|format=="website"){
-    api.temp1 <- format_tsv(QS.tib, col_names = FALSE)
+  
+  if (format=="website"){
+    api.temp1 <- format_tsv(QS.tib, col_names = FALSE, quote_escape = "none")
     api.temp2 <- gsub("\t", "%7C",api.temp1)       # Replace TAB with "%7C"
     api.temp3 <- gsub("%7C(%7C)+","%7C",api.temp2) # Replace multiple tabs (from missing values) with a single tab (to distinguish from newlines)
     api.temp4 <- gsub("\n", "%7C%7C",api.temp3)    # Replace end-of-line with "%7C%7C"
     api.temp5 <- gsub(" ",  "%20",api.temp4)       # Replace space with "%20"
     api.temp6 <- gsub("\\+","%2B",api.temp5)       # Replace plus with "%2B"
     api.data  <- gsub("/",  "%2F",api.temp6)       # Replace slash with "%2F"
-
-    if (format=="api"){
-      if (is.null(api.token)){stop("API token needed. Find yours at https://quickstatements.toolforge.org/#/user")}
+    
+    url <- paste0("https://quickstatements.toolforge.org/#/v1=","&data=%7C%7C",api.data)
+    
+    if(api.submit){ 
+      browseURL(url)
+    }else{
+      return(url)
+    }
+  }
+  
+  if (format=="api"){
+    api.temp1 <- format_tsv(QS.tib, col_names = FALSE, quote_escape = "none")
+    api.temp2 <- gsub("%22","\"",api.temp1) #cludge to fix as_quote issues
+    api.data  <- gsub("%2F","/",api.temp2) #cludge to fix as_date issues
+    
+    if (api.submit){
+      POST(url="https://tools.wmflabs.org/quickstatements/api.php",
+               body = list(action    = "import",
+                           submit    = "1",
+                           format    = api.format,
+                           batchname = api.batchname,
+                           username  = api.username,
+                           token     = api.token,
+                           data      = api.data)
+           )
+      browseURL("https://quickstatements.toolforge.org/#/batches")
+    }else{
+      api.temp1 <- format_tsv(QS.tib, col_names = FALSE, quote_escape = "none")
+      api.temp2 <- gsub("\t", "%7C",api.temp1)       # Replace TAB with "%7C"
+      api.temp3 <- gsub("%7C(%7C)+","%7C",api.temp2) # Replace multiple tabs (from missing values) with a single tab (to distinguish from newlines)
+      api.temp4 <- gsub("\n", "%7C%7C",api.temp3)    # Replace end-of-line with "%7C%7C"
+      api.temp5 <- gsub(" ",  "%20",api.temp4)       # Replace space with "%20"
+      api.temp6 <- gsub("\\+","%2B",api.temp5)       # Replace plus with "%2B"
+      api.data  <- gsub("/",  "%2F",api.temp6)       # Replace slash with "%2F"
       url <- paste0("https://tools.wmflabs.org/quickstatements/api.php",
                     "?action=",    "import",
                     "&submit=",    "1",
@@ -243,14 +279,6 @@ write_wikidata <- function(items,
                     "&username=",  api.username,
                     "&token=",     api.token,
                     "&data=%7C%7C",api.data)
-    }
-    if (format=="website"){
-      url <- paste0("https://quickstatements.toolforge.org/#/v1=",
-                    "&data=%7C%7C",api.data)
-    }
-    if(api.submit){
-      browseURL(url)
-    }else{
       return(url)
     }
   }
