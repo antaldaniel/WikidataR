@@ -4,15 +4,18 @@
 \alias{searcher}
 \title{Convert an input to a item QID}
 \usage{
-searcher(search_term, language, limit, type, ...)
+searcher(search_term, language, limit, response_language, type, ...)
 }
 \arguments{
 \item{search_term}{a term to search for.}
 
-\item{language}{the language to return the labels and descriptions in; this should
+\item{language}{the language to conduct the search in; this should
 consist of an ISO language code. Set to "en" by default.}
 
 \item{limit}{the number of results to return; set to 10 by default.}
+
+\item{response_language}{the language to return the labels and descriptions in; this should
+consist of an ISO language code. Set to "en" by default.}
 
 \item{type}{type of wikidata object to return (default = "item")}
 
