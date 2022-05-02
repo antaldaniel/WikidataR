@@ -11,6 +11,8 @@ disambiguate_QIDs(
   filter_property = NULL,
   filter_variable = NULL,
   filter_firsthit = FALSE,
+  Q_min = NULL,
+  auto_create = FALSE,
   limit = 10
 )
 }
@@ -28,6 +30,10 @@ Can also be a list of lists (see examples)}
 
 \item{filter_firsthit}{apply filter to the first match presented or only if alternatives requested?
 (default = FALSE, note: true is slower if filter not needed on most matches)}
+
+\item{Q_min}{return only possible hits with QIDs above the provided value}
+
+\item{auto_create}{if no match found, automatically assign "CREATE"}
 
 \item{limit}{number of alternative possible wikidata items to present if multiple potential matches}
 }
