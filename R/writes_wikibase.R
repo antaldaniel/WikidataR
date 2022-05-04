@@ -234,7 +234,7 @@ write_wikibase <- function(items,
 
   # remove quotes, if PID is coordinates
   if (!is.null(coordinate_pid)) {
-    QS.tib$Value <- ifelse(QS.tib$Prop == coordinate_pid, gsub("%22", "", QS.tib$Value), QS.tib$Value)
+    QS.tib$Value <- ifelse(QS.tib$Prop == coordinate_pid, gsub('\"', '', QS.tib$Value), QS.tib$Value)
   }
 
   # output
