@@ -35,6 +35,7 @@
 #'@param api.batchname a string create a named batch (listed at [your batch history page](https://quickstatements.toolforge.org/#/batches)) and tag in the edit summaries
 #'@param api.submit boolian indicating whether to submit instruction directly to wikidata (else returns the URL that can be copy-pasted into a web browser)
 #'@param quickstatements.url url to access quickstatements of the corresponding Wikibase instance.
+#'@param coordinate_pid PID of a geocoordinates; need to have a different formatting
 #'
 #'@return data formatted to upload to wikidata (via quickstatemsnts),
 #'optionally also directly uploded to wikidata (see \code{format} parameter). 
@@ -72,7 +73,8 @@ write_wikibase <- function(items,
                            api.format      = "v1",
                            api.batchname   = NULL,
                            api.submit      = TRUE,
-                           quickstatements.url = NULL
+                           quickstatements.url = NULL,
+                           coordinate_pid = NULL
 ){
   
   # Check if username and token provided
@@ -181,12 +183,16 @@ write_wikibase <- function(items,
     
     QS.src.tib <- as_tibble(cbind(QSs[[1]],QSs[[2]])[,c(rbind(1:ncol(QSs[[1]]),ncol(QSs[[1]])+1:ncol(QSs[[2]])))])
     
-    QS.tib <<- tibble(QS.tib,
+    QS.tib <- tibble(QS.tib,
                       QS.src.tib)
   }
   
   # if new QIDs are being created via tidy "CREATExyz" keywords, need to insert CREATE lines above and replace subsequent "CREATExyz" with "LAST"
   QS.tib <- createrows.tidy(QS.tib)
+  
+  if(!is.null(coordinate_pid)) {
+    QS.tib$Value[QS.tib$Prop == coordinate_pid] <- gsub("%22", "", QS.tib$Value)
+  }
   
   # output
   if (format=="csv"){

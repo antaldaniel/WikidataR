@@ -19,7 +19,8 @@ write_wikibase(
   api.format = "v1",
   api.batchname = NULL,
   api.submit = TRUE,
-  quickstatements.url = NULL
+  quickstatements.url = NULL,
+  coordinate_pid = NULL
 )
 }
 \arguments{
@@ -70,6 +71,8 @@ be removed from the item rather than added (default = FALSE)}
 \item{api.submit}{boolian indicating whether to submit instruction directly to wikidata (else returns the URL that can be copy-pasted into a web browser)}
 
 \item{quickstatements.url}{url to access quickstatements of the corresponding Wikibase instance.}
+
+\item{coordinate_pid}{PID of a geocoordinates; need to have a different formatting}
 }
 \value{
 data formatted to upload to wikidata (via quickstatemsnts),
