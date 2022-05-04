@@ -88,15 +88,18 @@ adding statements to existing items (via the quickstatements format and API).
 # The instruction will submit directly to wikidata via the API
 # (if you include your Wikibase/Wikimedia username and token)
 
-\dontrun{write_wikibase(items        = "Q24",
-               properties   = "P2",
-               values       = "Q8",
-               format       = "api",
-               api.username = "myusername", 
-               api.token    = "mytoken",
-               api.submit      = TRUE,
-               quickstatements.url = NULL 
-               )}
-#note: 
+\dontrun{
+write_wikibase(
+  items = "Q24",
+  properties = "P2",
+  values = "Q8",
+  format = "api",
+  api.username = "myusername",
+  api.token = "mytoken",
+  api.submit = TRUE,
+  quickstatements.url = NULL
+)
+}
+# note:
 
 }
