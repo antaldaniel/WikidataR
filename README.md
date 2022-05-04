@@ -10,10 +10,12 @@ __Status:__ Stable
 Install from Github
 ======
 
+```r
 # install.packages("credentials")
 credentials::set_github_pat()
 # install.packages("devtools")
 devtools::install_github("cutterkom/WikidataR")
+```
 
 Description
 ======
