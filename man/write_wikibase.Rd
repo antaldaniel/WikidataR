@@ -14,6 +14,7 @@ write_wikibase(
   src.values = NULL,
   remove = FALSE,
   format = "tibble",
+  format.csv.file = NULL,
   api.username = NULL,
   api.token = NULL,
   api.format = "v1",
@@ -55,10 +56,12 @@ be removed from the item rather than added (default = FALSE)}
 \item{format}{output format as a string. Options include:
 \describe{
   \item{tibble}{easiest format to further manuipulation in R}
-  \item{csv}{can be copy-pasted to [the QuickStatements website](https://quickstatements.toolforge.org/) (or manipulated in a spreadsheet programs)}
+  \item{csv}{can be copy-pasted to the Wikibase QuickStatements website (or manipulated in a spreadsheet programs). In contrast to write_wikidata function the delimiter is `tab`, because Quickstatements expect tab-separated data}
   \item{api}{a url that can be copy-pasted into a web browser, or automatically submitted (see \code{api.submit} parameter)}
   \item{website}{open a [QuickStatements](https://quickstatements.toolforge.org/) web browser window summarising the edits to be made to Wikidata)}
 }}
+
+\item{format.csv.file}{path to save the csv file. If none is provided, then printed to console.}
 
 \item{api.username}{a string indicating your wikimedia username}
 
