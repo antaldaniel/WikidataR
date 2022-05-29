@@ -4,7 +4,8 @@
 #' @return vector of QIDs corresponding to DOIs submitted
 #' @export
 qid_from_DOI <- function(DOI = '10.15347/WJM/2019.001'){
-  article.qid <- qid_from_identifier(property = 'P356',value = DOI)
+  article.qid <- qid_from_identifier(property = 'P356',
+                                     value = toupper(DOI))
   return(article.qid)
 }
 
