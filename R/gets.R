@@ -156,16 +156,16 @@ get_example <- function(example_name){
 #'@aliases find_item find_property
 #'@rdname find_item
 #'@export
-find_item <- function(search_term, language = "en", limit = 10, ...){
-  res <- searcher(search_term, language, limit, "item")
+find_item <- function(search_term, language = "en", limit = 10, response_language = "en", ...){
+  res <- searcher(search_term, language, limit, response_language, "item")
   class(res) <- "find_item"
   return(res)
 }
 
 #'@rdname find_item
 #'@export
-find_property <- function(search_term, language = "en", limit = 10){
-  res <- searcher(search_term, language, limit, "property")
+find_property <- function(search_term, language = "en", response_language = "en", limit = 10){
+  res <- searcher(search_term, language, limit, response_language, "property")
   class(res) <- "find_property"
   return(res)
 }
@@ -174,7 +174,9 @@ find_property <- function(search_term, language = "en", limit = 10){
 #'@title Convert an input to a item QID
 #'@description Convert an input string to the most likely item QID
 #'@param search_term a term to search for.
-#'@param language the language to return the labels and descriptions in; this should
+#'@param language the language to conduct the search in; this should
+#'consist of an ISO language code. Set to "en" by default.
+#'@param response_language the language to return the labels and descriptions in; this should
 #'consist of an ISO language code. Set to "en" by default.
 #'@param limit the number of results to return; set to 10 by default.
 #'@param type type of wikidata object to return (default = "item")
@@ -190,12 +192,13 @@ find_property <- function(search_term, language = "en", limit = 10){
 #'# if input string matches a single unique label
 #'as_qid("Douglas Adams and the question of arterial blood pressure in mammals")
 #'@export
-searcher <- function(search_term, language, limit, type, ...){
+searcher <- function(search_term, language, limit, response_language, type, ...){
   result <- WikipediR::query(url = "https://www.wikidata.org/w/api.php", out_class = "list", clean_response = FALSE,
                              query_param = list(
                                action   = "wbsearchentities", 
                                type     = type,
                                language = language,
+                               uselang = response_language,
                                limit    = limit,
                                search   = search_term
                              ),

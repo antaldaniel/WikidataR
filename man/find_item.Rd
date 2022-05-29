@@ -5,9 +5,20 @@
 \alias{find_property}
 \title{Search for Wikidata items or properties that match a search term}
 \usage{
-find_item(search_term, language = "en", limit = 10, ...)
+find_item(
+  search_term,
+  language = "en",
+  limit = 10,
+  response_language = "en",
+  ...
+)
 
-find_property(search_term, language = "en", limit = 10)
+find_property(
+  search_term,
+  language = "en",
+  response_language = "en",
+  limit = 10
+)
 }
 \arguments{
 \item{search_term}{a term to search for.}
