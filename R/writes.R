@@ -50,7 +50,7 @@
 #'# The instruction will submit directly to wikidata via the API
 #'# (if you include your wikimedia username and token)
 #'
-#' \donttest{write_wikidata(items        = "Wikidata Sandbox",
+#' \dontrun{write_wikidata(items        = "Wikidata Sandbox",
 #'                properties   = "instance of",
 #'                values       = "Q1",
 #'                format       = "api",
