@@ -19,7 +19,7 @@ to restrict the search to.}
 
 \item{limit}{the maximum number of results to return.}
 
-\item{\\dots}{further arguments to pass to httr's GET.}
+\item{\\dots}{further arguments to pass to de{httr:ink[httr::GET]{GET}}.}
 }
 \value{
 a data.frame of 5 columns:

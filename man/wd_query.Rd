@@ -7,14 +7,15 @@
 wd_query(title, ...)
 }
 \arguments{
-\item{title}{the wikidata item or property as a string}
+\item{title}{The Wikidata item or property as a string.}
 
-\item{\\dots}{Additional parameters to supply to [httr::POST]}
+\item{\\dots}{Additional parameters to supply to  \code{httr:\link[httr::POST]{POST}}.}
 }
 \value{
-a download of the full wikidata object (item or property) formatted as a nested json list
+A downloaded full wikidata object (item or property) formatted as a 
+nested json list.
 }
 \description{
-Utility wrapper for wikidata API to download item.
-Used by \code{get_item} and \code{get_property}
+Utility wrapper for Wikidata API to download item.
+Used by \code{get_item} and \code{get_property}.
 }

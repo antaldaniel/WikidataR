@@ -7,7 +7,7 @@
 \method{print}{wikidata}(x, ...)
 }
 \arguments{
-\item{x}{wikidata object from get_item, get_random_item, get_property or get_random_property}
+\item{x}{Wikidata object from get_item, get_random_item, get_property or get_random_property}
 
 \item{\dots}{Arguments to be passed to methods}
 }

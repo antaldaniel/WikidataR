@@ -24,27 +24,27 @@
 #' be removed from the item rather than added (default = FALSE)
 #' @param format output format as a string. Options include:
 #' \describe{
-#'   \item{tibble}{easiest format to further manuipulation in R}
+#'   \item{tibble}{easiest format to further manipulation in R}
 #'   \item{csv}{can be copy-pasted to the Wikibase QuickStatements website (or manipulated in a spreadsheet programs). In contrast to write_wikidata function the delimiter is `tab`, because Quickstatements expect tab-separated data}
 #'   \item{api}{a url that can be copy-pasted into a web browser, or automatically submitted (see \code{api.submit} parameter)}
-#'   \item{website}{open a [QuickStatements](https://quickstatements.toolforge.org/) web browser window summarising the edits to be made to Wikidata)}
+#'   \item{website}{open a [QuickStatements](https://quickstatements.toolforge.org/) web browser window summarizing the edits to be made to Wikidata)}
 #' }
 #' @param format.csv.file path to save the csv file. If none is provided, then printed to console.
-#' @param api.username a string indicating your wikimedia username
+#' @param api.username a string indicating your Wikimedia username
 #' @param api.token a string indicating your api token (the unique identifier that you can find listed at [your user page](https://quickstatements.toolforge.org/#/user))
-#' @param api.format a string indicateing which version of the quickstatement format used to submit the api (default = "v1")
+#' @param api.format a string indicating which version of the quickstatement format used to submit the api (default = "v1")
 #' @param api.batchname a string create a named batch (listed at [your batch history page](https://quickstatements.toolforge.org/#/batches)) and tag in the edit summaries
 #' @param api.submit boolian indicating whether to submit instruction directly to wikidata (else returns the URL that can be copy-pasted into a web browser)
 #' @param quickstatements.url url to access quickstatements of the corresponding Wikibase instance.
 #' @param coordinate_pid PID of a geocoordinates; need to have a different formatting
 #'
-#' @return data formatted to upload to wikidata (via quickstatemsnts),
-#' optionally also directly uploded to wikidata (see \code{format} parameter).
+#' @return data formatted to upload to Wikidata (via quickstatemsnts),
+#' optionally also directly uploaded to Wikidata (see \code{format} parameter).
 #'
 #' @examples
 #' # Add a statement to the "Wikidata sandbox" item (Q4115189)
 #' # to say that it is an "instance of" (P31) of Q1 (the universe).
-#' # The instruction will submit directly to wikidata via the API
+#' # The instruction will submit directly to Wikidata via the API
 #' # (if you include your Wikibase/Wikimedia username and token)
 #'
 #' \dontrun{

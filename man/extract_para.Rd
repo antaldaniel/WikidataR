@@ -19,5 +19,5 @@ the nth paragraph of the input text.
 }
 \description{
 Return the nth paragraph of a section of text
-Useful for extracting information from wikipedia or other wikimarkup text
+Useful for extracting information from Wikipedia or other wikimarkup text
 }

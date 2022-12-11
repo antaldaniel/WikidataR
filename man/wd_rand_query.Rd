@@ -7,15 +7,18 @@
 wd_rand_query(ns, limit, ...)
 }
 \arguments{
-\item{ns}{string indicating namespace, most commonly "Main" for QID items, "Property" for PID properties}
+\item{ns}{string indicating namespace, most commonly "Main" for QID items, "Property" 
+for PID properties.}
 
-\item{limit}{how many random objesct to return}
+\item{limit}{How many random object to return.}
 
-\item{\\dots}{Additional parameters to supply to [httr::POST]}
+\item{\\dots}{Additional parameters to supply to  \code{httr:\link[httr::POST]{POST}}.}
 }
 \value{
-a download of the full wikidata objects (items or properties) formatted as nested json lists
+Downloaded full wikidata objects (items or properties) formatted 
+as nested json lists.
 }
 \description{
-Utility wrapper for wikidata API to download random items. Used by \code{random_item}
+Utility wrapper for Wikidata API to download random items. 
+Used by \code{random_item}.
 }

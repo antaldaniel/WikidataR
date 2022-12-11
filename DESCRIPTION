@@ -13,10 +13,10 @@ Authors@R: c(
            )
 Description: Read from, interrogate, and write to Wikidata <https://www.wikidata.org> -
     the multilingual, interdisciplinary, semantic knowledgebase. Includes functions to:
-    read from wikidata (single items, properties, or properties); query wikidata (retrieving
+    read from Wikidata (single items, properties, or properties); query Wikidata (retrieving
     all items that match a set of criteria via Wikidata SPARQL query service); write to
     Wikidata (adding new items or statements via QuickStatements); and handle and manipulate
-    Wikidata objects (as lists and tibbles). Uses the Wikidata and Quickstatements APIs. 
+    Wikidata objects (as lists and tibbles). Uses the Wikidata and QuickStatements APIs. 
 BugReports: https://github.com/TS404/WikidataR/issues
 URL: https://github.com/TS404/WikidataR
 License: MIT + file LICENSE
@@ -40,7 +40,9 @@ Suggests:
     testthat,
     tidyverse,
     knitr,
-    pageviews
-RoxygenNote: 7.1.2
+    pageviews,
+    spelling
+RoxygenNote: 7.2.3
 Encoding: UTF-8
 Depends: R (>= 3.5.0)
+Language: en-US

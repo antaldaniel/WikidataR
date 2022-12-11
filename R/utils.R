@@ -66,9 +66,10 @@ check_input <- function(input, substitution){
 
 # -------- Format converters --------
 # Simple functions to convert plain text descriptions into their most likely QID/PIDs
-#'@title Convert an input to a item QID
-#'@description Convert an input string to the most likely item QID
-#'@param x a vector, data frame, or tibble of strings representaing wikidata items
+#'@title Convert an input to a item QID.
+#'@description Convert an input string to the most likely item 
+#'\href{https://www.wikidata.org/wiki/Q43649390}{QID}.
+#'@param x a vector, data frame, or tibble of strings representing wikidata items
 #'@return if the inputted string is a valid QID, return the string.
 #'If the inputted string matches an item label, return its QID.
 #'If the inputted string matches multiple labels of multiple items, return the QID of the first hit.
@@ -121,8 +122,8 @@ as_qid <- function(x){
 
 #'@title Convert an input to a property PID
 #'@description Convert an input string to the most likely property PID
-#'@param x a vector, data frame, or tibble of strings representaing wikidata properties
-#'@return if the inputted string is a valid PID, return the string.
+#'@param x a vector, data frame, or tibble of strings representing Wikidata properties
+#'@return If the inputted string is a valid PID, return the string.
 #'If the inputted string matches a property label, return its PID.
 #'If the inputted string matches multiple labels of multiple properties, return the PID of the first hit.
 #'@examples
@@ -162,11 +163,14 @@ as_pid <- function(x){
 }
 
 #'@title Convert an input to a source property SID
-#'@description Convert an input string to the most likely source SID (equivalent to PID)
-#'@param x a vector, data frame, or tibble of strings representaing wikidata source properties
+#'@description Convert an input string to the most likely source SID
+#' (equivalent to PID.)
+#'@param x a vector, data frame, or tibble of strings representing Wikidata 
+#'source properties.
 #'@return if the inputted string is a valid SID, return the string.
-#'If the inputted string matches a property label, return its SID
-#'If the inputted string matches multiple labels of multiple properties, return the SID of the first hit.
+#'If the inputted string matches a property label, return its SID.
+#'If the inputted string matches multiple labels of multiple properties, 
+#'return the SID of the first hit.
 #'@examples
 #'# if input string is a valid SID
 #'as_pid("S854")
@@ -194,11 +198,15 @@ as_sid <- function(x){
 }
 
 #'@title Add quotations marks
-#'@description Add escaped quotation marks around strings that need them ready for submision to an API
+#'@description Add escaped quotation marks around strings that need them ready for 
+#'submission to an API.
 #'@param x a vector, data frame, or tibble of strings
-#'@param format either "tibble" / "csv" to use plain quotation marks (default), or "api" / "website" to use '\%22'
-#'@return tibble of items inside of escaped quotation marks
-#'unless they are already in escaped quotation marks, is a QID, (in which chase it is returned unchanged) 
+#'@param format either "tibble" / "csv" to use plain quotation marks (default), 
+#'or "api" / "website" to use '\%22'
+#'@return A tibble of items inside of escaped quotation marks
+#'unless they are already in escaped quotation marks, is a 
+#'\href{https://www.wikidata.org/wiki/Q43649390}{QID}, 
+#'in which chase it is returned unchanged. 
 #'@examples
 #'as_quot("text")
 #'@export
@@ -224,11 +232,13 @@ as_quot <- function(x,format="tibble"){
   return(output)
 }
 
-#'@title Extract an identifier from a wikidata URL
+#'@title Extract an identifier from a Wikidata URL
 #'@description Convert a URL ending in an identifier (returned by SPARQL queries)
 #'to just the plan identifier (QID or PID).
-#'@param x a vector of strings representing wikidata URLs
-#'@return QID or PID
+#'@details The \href{https://www.wikidata.org/wiki/Q43649390}{Wikidata Q identifier} (QID) 
+#'is the unique identifier (UID) used in Wikidata.
+#'@param x A vector of strings representing Wikidata URLs.
+#'@return QID or PID.
 #'@examples
 #'url_to_id("http://www.wikidata.org/Q42")
 #'@export
@@ -238,7 +248,7 @@ url_to_id <- function(x){
 
 
 # -------- Wikidata object manipulation --------
-#'@title Extract Claims from Returned Item Data
+#'@title Extract claims from returned item data
 #'@description extract claim information from data returned using
 #'\code{\link{get_item}}.
 #'@param items a list of one or more Wikidata items returned with
@@ -334,6 +344,8 @@ get_names_from_properties <- function(properties){
 #'@title Filter QIDs
 #'@description For a QID or vector of QIDs, remove ones that match a particular statement
 #'(e.g. remove all that are instances of academic publications or books).
+#'@details The \href{https://www.wikidata.org/wiki/Q43649390}{Wikidata Q identifier} (QID) 
+#'is the unique identifier (UID) used in Wikidata.
 #'@param ids QIDs to check
 #'@param property property to check (default = P31 to filter on "instance of")
 #'@param filter values of that property to use to filter out
@@ -457,7 +469,7 @@ unspecial <- function(x){
 
 #'@title Extract a paragraph of text
 #'@description Return the nth paragraph of a section of text
-#'Useful for extracting information from wikipedia or other wikimarkup text
+#'Useful for extracting information from Wikipedia or other wikimarkup text
 #'@param text the input text as a string
 #'@param para number indicating which paragraph(s) to return (default=1)
 #'@param templ an optional string specifying a mediawikitemplate within
@@ -498,7 +510,7 @@ extract_para <- function(text,
 #'@title "CREATE" rows 
 #'@description Add in empty lines for QuickStatements CREATE rows that mint new QIDs.
 #'This is a slightly messy quirk of the QuickStatements format that mints new QIDs via a line
-#'containing only "CREATE", so this function is a way to approximate that bevaviour in a tibble
+#'containing only "CREATE", so this function is a way to approximate that behavior in a tibble
 #'@param items a vector, data frame or tibble of items (which may or may not contain the keyword "CREATE")
 #'@param vector a vector of properties or values which may be expanded based on the items vector
 #'@return if the vector is NULL, return NULL. Otherwise, if the "CREATE" keyword appears in the
@@ -531,8 +543,8 @@ createrows <- function(items,vector){
 #'by any unique ID.
 #'@param QS.tib a tibble of items, values and properties (optionally qualifiers and sources).
 #'@return a tibble, with items that start with "CREATE" followed by any unique text causing the
-#'addition of a "Create" line above, being replaced with "LAST" in the Quickstatemnts format
-#'to create new QIDs.
+#'addition of a "Create" line above, being replaced with "LAST" in the QuickStatements 
+#'format to create new QIDs.
 #'@export
 createrows.tidy <- function(QS.tib){
   #insert 'CREATE' blankrows above first instance of 'CREATExyz'

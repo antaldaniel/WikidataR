@@ -10,15 +10,19 @@ qid_from_identifier(
 )
 }
 \arguments{
-\item{property}{the identifier property to search (for caveats, see \code{as_pid})}
+\item{property}{The identifier property to search (for caveats, see \code{as_pid}.)}
 
-\item{value}{the identifier value to match}
+\item{value}{The identifier value to match.}
 }
 \value{
-vector of QIDs corresponding to identifiers submitted
+A vector of QIDs corresponding to identifiers submitted.
 }
 \description{
-convert unique identifiers to QIDs (for items in wikidata).
+Convert unique identifiers to QIDs (for items in Wikidata).
+}
+\details{
+The \href{https://www.wikidata.org/wiki/Q43649390}{Wikidata Q identifier} (QID) is the unique identifier (UID) 
+used in Wikidata.
 }
 \examples{
 qid_from_identifier('ISBN-13','978-0-262-53817-6')

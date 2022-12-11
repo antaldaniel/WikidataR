@@ -7,10 +7,10 @@
 as_pid(x)
 }
 \arguments{
-\item{x}{a vector, data frame, or tibble of strings representaing wikidata properties}
+\item{x}{a vector, data frame, or tibble of strings representing Wikidata properties}
 }
 \value{
-if the inputted string is a valid PID, return the string.
+If the inputted string is a valid PID, return the string.
 If the inputted string matches a property label, return its PID.
 If the inputted string matches multiple labels of multiple properties, return the PID of the first hit.
 }

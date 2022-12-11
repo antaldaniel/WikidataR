@@ -4,7 +4,7 @@
 \alias{WD.globalvar}
 \title{Global variables for Wikidata properties}
 \format{
-A list of tibbles documenting key property constraints from wikidata  
+A list of tibbles documenting key property constraints from Wikidata  
 \describe{
   \item{SID.valid}{valid reference source properties}
   \item{PID.datatype}{required data type for each property}

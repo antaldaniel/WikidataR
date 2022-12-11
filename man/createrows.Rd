@@ -18,5 +18,5 @@ items vector, insert blank strings at those positions in the vector.
 \description{
 Add in empty lines for QuickStatements CREATE rows that mint new QIDs.
 This is a slightly messy quirk of the QuickStatements format that mints new QIDs via a line
-containing only "CREATE", so this function is a way to approximate that bevaviour in a tibble
+containing only "CREATE", so this function is a way to approximate that behavior in a tibble
 }

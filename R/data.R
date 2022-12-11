@@ -4,7 +4,7 @@
 #'
 #' @description A dataset of Wikidata global variables.
 #'
-#' @format A list of tibbles documenting key property constraints from wikidata  
+#' @format A list of tibbles documenting key property constraints from Wikidata  
 #' \describe{
 #'   \item{SID.valid}{valid reference source properties}
 #'   \item{PID.datatype}{required data type for each property}
