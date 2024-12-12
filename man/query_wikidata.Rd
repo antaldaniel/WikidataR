@@ -12,9 +12,9 @@ query_wikidata(sparql_query, format = "tibble", ...)
 \item{format}{`tibble` (default) returns a pure character data frame,
 `simple` returns a pure character vector, while
 `smart` fetches JSON-formatted data and returns a tibble with datetime
-columns converted to `POSIXct`}
+columns converted to `POSIXct`.}
 
-\item{\\dots}{Additional parameters to supply to [httr::POST]}
+\item{\\dots}{Additional parameters to supply to \code{httr:\link[httr::POST]{POST}}.}
 }
 \value{
 A `tibble` or `vector`. Note: QID values will be returned as QIDs, rather than URLs.
@@ -29,8 +29,8 @@ are also following limits:
 - One client (user agent + IP) is allowed 60 seconds of processing time each
   60 seconds
 - One client is allowed 30 error queries per minute
-See [query limits section](https://www.mediawiki.org/wiki/Wikidata_Query_Service/User_Manual#Query_limits)
-in the WDQS user manual for more information.
+See \href{https://www.mediawiki.org/wiki/Wikidata_Query_Service/User_Manual#Query_limits}{query limits section}
+in the Wikidata Query Service User Manual for more information.
 }
 
 \examples{

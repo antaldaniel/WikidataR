@@ -13,10 +13,10 @@ get_property(id, ...)
 \item{id}{the ID number(s) of the item or property you're looking for. This can be in
 various formats; either a numeric value ("200"), the full name ("Q200") or
 even with an included namespace ("Property:P10") - the function will format
-it appropriately. This function is vectorised and will happily accept
+it appropriately. This function is vectorized and will happily accept
 multiple IDs.}
 
-\item{\\dots}{further arguments to pass to httr's GET.}
+\item{\\dots}{further arguments to pass to de{httr:ink[httr::GET]{GET}}.}
 }
 \description{
 \code{get_item} and \code{get_property} allow you to retrieve the data associated

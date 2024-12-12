@@ -41,7 +41,7 @@ To get the current development version from github:
 Examples
 ======
 ### Search Wikidata to see if an item exists (example: pharmaceuticals)
-For cases where you don't already know the QID of an item or the PID of a property, you can search wikidata by name. Note that some search terms will return multiple possible items. You can also specify a language (defaults to Engligh).
+For cases where you don't already know the QID of an item or the PID of a property, you can search wikidata by name. Note that some search terms will return multiple possible items. You can also specify a language (defaults to English).
 
 ``` r
 find_item("Paracetamol")
@@ -63,7 +63,7 @@ and
 Elements within those lists include basic information from wikidata (ID, description, labels). The QID or PID can then be used to get the full data for the item (see below).
 
 ### Convert between identifiers
-Wikidata is an excellent thesaurus for different identifiers. For example it's possible to convert from any identifier to wikidata QIDs or between different identifiers
+Wikidata is an excellent thesaurus for different identifiers. For example it is possible to convert from any identifier to wikidata QIDs or between different identifiers
 ``` r
 qid_from_identifier('ISBN-13','978-0-262-53817-6')
 identifier_from_identifier('ORCID iD','IMDb ID',c('0000-0002-7865-7235','0000-0003-1079-5604'))

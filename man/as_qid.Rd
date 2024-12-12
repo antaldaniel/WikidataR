@@ -2,12 +2,12 @@
 % Please edit documentation in R/utils.R
 \name{as_qid}
 \alias{as_qid}
-\title{Convert an input to a item QID}
+\title{Convert an input to a item QID.}
 \usage{
 as_qid(x)
 }
 \arguments{
-\item{x}{a vector, data frame, or tibble of strings representaing wikidata items}
+\item{x}{a vector, data frame, or tibble of strings representing wikidata items}
 }
 \value{
 if the inputted string is a valid QID, return the string.
@@ -15,7 +15,8 @@ If the inputted string matches an item label, return its QID.
 If the inputted string matches multiple labels of multiple items, return the QID of the first hit.
 }
 \description{
-Convert an input string to the most likely item QID
+Convert an input string to the most likely item 
+\href{https://www.wikidata.org/wiki/Q43649390}{QID}.
 }
 \examples{
 # if input string is a valid QID

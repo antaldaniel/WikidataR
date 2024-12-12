@@ -29,6 +29,10 @@ a vector of QIDs that do not match the property filter
 For a QID or vector of QIDs, remove ones that match a particular statement
 (e.g. remove all that are instances of academic publications or books).
 }
+\details{
+The \href{https://www.wikidata.org/wiki/Q43649390}{Wikidata Q identifier} (QID) 
+is the unique identifier (UID) used in Wikidata.
+}
 \examples{
 \dontrun{
 # Filter three items called "Earth Science" to show only those that aren't

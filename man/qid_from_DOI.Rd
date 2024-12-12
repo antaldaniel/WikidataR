@@ -13,5 +13,5 @@ qid_from_DOI(DOI = "10.15347/WJM/2019.001")
 vector of QIDs corresponding to DOIs submitted
 }
 \description{
-simple converter from DOIs to QIDs (for items in wikidata)
+simple converter from DOIs to QIDs (for items in Wikidata)
 }

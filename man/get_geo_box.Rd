@@ -29,7 +29,7 @@ to \code{city} (eg "NorthWest", "SouthEast").}
 \item{language}{the two-letter language code to use for the name
 of the item. "en" by default.}
 
-\item{\\dots}{further arguments to pass to httr's GET.}
+\item{\\dots}{further arguments to pass to de{httr:ink[httr::GET]{GET}}.}
 }
 \value{
 a data.frame of 5 columns:

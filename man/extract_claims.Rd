@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{extract_claims}
 \alias{extract_claims}
-\title{Extract Claims from Returned Item Data}
+\title{Extract claims from returned item data}
 \usage{
 extract_claims(items, claims)
 }

@@ -3,8 +3,8 @@
 #'@title Disambiguate QIDs
 #'@description Interactive function that presents alternative possible QID matches for a list of text
 #'strings and provides options for choosing between alternatives, rejecting all presented alternatives,
-#'or creating new items. Useful in cases where a list of text strings may have either missing wikidata items
-#'or multiple alternative potential matches that need to be manually disambuguated. Can also used on
+#'or creating new items. Useful in cases where a list of text strings may have either missing Wikidata items
+#'or multiple alternative potential matches that need to be manually disambiguated. Can also used on
 #'lists of lists (see examples). For long lists of items, the process can be stopped partway through and
 #'the returned vector will indicate where the process was stopped. 
 #'@param list a list or vector of text strings to find potential QID matches to.
@@ -17,7 +17,7 @@
 #'                       (default = FALSE, note: true is slower if filter not needed on most matches)
 #'@param Q_min return only possible hits with QIDs above the provided value
 #'@param auto_create if no match found, automatically assign "CREATE"
-#'@param limit number of alternative possible wikidata items to present if multiple potential matches
+#'@param limit number of alternative possible Wikidata items to present if multiple potential matches
 #'@return a vector of:
 #' \describe{
 #'   \item{QID}{Selected QID (for when an appropriate Wikidata match exists)}

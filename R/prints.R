@@ -114,7 +114,7 @@ wd_print_base <- function(x, ...){
 #'
 #'@description print found objects generally.
 #'
-#'@param x wikidata object from get_item, get_random_item, get_property or get_random_property
+#'@param x Wikidata object from get_item, get_random_item, get_property or get_random_property
 #'@param \dots Arguments to be passed to methods
 #'@seealso get_item, get_random_item, get_property or get_random_property
 #'@method print wikidata

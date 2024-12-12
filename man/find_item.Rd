@@ -21,18 +21,21 @@ find_property(
 )
 }
 \arguments{
-\item{search_term}{a term to search for.}
+\item{search_term}{A term to search for.}
 
-\item{language}{the language to return the labels and descriptions in; this should
-consist of an ISO language code. Set to "en" by default.}
+\item{language}{The language to return the labels and descriptions in; this should
+consist of an ISO language code. Defaults to \code{"en"}.}
 
-\item{limit}{the number of results to return; set to 10 by default.}
+\item{limit}{The number of results to return; set to \code{10} by default.}
 
-\item{\\dots}{further arguments to pass to httr's GET.}
+\item{\\dots}{further arguments to pass to de{httr:ink[httr::GET]{GET}}.}
+}
+\value{
+A list containing the result of the query.
 }
 \description{
 \code{find_item} and \code{find_property} allow you to retrieve a set
-of Wikidata items or properties where the aliase or descriptions match a particular
+of Wikidata items or properties where the aliases or descriptions match a particular
 search term.  As with other \code{WikidataR} code, custom print methods are available;
 use \code{\link{str}} to manipulate and see the underlying structure of the data.
 }

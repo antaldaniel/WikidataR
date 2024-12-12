@@ -35,7 +35,7 @@ Can also be a list of lists (see examples)}
 
 \item{auto_create}{if no match found, automatically assign "CREATE"}
 
-\item{limit}{number of alternative possible wikidata items to present if multiple potential matches}
+\item{limit}{number of alternative possible Wikidata items to present if multiple potential matches}
 }
 \value{
 a vector of:
@@ -49,8 +49,8 @@ a vector of:
 \description{
 Interactive function that presents alternative possible QID matches for a list of text
 strings and provides options for choosing between alternatives, rejecting all presented alternatives,
-or creating new items. Useful in cases where a list of text strings may have either missing wikidata items
-or multiple alternative potential matches that need to be manually disambuguated. Can also used on
+or creating new items. Useful in cases where a list of text strings may have either missing Wikidata items
+or multiple alternative potential matches that need to be manually disambiguated. Can also used on
 lists of lists (see examples). For long lists of items, the process can be stopped partway through and
 the returned vector will indicate where the process was stopped.
 }

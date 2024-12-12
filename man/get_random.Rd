@@ -13,7 +13,7 @@ get_random_property(limit = 1, ...)
 \arguments{
 \item{limit}{how many random items to return. 1 by default, but can be higher.}
 
-\item{\\dots}{arguments to pass to httr's GET.}
+\item{\\dots}{arguments to pass to de{httr:ink[httr::GET]{GET}}.}
 }
 \description{
 \code{get_random_item} and \code{get_random_property} allow you to retrieve the data

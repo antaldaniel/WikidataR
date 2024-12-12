@@ -2,19 +2,19 @@
 % Please edit documentation in R/queries.R
 \name{sparql_query}
 \alias{sparql_query}
-\title{Download full Wikidata items matching a sparql query}
+\title{Download full Wikidata items matching a SPARQL query}
 \usage{
 sparql_query(query, ...)
 }
 \arguments{
-\item{query}{the sparql query as a string}
+\item{query}{The SPARQL query as a string}
 
-\item{\\dots}{Additional parameters to supply to [httr::POST]}
+\item{\\dots}{Additional parameters to supply to \code{httr:\link[httr::POST]{POST}}.}
 }
 \value{
 a download of the full wikidata objects formatted as a nested json list
 }
 \description{
-Utility wrapper for wikidata spargle endpoint to download items.
-Used by \code{get_geo_entity} and \code{get_geo_box}
+Utility wrapper for wikidata spargl endpoint to download items.
+Used by \code{get_geo_entity} and \code{get_geo_box}.
 }

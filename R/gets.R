@@ -9,10 +9,10 @@
 #'@param id the ID number(s) of the item or property you're looking for. This can be in
 #'various formats; either a numeric value ("200"), the full name ("Q200") or
 #'even with an included namespace ("Property:P10") - the function will format
-#'it appropriately. This function is vectorised and will happily accept
+#'it appropriately. This function is vectorized and will happily accept
 #'multiple IDs.
 #'
-#'@param \\dots further arguments to pass to httr's GET.
+#'@param \\dots further arguments to pass to de{httr:ink[httr::GET]{GET}}.
 #'
 #'@seealso \code{\link{get_random}} for selecting a random item or property,
 #'or \code{\link{find_item}} for using search functionality to pull out
@@ -57,7 +57,7 @@ get_property <- function(id, ...){
 #'
 #'@param limit how many random items to return. 1 by default, but can be higher.
 #'
-#'@param \\dots arguments to pass to httr's GET.
+#'@param \\dots arguments to pass to de{httr:ink[httr::GET]{GET}}.
 #'
 #'@seealso \code{\link{get_item}} for selecting a specific item or property,
 #'or \code{\link{find_item}} for using search functionality to pull out
@@ -129,18 +129,18 @@ get_example <- function(example_name){
 
 #'@title Search for Wikidata items or properties that match a search term
 #'@description \code{find_item} and \code{find_property} allow you to retrieve a set
-#'of Wikidata items or properties where the aliase or descriptions match a particular
+#'of Wikidata items or properties where the aliases or descriptions match a particular
 #'search term.  As with other \code{WikidataR} code, custom print methods are available;
 #'use \code{\link{str}} to manipulate and see the underlying structure of the data.
 #'
-#'@param search_term a term to search for.
+#'@param search_term A term to search for.
 #'
-#'@param language the language to return the labels and descriptions in; this should
-#'consist of an ISO language code. Set to "en" by default.
+#'@param language The language to return the labels and descriptions in; this should
+#'consist of an ISO language code. Defaults to \code{"en"}.
 #'
-#'@param limit the number of results to return; set to 10 by default.
+#'@param limit The number of results to return; set to \code{10} by default.
 #'
-#'@param \\dots further arguments to pass to httr's GET.
+#'@param \\dots further arguments to pass to de{httr:ink[httr::GET]{GET}}.
 #'
 #'@seealso \code{\link{get_random}} for selecting a random item or property,
 #'or \code{\link{get_item}} for selecting a specific item or property.
@@ -154,9 +154,14 @@ get_example <- function(example_name){
 #'peerage_props <- find_property("peerage")
 #'
 #'@aliases find_item find_property
+#'@return A list containing the result of the query.
 #'@rdname find_item
 #'@export
-find_item <- function(search_term, language = "en", limit = 10, response_language = "en", ...){
+find_item <- function(search_term, 
+                      language = "en", 
+                      limit = 10, 
+                      response_language = "en", 
+                      ...){
   res <- searcher(search_term, language, limit, response_language, "item")
   class(res) <- "find_item"
   return(res)
@@ -164,7 +169,10 @@ find_item <- function(search_term, language = "en", limit = 10, response_languag
 
 #'@rdname find_item
 #'@export
-find_property <- function(search_term, language = "en", response_language = "en", limit = 10){
+find_property <- function(search_term, 
+                          language = "en", 
+                          response_language = "en", 
+                          limit = 10){
   res <- searcher(search_term, language, limit, response_language, "property")
   class(res) <- "find_property"
   return(res)

@@ -1,5 +1,5 @@
 #' @title QID from DOI
-#' @description simple converter from DOIs to QIDs (for items in wikidata)
+#' @description simple converter from DOIs to QIDs (for items in Wikidata)
 #' @param DOI digital object identifiers submitted as strings
 #' @return vector of QIDs corresponding to DOIs submitted
 #' @export

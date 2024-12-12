@@ -1,7 +1,7 @@
 # -------- Writes --------
 
 #'@title Write statements to Wikidata
-#'@description Upload data to wikidata, including creating items,
+#'@description Upload data to Wikidata, including creating items,
 #'adding statements to existing items (via the quickstatements format and API).
 #'
 #'@param items a vector of strings indicating the items to which to add statements (as QIDs or labels).
@@ -30,25 +30,25 @@
 #'be removed from the item rather than added (default = FALSE)
 #'@param format output format as a string. Options include:
 #' \describe{
-#'   \item{tibble}{easiest format to further manuipulation in R}
+#'   \item{tibble}{easiest format to further manipulation in R}
 #'   \item{csv}{can be copy-pasted to [the QuickStatements website](https://quickstatements.toolforge.org/) (or manipulated in a spreadsheet programs)}
 #'   \item{api}{a url that can be copy-pasted into a web browser, or automatically submitted (see \code{api.submit} parameter)}
-#'   \item{website}{open a [QuickStatements](https://quickstatements.toolforge.org/) web browser window summarising the edits to be made to Wikidata)}
+#'   \item{website}{open a [QuickStatements](https://quickstatements.toolforge.org/) web browser window summarizing the edits to be made to Wikidata)}
 #' }
-#'@param api.username a string indicating your wikimedia username 
+#'@param api.username a string indicating your Wikimedia username 
 #'@param api.token a string indicating your api token (the unique identifier that you can find listed at [your user page](https://quickstatements.toolforge.org/#/user))
-#'@param api.format a string indicateing which version of the quickstatement format used to submit the api (default = "v1")
+#'@param api.format a string indicating which version of the quickstatement format used to submit the api (default = "v1")
 #'@param api.batchname a string create a named batch (listed at [your batch history page](https://quickstatements.toolforge.org/#/batches)) and tag in the edit summaries
 #'@param api.submit boolian indicating whether to submit instruction directly to wikidata (else returns the URL that can be copy-pasted into a web browser)
 #'
 #'@return data formatted to upload to wikidata (via quickstatemsnts),
-#'optionally also directly uploded to wikidata (see \code{format} parameter). 
+#'optionally also directly uploaded to wikidata (see \code{format} parameter). 
 #'
 #'@examples
 #'# Add a statement to the "Wikidata sandbox" item (Q4115189)
 #'# to say that it is an "instance of" (P31) of Q1 (the universe).
 #'# The instruction will submit directly to wikidata via the API
-#'# (if you include your wikimedia username and token)
+#'# (if you include your Wikimedia username and token)
 #'
 #' \dontrun{write_wikidata(items        = "Wikidata Sandbox",
 #'                properties   = "instance of",

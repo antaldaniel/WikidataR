@@ -2,7 +2,7 @@
 % Please edit documentation in R/queries.R
 \name{identifier_from_identifier}
 \alias{identifier_from_identifier}
-\title{identifier from identifier}
+\title{Identifier from identifier}
 \usage{
 identifier_from_identifier(
   property = "ORCID iD",
@@ -11,18 +11,21 @@ identifier_from_identifier(
 )
 }
 \arguments{
-\item{property}{the identifier property to search (for caveats, see \code{as_pid})}
+\item{property}{The identifier property to search (for caveats, see \code{as_pid})}
 
-\item{return}{the identifier property to convert to}
+\item{return}{The identifier property to convert to}
 
-\item{value}{the identifier value to match}
+\item{value}{The identifier value to match.}
 }
 \value{
-vector of identifiers corresponding to identifiers submitted
+A vector of identifiers corresponding to identifiers submitted.
 }
 \description{
-convert unique identifiers to other unique identifiers
+Convert unique identifiers to other unique identifiers.
 }
 \examples{
-identifier_from_identifier('ORCID iD','IMDb ID',c('0000-0002-7865-7235','0000-0003-1079-5604'))
+identifier_from_identifier(property ='ORCID iD',
+                           return = 'IMDb ID',
+                           value = c('0000-0002-7865-7235','0000-0003-1079-5604')
+                           )
 }

@@ -9,12 +9,12 @@ url_to_id(x)
 url_to_id(x)
 }
 \arguments{
-\item{x}{a vector of strings representing wikidata URLs}
+\item{x}{A vector of strings representing Wikidata URLs.}
 }
 \value{
 if the URL ends in a QID or PID, return that PID or QID, else return the original string
 
-QID or PID
+QID or PID.
 }
 \description{
 Convert a URL ending in an identifier (returned by SPARQL queries) to just
@@ -22,6 +22,10 @@ the plain identifier (QID or PID).
 
 Convert a URL ending in an identifier (returned by SPARQL queries)
 to just the plan identifier (QID or PID).
+}
+\details{
+The \href{https://www.wikidata.org/wiki/Q43649390}{Wikidata Q identifier} (QID) 
+is the unique identifier (UID) used in Wikidata.
 }
 \examples{
 url_to_id("http://www.wikidata.org/entity/42")

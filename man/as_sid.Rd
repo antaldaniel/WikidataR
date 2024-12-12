@@ -7,15 +7,18 @@
 as_sid(x)
 }
 \arguments{
-\item{x}{a vector, data frame, or tibble of strings representaing wikidata source properties}
+\item{x}{a vector, data frame, or tibble of strings representing Wikidata 
+source properties.}
 }
 \value{
 if the inputted string is a valid SID, return the string.
-If the inputted string matches a property label, return its SID
-If the inputted string matches multiple labels of multiple properties, return the SID of the first hit.
+If the inputted string matches a property label, return its SID.
+If the inputted string matches multiple labels of multiple properties, 
+return the SID of the first hit.
 }
 \description{
-Convert an input string to the most likely source SID (equivalent to PID)
+Convert an input string to the most likely source SID
+(equivalent to PID.)
 }
 \examples{
 # if input string is a valid SID
