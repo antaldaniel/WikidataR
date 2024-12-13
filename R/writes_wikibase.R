@@ -20,8 +20,8 @@
 #' (see \code{as_sid} function), so use with caution.
 #' @param src.values a vector, data frame, or tibble of strings indicating the values to add reference sources to statements (as QIDs or strings).
 #' Note: if strings are provided, they will be treated as plain text.
-#' @param remove a vector of boolians for each statemnt indicating whether it should
-#' be removed from the item rather than added (default = FALSE)
+#' @param remove a vector of boolean values for each statement indicating whether it should
+#' be removed from the item rather than added \code{default = FALSE}.
 #' @param format output format as a string. Options include:
 #' \describe{
 #'   \item{tibble}{easiest format to further manipulation in R}
@@ -38,7 +38,7 @@
 #' @param quickstatements.url url to access quickstatements of the corresponding Wikibase instance.
 #' @param coordinate_pid PID of a geocoordinates; need to have a different formatting
 #'
-#' @return data formatted to upload to Wikidata (via quickstatemsnts),
+#' @return data formatted to upload to Wikidata (via QuickStatemsnts),
 #' optionally also directly uploaded to Wikidata (see \code{format} parameter).
 #'
 #' @examples

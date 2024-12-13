@@ -1,15 +1,17 @@
 Package: WikidataR
 Type: Package
 Title: Read-Write API Client Library for Wikidata
-Version: 2.3.3
-Date: 2021-11-16
+Version: 2.3.3001
+Date: 2024-12-13
 Authors@R: c(
-            person("Thomas", "Shafee", role = c("aut", "cre"), email = "T.Shafee@latrobe.edu.au", comment = c(ORCID = "0000-0002-2298-7593")),
+            person("Thomas", "Shafee", role = c("aut"), email = "T.Shafee@latrobe.edu.au", comment = c(ORCID = "0000-0002-2298-7593")),
             person("Os", "Keyes", role = "aut", comment = c(ORCID = "0000-0001-5196-609X")),
             person("Serena", "Signorelli", role = "aut"),
             person("Alex", "Lum", role = "ctb", comment = c(ORCID = "0000-0002-9295-9053")),
             person("Christian", "Graul", role = "ctb"),
-            person("Mikhail", "Popov", role = "ctb", comment = c(ORCID = "0000-0003-0145-8948"))
+            person("Mikhail", "Popov", role = "ctb", comment = c(ORCID = "0000-0003-0145-8948")),
+            person(given="Daniel", family="Antal", email= "daniel.antal@dataobservatory.eu", 
+            role = c("ctb", "cre"),  comment = c(ORCID = "0000-0003-1689-0557"))
            )
 Description: Read from, interrogate, and write to Wikidata <https://www.wikidata.org> -
     the multilingual, interdisciplinary, semantic knowledgebase. Includes functions to:
@@ -41,7 +43,8 @@ Suggests:
     tidyverse,
     knitr,
     pageviews,
-    spelling
+    spelling,
+    rmarkdown
 RoxygenNote: 7.2.3
 Encoding: UTF-8
 Depends: R (>= 3.5.0)
