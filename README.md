@@ -7,16 +7,6 @@ __Authors:__ [Thomas Shafee](https://github.com/TS404) (aut., maint.), [Os Keys]
 __License:__ [MIT](https://opensource.org/licenses/MIT)  
 __Status:__ Stable
 
-Install from Github
-======
-
-```r
-# install.packages("credentials")
-credentials::set_github_pat()
-# install.packages("devtools")
-devtools::install_github("cutterkom/WikidataR")
-```
-
 Description
 ======
 WikidataR includes functions to:
@@ -29,14 +19,14 @@ For details on how to best use it, see the examples below.
 Installation
 ======
 
-To download WikidataR from CRAN:
+To download the stable version of WikidataR from CRAN:
 
     install.packages("WikidataR","WikidataQueryServiceR")
     
-To get the current development version from github:
+To get the most current development version from Github:
 
     install.packages("devtools")
-    devtools::install_github("r-lib/httr")
+    devtools::install_github("ts404/WikidataR")
     
 Examples
 ======
