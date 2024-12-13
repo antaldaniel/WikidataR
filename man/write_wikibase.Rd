@@ -50,8 +50,8 @@ Note: if labels are provided, and multiple items match, the first matching item 
 \item{src.values}{a vector, data frame, or tibble of strings indicating the values to add reference sources to statements (as QIDs or strings).
 Note: if strings are provided, they will be treated as plain text.}
 
-\item{remove}{a vector of boolians for each statemnt indicating whether it should
-be removed from the item rather than added (default = FALSE)}
+\item{remove}{a vector of boolean values for each statement indicating whether it should
+be removed from the item rather than added \code{default = FALSE}.}
 
 \item{format}{output format as a string. Options include:
 \describe{
@@ -78,7 +78,7 @@ be removed from the item rather than added (default = FALSE)}
 \item{coordinate_pid}{PID of a geocoordinates; need to have a different formatting}
 }
 \value{
-data formatted to upload to Wikidata (via quickstatemsnts),
+data formatted to upload to Wikidata (via QuickStatements),
 optionally also directly uploaded to Wikidata (see \code{format} parameter).
 }
 \description{

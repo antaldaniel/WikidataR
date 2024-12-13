@@ -1,0 +1,26 @@
+---
+title: "Cross-identification"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Cross-identification}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(WikidataR)
+```
+
+In this article you will learn how to use Wikidata for cross-identification and receive or exchange global, permanent identifiers for persons, objects, and other things.
+
+```{r}
+identifier_from_identifier('ORCID iD','IMDb ID',c('0000-0002-7865-7235','0000-0003-1079-5604'))
+```
+

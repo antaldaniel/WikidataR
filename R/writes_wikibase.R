@@ -38,7 +38,7 @@
 #' @param quickstatements.url url to access quickstatements of the corresponding Wikibase instance.
 #' @param coordinate_pid PID of a geocoordinates; need to have a different formatting
 #'
-#' @return data formatted to upload to Wikidata (via QuickStatemsnts),
+#' @return data formatted to upload to Wikidata (via QuickStatements),
 #' optionally also directly uploaded to Wikidata (see \code{format} parameter).
 #'
 #' @examples

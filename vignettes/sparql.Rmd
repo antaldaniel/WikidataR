@@ -1,0 +1,58 @@
+---
+title: "Query Wikidata with Complex Searches in SPARQL"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Query Wikidata with Complex Searches in SPARQL}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(WikidataR)
+```
+In this example, we search Wikidata for any items that are an "instance of" ([P31](https://www.wikidata.org/wiki/Property:P31)) "film" ([Q11424](https://www.wikidata.org/wiki/Q11424)) that has the label "The Cabin in the Woods" ([Q45394](https://www.wikidata.org/wiki/Q45394)), and ask for the item's genres ([P136](https://www.wikidata.org/wiki/Property:P136)).
+
+``` r
+query_wikidata('SELECT DISTINCT
+  ?genre ?genreLabel
+WHERE {
+  ?film wdt:P31 wd:Q11424.
+  ?film rdfs:label "The Cabin in the Woods"@en.
+  ?film wdt:P136 ?genre.
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+}')
+```
+Which returns a tibble:
+```
+    # A tibble: 6 x 2
+      genre                                   genreLabel          
+      <chr>                                   <chr>               
+    1 http://www.wikidata.org/entity/Q3072049 zombie film         
+    2 http://www.wikidata.org/entity/Q471839  science fiction film
+    3 http://www.wikidata.org/entity/Q859369  comedy-drama        
+    4 http://www.wikidata.org/entity/Q1342372 monster film        
+    5 http://www.wikidata.org/entity/Q853630  slasher film        
+    6 http://www.wikidata.org/entity/Q224700  comedy horror    
+```
+
+For more example SPARQL queries, see [this page](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples) on [Wikidata](https://www.wikidata.org/wiki/Wikidata:Main_Page).
+
+
+## Links for learning SPARQL  
+
+-   [A beginner-friendly course for SPARQL](https://www.wikidata.org/wiki/Wikidata:A_beginner-friendly_course_for_SPARQL)
+-   Building a SPARQL query: [Museums on Instagram](https://www.wikidata.org/wiki/Help:SPARQL/Building_a_query/Museums_on_Instagram)
+-   [SPARQL Query Examples](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples) for WDQS
+-   [Using SPARQL to access Linked Open Data](https://programminghistorian.org/lessons/graph-databases-and-SPARQL) by Matthew Lincoln
+-   Interesting or illustrative [SPARQL queries](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries) for Wikidata
+-   Wikidata [2016 SPARQL Workshop](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/2016_SPARQL_Workshop)
+-   [Wikidata SPARQL Query video tutorial](https://www.youtube.com/watch?v=1jHoUkj_mKw) by Navino Evans
+-   *[Learning SPARQL](http://www.learningsparql.com/)* by Bob DuCharme
+-   [WDQS User Manual](https://www.mediawiki.org/wiki/Wikidata_query_service/User_Manual)

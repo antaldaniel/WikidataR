@@ -1,0 +1,70 @@
+---
+title: "Write New Knowledge to Wikidata"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Write New Knowledge to Wikidata}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(WikidataR)
+```
+
+In this example we'll write directly to wikidata via the [QuickStatements](https://tools.wmflabs.org/quickstatements) format.
+
+``` r
+write_wikidata(items      = c("Q4115189","Q13406268"),
+               properties = "author",
+               values     = c("Q762","Q41406"),
+               format     = "api",
+               api.username = "myusername", # Enter your Wikimedia username here
+               api.token  = "" #REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
+               )
+```
+Results in the statements being directly added to wikidata under your username via the API.  
+> The Mona Lisa (Q12418) has the Creator (P170) of Leonardo da Vinci (Q762)  
+> The Scream (Q471379) has the Creator (P170) of Edvard Munch (Q41406)  
+
+Alternatively, you can print via <code>format=tibble</code> and paste into the [QuickStatements](https://tools.wmflabs.org/quickstatements) website.
+
+### Combining all of the above (example: journal articles)
+The example below finds all articles in a journal, works out the URL for their peer reviews, and writes those URLs into those articles' wikidata items.
+``` r
+sparql_query <- 'SELECT ?Article ?ArticleLabel ?JLabel ?T ?peer_review_URL WHERE {
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+  ?Article wdt:P1433 wd:Q24657325.
+  OPTIONAL { ?Article wdt:P1433 ?J. }
+  OPTIONAL { ?Article wdt:P1476 ?T. }
+  OPTIONAL { ?Article wdt:P7347 ?peer_review_URL. }}
+LIMIT 10000'
+articles.qr <- as_tibble(query_wikidata(sparql_query))
+articles.qr <- articles.qr[articles.qr$peer_review_URL=="",] #omit those with review URLs listed
+review.URLs <- paste0('https://en.wikiversity.org/wiki/Talk:',
+                      articles.qr$JLabel,
+                      "/",
+                      articles.qr$T
+                     )
+review.URLs <- gsub(" ","_",review.URLs)
+
+write_wikidata(items      = sapply(sapply(articles.qr$Article,pattern = "/",stringr::str_split),tail,1),
+               properties = "Peer review URL",
+               values     = review.URLs,
+               format     = "tibble",
+               )
+                  
+write_wikidata(items        = sapply(sapply(articles.qr$Article,pattern = "/",stringr::str_split),tail,1),
+               properties   = "Peer review URL",
+               values       = review.URLs,
+               format       = "api",
+               api.username = "myusername", 
+               api.token    = , #REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
+               )
+```

@@ -35,6 +35,8 @@ To get the most current development version from Github:
 
     install.packages("devtools")
     devtools::install_github("ts404/WikidataR")
+  
+Please review the documentation in a website format [here](https://wikidatar.dataobservatory.eu/).
     
 Examples
 ======
@@ -60,6 +62,8 @@ and
 ```
 Elements within those lists include basic information from wikidata (ID, description, labels). The QID or PID can then be used to get the full data for the item (see below).
 
+Read more in the [Search](https://wikidatar.dataobservatory.eu//docs/articles/search.html) article.
+
 ### Convert between identifiers
 Wikidata is an excellent thesaurus for different identifiers. For example it is possible to convert from any identifier to wikidata QIDs or between different identifiers
 ``` r
@@ -78,6 +82,8 @@ and
     1 0000-0002-7865-7235 nm2118834
     2 0000-0003-1079-5604 nm1821217
 ```
+
+Read more in the [Cross-identification](https://wikidatar.dataobservatory.eu//docs/articles/identity.html) article.
 
 ### Get full items from Wikidata (example: journal articles)
 In this example, we search for three articles using their DOIs ([P356](https://www.wikidata.org/wiki/Property:P356)), find their QIDs, download their full wikidata entries, and then extract the "main topics" (note PID didn't have to be used).
@@ -110,6 +116,7 @@ Which returns a tibble for each of the journal articles, listing the main topics
     1 P921.Q1820650  readability                    
     2 P921.Q16235120 health information on Wikipedia
 ```
+Read more in the [Retrieve Knowledge from Wikidata](https://wikidatar.dataobservatory.eu//docs/articles/retrieve.html) article.
 
 ### Query Wikidata with complex searches (example: movie genres)
 
@@ -142,17 +149,8 @@ For more example SPARQL queries, see [this page](https://www.wikidata.org/wiki/W
 
 `query_wikidata()` can accept multiple queries, returning a (potentially named) list of data frames. If the vector of SPARQL queries is named, the results will inherit those names.
 
-#### Links for learning SPARQL  
+Read more in the [Query Wikidata with Complex Searches in SPARQL](https://wikidatar.dataobservatory.eu//docs/articles/sparql.html) article.
 
--   [A beginner-friendly course for SPARQL](https://www.wikidata.org/wiki/Wikidata:A_beginner-friendly_course_for_SPARQL)
--   Building a SPARQL query: [Museums on Instagram](https://www.wikidata.org/wiki/Help:SPARQL/Building_a_query/Museums_on_Instagram)
--   [SPARQL Query Examples](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples) for WDQS
--   [Using SPARQL to access Linked Open Data](https://programminghistorian.org/lessons/graph-databases-and-SPARQL) by Matthew Lincoln
--   Interesting or illustrative [SPARQL queries](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries) for Wikidata
--   Wikidata [2016 SPARQL Workshop](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/2016_SPARQL_Workshop)
--   [Wikidata SPARQL Query video tutorial](https://www.youtube.com/watch?v=1jHoUkj_mKw) by Navino Evans
--   *[Learning SPARQL](http://www.learningsparql.com/)* by Bob DuCharme
--   [WDQS User Manual](https://www.mediawiki.org/wiki/Wikidata_query_service/User_Manual)
 
 ### Write to Wikidata (example: paintings)  
 In this example we'll write directly to wikidata via the [QuickStatements](https://tools.wmflabs.org/quickstatements) format.
@@ -204,6 +202,9 @@ write_wikidata(items        = sapply(sapply(articles.qr$Article,pattern = "/",st
                api.token    = , #REDACTED# Find yours from https://tools.wmflabs.org/quickstatements/#/user
                )
 ```
+
+Read more in the [Write New Knowledge to Wikidata](https://wikidatar.dataobservatory.eu//docs/articles/write.html) article.
+
 ### Acknowledgements
 This package combines and builds on the utilities of Os Keyes' [WikidataR](https://github.com/Ironholds/WikidataR), Christian Graul's
 [rwikidata](https://github.com/chgrl/rwikidata), Mikhail Popov's [WikidataQueryServiceR](https://github.com/wikimedia/WikidataQueryServiceR), and Serena Signorelli's [QueryWikidataR](https://github.com/serenasignorelli/QueryWikidataR) packages. It also uses the Magnus Manske's [QuickStatements](https://github.com/magnusmanske/quickstatements) tool.

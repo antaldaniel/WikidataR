@@ -9,3 +9,6 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^doc$
+^Meta$
+^R/WikidataR.bak

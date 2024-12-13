@@ -1,0 +1,109 @@
+url: https://wikidatar.dataobservatory.eu
+template:
+  bootstrap: 5
+
+home:
+  links:
+  - text: https://wikidatar.dataobservatory.eu
+    href: https://wikidatar.dataobservatory.eu
+    
+articles:
+  - title: "Search"
+    desc: >
+     Our `WikidataR` R package aims to help the programmatic search of Wikidata in
+         the R statistical environment and language.
+    contents:
+       - search
+  - title: "Identification"
+    desc: >
+     Understand the cross-identification functionality.
+    contents:
+       - identity
+  - title: "Retrieve structured knowledge"
+    desc: >
+     In this article, retrieve information about a list of scientific publications
+         identified by their Digital Object Identifiers (DOIs.)
+    contents:
+       - retrieve
+  - title: "Query Wikidata with Complex Searches in SPARQL"
+    desc: >
+     In this article, retrieve learn SPARQL and how to integrate its queries with R.
+    contents:
+       - sparql
+  - title: "Write to Wikidata"
+    desc: >
+     In this article you learn about writing new knowledge into Wikidata.
+    contents:
+       - write
+  
+reference:
+  - title: "GET"
+    desc: >
+      Get structured knowledge.
+    contents:
+    - get_item
+    - get_property
+    - get_example
+    - get_geo_box
+    - get_geo_entity
+    - get_names_from_properties
+    - get_random_item
+    - get_random_property
+  - title: "CREATE"
+    desc: >
+      Create objects.
+    contents:
+    - createrows
+    - createrows.tidy
+  - title: "WRITE"
+    desc: >
+      Write to a Wikibase/Wikidata instance.
+    contents:
+    - write_wikibase
+    - write_wikidata
+  - title: "EXTRACT"
+    desc: >
+      Extract content from query responses.
+    contents:
+    - extract_claims
+    - extract_para
+    - list_properties
+  - title: "MATCHING"
+    desc: >
+      Matching items with identification.
+    contents:
+    - disambiguate_QIDs
+    - filter_qids
+    - identifier_from_identifier
+    - qid_from_DOI
+    - qid_from_identifier
+    - qid_from_ORCID
+    - qid_from_name
+    - url_to_id
+  - title: "SEARCH"
+    desc: >
+      Functions to search for knowledge.
+    contents:
+    - find_item
+    - searcher
+    - query_wikidata
+    - sparql_query
+    - wd_query
+    - wd_rand_query
+  - title: "UTILS"
+    desc: >
+      Various utility functions.
+    contents:
+    - as_pid
+    - as_qid
+    - as_quot
+    - as_sid
+    - check_input
+    - initials
+    - unspecial
+    - print.find_item
+    - print.find_property
+    - print.wikidata
+    - WD.globalvar
+    - WikidataR
+    

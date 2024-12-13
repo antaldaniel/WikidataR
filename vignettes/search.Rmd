@@ -1,0 +1,50 @@
+---
+title: "Search"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Search}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(WikidataR)
+```
+
+In this article you will learn how to find items and knowledge on Wikidata via 
+the WikidataR functions.
+
+### Search Wikidata to see if an item exists (example: pharmaceuticals)
+For cases where you don't already know the QID of an item or the PID of a property, you can search wikidata by name. Note that some search terms will return multiple possible items. You can also specify a language (defaults to English).
+
+```{r finditem}
+find_item("Paracetamol")
+```
+
+
+```{r}
+find_property("medical condition treated")
+```
+
+Which returns the lists: 
+
+```
+    acetaminophen (Q57055) - common drug for pain and fever  
+    Paracetamol (Q36716177) - scientific article published on July 1980  
+    Paracetamol (Q54982056) - musical group  
+    ...
+```
+
+and
+```
+    medical condition treated (P2175) - disease that this pharmaceutical drug, procedure, or therapy is used to treat 
+```
+Elements within those lists include basic information from wikidata (ID, description, labels). The QID or PID can then be used to get the full data for the item (see below).
+

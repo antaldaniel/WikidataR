@@ -20,7 +20,7 @@ Description: Read from, interrogate, and write to Wikidata <https://www.wikidata
     Wikidata (adding new items or statements via QuickStatements); and handle and manipulate
     Wikidata objects (as lists and tibbles). Uses the Wikidata and QuickStatements APIs. 
 BugReports: https://github.com/TS404/WikidataR/issues
-URL: https://github.com/TS404/WikidataR
+URL: https://wikidatar.dataobservatory.eu/
 License: MIT + file LICENSE
 Imports:
     httr,
@@ -45,7 +45,8 @@ Suggests:
     pageviews,
     spelling,
     rmarkdown
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Encoding: UTF-8
 Depends: R (>= 3.5.0)
 Language: en-US
+VignetteBuilder: knitr

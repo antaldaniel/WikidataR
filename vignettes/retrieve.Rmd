@@ -1,0 +1,61 @@
+---
+title: "Retrieve Knowledge from Wikidata"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Retrieve Knowledge from Wikidata}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(WikidataR)
+```
+
+
+In this example, we search for three articles using their DOIs ([P356](https://www.wikidata.org/wiki/Property:P356)), find their QIDs, download their full wikidata entries, and then extract the "main topics" (note PID didn't have to be used).
+
+First find the structured knowledge documents on Wikidata based on DOIs:
+
+```{r getqids}
+article.qid <- qid_from_DOI(c('10.15347/WJM/2017.007','10.15347/WJM/2019.001','10.15347/WJM/2019.007'))
+article.qid
+```
+Mass-retrieve the items from Wikidata:
+
+```{r}
+article.q        <- get_item(article.qid)
+```
+
+```{r maintopics}
+article.topics.p <- extract_claims(article.q, "main topic")
+get_names_from_properties(article.topics.p)
+```
+
+```
+    $`10.15347/WJM/2017.007`
+    # A tibble: 1 x 2
+      QID          value    
+      <chr>        <chr>    
+    1 P921.Q164778 rotavirus
+
+    $`10.15347/WJM/2019.001`
+    # A tibble: 2 x 2
+      QID            value                               
+      <chr>          <chr>                               
+    1 P921.Q15989108 Western African Ebola virus epidemic
+    2 P921.Q10538943 Ebola virus                         
+
+    $`10.15347/WJM/2019.007`
+    # A tibble: 2 x 2
+      QID            value                          
+      <chr>          <chr>                          
+    1 P921.Q1820650  readability                    
+    2 P921.Q16235120 health information on Wikipedia
+```
